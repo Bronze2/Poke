@@ -11,9 +11,12 @@ public:
 
     void Update();
     void Render();
+    void Init(wstring _Name);
 
     void SetAnimation(Animator* animator) { this->animator = animator; }
+    class Animator* GetAnimator() { return animator; }
 
+    void AddAnimation(AnimationClip* _pClip);
     virtual void Move() override;
 protected:
     class Animator* animator = nullptr;

@@ -31,24 +31,24 @@ AnimationRect::AnimationRect(Vector3 position, Vector3 size)
  ///   SAFE_DELETE(srcTex);
 
     // Sampler
-    {
-        D3D11_SAMPLER_DESC desc;
-        States::GetSamplerDesc(&desc);
-        States::CreateSampler(&desc, &point[0]);
-
-        desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
-        States::CreateSampler(&desc, &point[1]);
-    }
-    
-    // Blend
-    {
-        D3D11_BLEND_DESC desc;
-        States::GetBlendDesc(&desc);
-        States::CreateBlend(&desc, &bPoint[0]);
-
-        desc.RenderTarget[0].BlendEnable = true;
-        States::CreateBlend(&desc, &bPoint[1]);
-    }
+ //   {
+ //       D3D11_SAMPLER_DESC desc;
+ //       States::GetSamplerDesc(&desc);
+ //       States::CreateSampler(&desc, &point[0]);
+ //
+ //       desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+ //       States::CreateSampler(&desc, &point[1]);
+ //   }
+ //   
+ //   // Blend
+ //   {
+ //       D3D11_BLEND_DESC desc;
+ //       States::GetBlendDesc(&desc);
+ //       States::CreateBlend(&desc, &bPoint[0]);
+ //
+ //       desc.RenderTarget[0].BlendEnable = true;
+ //       States::CreateBlend(&desc, &bPoint[1]);
+ //   }
 
 }
 
@@ -90,6 +90,57 @@ void AnimationRect::Render()
     DC->OMSetBlendState(bPoint[1], nullptr, (UINT)0xFFFFFFFF);
 
     __super::Render();
+}
+
+void AnimationRect::Init(wstring _Name)
+{
+    animator = new Animator;
+   
+
+  Texture2D* srcTex = new Texture2D(TexturePath + _Name);
+  AnimationClip* Run_R = new AnimationClip
+  (
+      L"Run_R", srcTex, 10,
+      Values::ZeroVec2,
+      Vector2(srcTex->GetWidth(), srcTex->GetHeight() * 0.5f),
+      1.0f / 15.0f
+  );
+  AnimationClip* Run_L = new AnimationClip
+  (
+      L"Run_L", srcTex, 10,
+      Vector2(0.0f, srcTex->GetHeight() * 0.5f),
+      Vector2(srcTex->GetWidth(), srcTex->GetHeight()),
+      1.0f / 15.0f, true
+  );
+
+  animator->AddAnimClip(Run_R);
+  animator->AddAnimClip(Run_L);
+  animator->SetCurrentAnimClip(L"Run_R");
+
+   SAFE_DELETE(srcTex);
+   {
+       D3D11_SAMPLER_DESC desc;
+       States::GetSamplerDesc(&desc);
+       States::CreateSampler(&desc, &point[0]);
+
+       desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+       States::CreateSampler(&desc, &point[1]);
+   }
+
+   // Blend
+   {
+       D3D11_BLEND_DESC desc;
+       States::GetBlendDesc(&desc);
+       States::CreateBlend(&desc, &bPoint[0]);
+
+       desc.RenderTarget[0].BlendEnable = true;
+       States::CreateBlend(&desc, &bPoint[1]);
+   }
+}
+
+void AnimationRect::AddAnimation(AnimationClip* _pClip)
+{
+    animator->AddAnimClip(_pClip);
 }
 
 void AnimationRect::Move()

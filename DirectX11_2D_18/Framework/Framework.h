@@ -73,6 +73,7 @@ typedef UINT		uint;
 
 #define WinMaxWidth 512
 #define WinMaxHeight 768
+#define CLONE(type) type* Clone(){return new type(*this);}
 
 const wstring ShaderPath = L"../_Shaders/";
 const wstring TexturePath = L"../_Resources/Textures/";
@@ -122,6 +123,23 @@ enum class SCENE_TYPE {
     END = 32,
 };
 
+enum class EVENT_TYPE {
+    CREATE_OBJ,
+    DELETE_OBJ,
+    SCENE_CHANGE,
+};
+enum class DIR {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+    NONE,
+};
+
+
 #include "Utilities/BoundingBox.h"
 #include "Utilities/String.h"
 #include "Utilities/Path.h"
+
+#include "struct.h"
+#include "func.h"

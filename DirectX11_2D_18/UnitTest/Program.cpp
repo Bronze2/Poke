@@ -38,7 +38,7 @@ void Program::Init()
 	//Push(new ShadedDemo);
 	//Push(new RTVDemo);
 	//Push(new CollisionDemo);
-	Push(new TitleScene);
+//	Push(new TitleScene);
 }
 
 void Program::Destroy()

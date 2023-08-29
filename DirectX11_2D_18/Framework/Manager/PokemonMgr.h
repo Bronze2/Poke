@@ -8,6 +8,9 @@ private:
 public:
 
 
+private:
+	PokemonMgr();
+	~PokemonMgr();
 public:
 	friend class SingletonBase<PokemonMgr>;
 };

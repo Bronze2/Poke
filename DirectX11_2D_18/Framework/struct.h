@@ -23,8 +23,16 @@ enum class SKILL_TYPE {
 };
 struct SKILL {
 	SKILL_TYPE m_eType;
+	UINT maxPP;
+	UINT curPP;
+	UINT Dmg;
 };
 
-struct Pokemon {
+struct tEvent {
+	EVENT_TYPE eEvent;
+	DWORD_PTR wParam;
+	DWORD_PTR lParam;
+};
+struct Poke {
 
 };

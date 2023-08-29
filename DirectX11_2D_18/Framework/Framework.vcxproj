@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="func.cpp" />
     <ClCompile Include="Object\CObject.cpp" />
     <ClCompile Include="Manager\EventMgr.cpp" />
     <ClCompile Include="Framework.cpp" />
@@ -189,6 +190,7 @@
     <ClCompile Include="Utilities\String.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="func.h" />
     <ClInclude Include="Object\CObject.h" />
     <ClInclude Include="Manager\EventMgr.h" />
     <ClInclude Include="Framework.h" />

@@ -35,6 +35,7 @@
     <ClCompile Include="Object\Title.cpp" />
     <ClCompile Include="Manager\PokemonMgr.cpp" />
     <ClCompile Include="Object\Pokemon.cpp" />
+    <ClCompile Include="func.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Systems\Graphics.h" />
@@ -76,5 +77,6 @@
     <ClInclude Include="Manager\PokemonMgr.h" />
     <ClInclude Include="Object\Pokemon.h" />
     <ClInclude Include="struct.h" />
+    <ClInclude Include="func.h" />
   </ItemGroup>
 </Project>

@@ -3,6 +3,8 @@
 #include "Geometries/TextureRect.h"
 #include "Object/CObject.h"
 #include "Object/Title.h"
+#include "Manager/SceneMgr.h"
+#include "Manager/EventMgr.h"
 void TitleScene::Init()
 {
     m_Obj = new Title;
@@ -19,6 +21,12 @@ void TitleScene::Destroy()
 void TitleScene::Update()
 {
     Scene::Update();
+
+    auto* key = Keyboard::Get();
+    if (key->Press('A')) {
+      
+        ChangeScene(SCENE_TYPE::FIELD);
+    }
 }
 
 void TitleScene::Render()

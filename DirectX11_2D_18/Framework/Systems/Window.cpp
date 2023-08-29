@@ -1,6 +1,8 @@
 #include "Framework.h"
 #include "Window.h"
 #include "Graphics.h"
+#include "Manager/EventMgr.h"
+#include "Manager/SceneMgr.h"
 
 //상대경로 : ./ 현재폴더, ../ 상위폴더
 //절대경로 : 
@@ -87,8 +89,11 @@ WPARAM Window::Run(IObject* mainObj)
 	Time::Create();
 	Gui::Create();
 	States::Create();
+	SceneMgr::Create();
+	EventMgr::Create();
+	SceneMgr::Get()->Init();
 
-	this->mainObj->Init();
+//	this->mainObj->Init();
 
 	Time::Get()->Start();
 
@@ -108,8 +113,10 @@ WPARAM Window::Run(IObject* mainObj)
 		}
 		
 	}
-	this->mainObj->Destroy();
+	//this->mainObj->Destroy();
 
+	SceneMgr::Delete();
+	EventMgr::Delete();
 	Gui::Delete();
 	Time::Delete();
 	Mouse::Delete();
@@ -144,18 +151,20 @@ void Window::MainRender()
 	Mouse::Get()->Update();
 	Keyboard::Get()->Update();
 	}
+
 	Time::Get()->Update();
 	Gui::Get()->Update();
 
-	mainObj->Update();
-
+//	mainObj->Update();
+	SceneMgr::Get()->Update();
 	Graphics::Get()->Begin();
 	{
-		mainObj->Render();
-		mainObj->PostRender();
+		//mainObj->Render();
+		SceneMgr::Get()->Render();
 
-		mainObj->GUI();
 		Gui::Get()->Render();
+		EventMgr::Get()->Update();
 	}
 	Graphics::Get()->End();
+
 }
