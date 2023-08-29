@@ -16,7 +16,7 @@ public:
     void SetAnimation(Animator* animator) { this->animator = animator; }
     class Animator* GetAnimator() { return animator; }
 
-    void AddAnimation(AnimationClip* _pClip);
+    void AddClip (AnimationClip* _pClip);
     virtual void Move() override;
 protected:
     class Animator* animator = nullptr;

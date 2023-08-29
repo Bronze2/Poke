@@ -22,7 +22,7 @@ public:
 
     ~Pokemon();
     void Init(wstring Name
-    ,UINT maxhp,int hp,int att,int def,UINT level);
+    ,UINT maxhp,int hp,int att,int def,UINT level,wstring Path);
     void Update();
 
     void Render();
