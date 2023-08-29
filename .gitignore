@@ -1,0 +1,14 @@
+
+
+
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+OutputFile/
+
+.vs/
+bin_debug/
+content/
+.Out/
+.Temp/
