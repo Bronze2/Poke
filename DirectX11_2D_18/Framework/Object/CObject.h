@@ -15,6 +15,7 @@ protected:
 
 public:
 	void SetPosition(Vector3 _pos) { m_Position = _pos; }
+	void SetSz(Vector3 _size) { m_Size = _size; }
 	void SetDead() { m_bDead = true; }
 	virtual void Init() {};
 	virtual void Update() {};
@@ -23,7 +24,7 @@ public:
 	virtual void GUI() {};
 	CObject();
 	virtual ~CObject();
-
-
+	Vector3 GetPos() { return m_Position; }
+	Vector3 GetSize() { return m_Size; }
 };
 

@@ -3,6 +3,7 @@
 #include "../UnitTest/Scene/Scene.h"
 #include "../UnitTest/Scene/TitleScene.h"
 #include "../UnitTest/Scene/FieldScene.h"
+#include "PokemonMgr.h"
 void SceneMgr::ChangeScene(SCENE_TYPE _NextScene)
 {
 	if (m_pCurScene == m_arrScene[(UINT)_NextScene])
@@ -50,8 +51,12 @@ void SceneMgr::Init()
 		vpb->SetView(view);
 		vpb->SetProjection(proj);
 	}
+	PokemonMgr::Create();
+
+	
 
 
+	PokemonMgr::Get()->Init();
 	m_arrScene[(UINT)SCENE_TYPE::TITLE] = new TitleScene;
 	m_arrScene[(UINT)SCENE_TYPE::FIELD] = new FieldScene;
 	m_pCurScene = m_arrScene[(UINT)SCENE_TYPE::TITLE];

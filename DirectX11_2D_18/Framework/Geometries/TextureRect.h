@@ -17,13 +17,21 @@ public:
     void MapVertexBuffer();
     void UnmapVertexBuffer();
 
-    virtual void Move();
+    void SetHeight(const UINT& _Height) { m_Height = _Height; }
+    void SetWidth(const UINT& _Width) { m_Width = _Width; }
 
+    virtual void Move();
+    void SetPosition(const Vector3& pos) { position = pos; }
+    void SetSize(const Vector3& _size) { size = _size; }
+    const UINT& GetHeight() { return m_Height; }
+    const UINT& GetWidth() { return m_Width; }
 private:
     void SetVertices();
     void UpdateWorld();
-
+    
 protected:
+    UINT m_Height;
+    UINT m_Width;
     vector<VertexTexture> vertices;
     VertexBuffer* vb = nullptr;
 

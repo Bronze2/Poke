@@ -16,10 +16,12 @@ private:
 
 
 public:
+    class AnimationRect* GetAnimRect() { return AnimRect; }
     Pokemon(wstring Name
         , UINT maxhp, int hp, int att, int def, UINT level);
 
-
+    void SetPos(const Vector3& pos);
+    void SetSize(const Vector3& size); 
     ~Pokemon();
     void Init(wstring Name
     ,UINT maxhp,int hp,int att,int def,UINT level,wstring Path);

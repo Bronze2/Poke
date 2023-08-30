@@ -6,8 +6,9 @@ private:
 	vector<Pokemon*>m_vecPokemon;
 
 public:
+	void Init();
 
-
+	vector<Pokemon*>GetPokemons() { return m_vecPokemon; }
 private:
 	PokemonMgr();
 	~PokemonMgr();
