@@ -36,6 +36,12 @@
     <ClCompile Include="Manager\PokemonMgr.cpp" />
     <ClCompile Include="Object\Pokemon.cpp" />
     <ClCompile Include="func.cpp" />
+    <ClCompile Include="Object\Player.cpp" />
+    <ClCompile Include="Object\Npc.cpp" />
+    <ClCompile Include="Systems\Camera.cpp" />
+    <ClCompile Include="Geometries\Tile\TileSet.cpp" />
+    <ClCompile Include="Geometries\Tile\TMap.cpp" />
+    <ClCompile Include="Geometries\Tile\Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Systems\Graphics.h" />
@@ -78,5 +84,16 @@
     <ClInclude Include="Object\Pokemon.h" />
     <ClInclude Include="struct.h" />
     <ClInclude Include="func.h" />
+    <ClInclude Include="Object\Player.h" />
+    <ClInclude Include="Object\Npc.h" />
+    <ClInclude Include="Systems\Camera.h" />
+    <ClInclude Include="Geometries\Tile\TileSet.h" />
+    <ClInclude Include="Geometries\Tile\TMap.h" />
+    <ClInclude Include="Geometries\Tile\Tile.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="NewFilter1">
+      <UniqueIdentifier>{7327d29e-c18a-4f79-b70a-af26d336b639}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

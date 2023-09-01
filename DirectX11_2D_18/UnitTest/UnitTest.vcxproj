@@ -151,12 +151,14 @@
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Scene\TitleScene.h" />
+    <ClInclude Include="Scene\TileMap.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene\FieldScene.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
+    <ClCompile Include="Scene\TileMap.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

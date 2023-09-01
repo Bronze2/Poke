@@ -76,6 +76,7 @@ void SceneMgr::Render()
 	vpb->SetVSBuffer(1);
 	if (nullptr != m_pCurScene) {
 		m_pCurScene->Render();
+		Camera::Get()->Render();
 		m_pCurScene->PostRender();
 		m_pCurScene->GUI();
 	}

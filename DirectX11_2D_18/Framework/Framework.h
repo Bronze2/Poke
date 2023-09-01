@@ -140,6 +140,8 @@ enum class DIR {
 #include "Utilities/BoundingBox.h"
 #include "Utilities/String.h"
 #include "Utilities/Path.h"
+#include "Systems/Camera.h"
+
 
 #include "struct.h"
 #include "func.h"
