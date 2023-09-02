@@ -70,6 +70,10 @@ typedef UINT		uint;
 #define SAFE_DELETE_ARRAY(p) { if(p) { delete[](p);	   (p) = nullptr; } }
 #define SAFE_RELEASE(p)		 { if(p) { (p)->Release(); (p) = nullptr; } }
 
+#define MOUSE       Mouse   ::Get()
+#define PRESS(p) Keyboard::Get()->Press(p)
+#define KEYUP(p) Keyboard::Get()->Up(p)
+#define KEYDOWN(p) Keyboard::Get()->Down(p)
 
 #define WinMaxWidth 512
 #define WinMaxHeight 768
@@ -77,7 +81,7 @@ typedef UINT		uint;
 
 const wstring ShaderPath = L"../_Shaders/";
 const wstring TexturePath = L"../_Resources/Textures/";
-
+const string  TilePath = "../_Resources/_TileDatas/";
 extern HWND handle;
 
 #include "Utilities/DirectHelper.h"

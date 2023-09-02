@@ -50,6 +50,10 @@ void Pokemon::SetSize(const Vector3& size)
 {
 	AnimRect->SetSize(size); this->SetSz(size);
 }
+void Pokemon::StartAnimation(const wstring& _Name)
+{
+	AnimRect->GetAnimator()->SetCurrentAnimClip(_Name);
+}
 void Pokemon::SetIconPos(const Vector3& pos)
 {
 	IconRect->SetPosition(pos);

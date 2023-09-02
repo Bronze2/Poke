@@ -14,6 +14,8 @@ private:
 
     class AnimationRect* AnimRect;
     class AnimationRect* IconRect;
+    SKILL m_sSkill[4];
+
 
 public:
 
@@ -27,7 +29,7 @@ public:
     void SetSize(const Vector3& size); 
 
 
-    void StartAnimation(const wstring& _Name) { AnimRect->GetAnimator()->SetCurrentAnimClip(_Name); }
+    void StartAnimation(const wstring& _Name);
 
 
     void SetIconPos(const Vector3& pos);
@@ -40,5 +42,9 @@ public:
     void Render();
 
 
+
+    const wstring& GetName() { return Name; }
+    void Attack();
+    void SkillAttack();
 };
 
