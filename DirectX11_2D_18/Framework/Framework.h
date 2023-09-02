@@ -15,6 +15,7 @@
 #include <string>
 #include <unordered_map>
 #include <assert.h>
+#include <fstream>
 
 using namespace std;
 
@@ -70,12 +71,13 @@ typedef UINT		uint;
 #define SAFE_DELETE_ARRAY(p) { if(p) { delete[](p);	   (p) = nullptr; } }
 #define SAFE_RELEASE(p)		 { if(p) { (p)->Release(); (p) = nullptr; } }
 
-#define MOUSE       Mouse   ::Get()
+#define MOUSE       Mouse::Get()
+#define CAMERA       Camera::Get()
 #define PRESS(p) Keyboard::Get()->Press(p)
 #define KEYUP(p) Keyboard::Get()->Up(p)
 #define KEYDOWN(p) Keyboard::Get()->Down(p)
 
-#define WinMaxWidth 512
+#define WinMaxWidth 1368
 #define WinMaxHeight 768
 #define CLONE(type) type* Clone(){return new type(*this);}
 

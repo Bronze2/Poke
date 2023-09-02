@@ -42,6 +42,8 @@
     <ClCompile Include="Geometries\Tile\TileSet.cpp" />
     <ClCompile Include="Geometries\Tile\TMap.cpp" />
     <ClCompile Include="Geometries\Tile\Tile.cpp" />
+    <ClCompile Include="Manager\BattleManager.cpp" />
+    <ClCompile Include="Geometries\TileMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Systems\Graphics.h" />
@@ -90,6 +92,8 @@
     <ClInclude Include="Geometries\Tile\TileSet.h" />
     <ClInclude Include="Geometries\Tile\TMap.h" />
     <ClInclude Include="Geometries\Tile\Tile.h" />
+    <ClInclude Include="Manager\BattleManager.h" />
+    <ClInclude Include="Geometries\TileMap.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NewFilter1">

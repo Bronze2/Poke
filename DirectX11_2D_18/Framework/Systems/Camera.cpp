@@ -14,7 +14,18 @@ void Camera::Render()
 
 void Camera::Move()
 {
+	if (Keyboard::Get()->Press(VK_LSHIFT))
+	{
+		if (Keyboard::Get()->Press('W'))
+			position.y += cameraSpeed * Time::Delta();
+		else if (Keyboard::Get()->Press('S'))
+			position.y -= cameraSpeed * Time::Delta();
 
+		if (Keyboard::Get()->Press('D'))
+			position.x += cameraSpeed * Time::Delta();
+		else if (Keyboard::Get()->Press('A'))
+			position.x -= cameraSpeed * Time::Delta();
+	}
 	UpdateView();
 }
 

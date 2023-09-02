@@ -22,22 +22,24 @@ void TileSet::GUI()
 				count++;
 				ImGui::PopID();
 
-				if (count % 4 != 0)
+				if (count % 3 != 0)
 					ImGui::SameLine();
 			}
 		}
 	}
 	ImGui::End();
+
+
 }
 
 TileSet::TileSet()
 {
-	Texture2D* tex = new Texture2D(TexturePath + L"tiles.jpg");
+	Texture2D* tex = new Texture2D(TexturePath + L"Pokemon/Map/MapTile48.png");
 	tileSRV = tex->GetSRV();
 	SAFE_DELETE(tex);
 
-	tileXCount = 10;
-	tileYCount = 18;
+	tileXCount = 27;
+	tileYCount = 24;
 
 	texelTileSize = Vector2(1 / (float)tileXCount, 1 / (float)tileYCount);
 }

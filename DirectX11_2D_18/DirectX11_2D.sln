@@ -21,13 +21,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Shaders", "_Shaders", "{B7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tile", "Tile", "{11E05D0E-D3A1-406E-B914-D9F68AFDAFA1}"
 	ProjectSection(SolutionItems) = preProject
-		VertexTile.hlsl = VertexTile.hlsl
+		_Shaders\Tile\VertexTile.hlsl = _Shaders\Tile\VertexTile.hlsl
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{FC4BA62B-5271-4006-805D-AA57A931CDCA}"
 	ProjectSection(SolutionItems) = preProject
-		ColorUI.hlsl = ColorUI.hlsl
-		TextureUI.hlsl = TextureUI.hlsl
+		_Shaders\UI\ColorUI.hlsl = _Shaders\UI\ColorUI.hlsl
+		_Shaders\UI\TextureUI.hlsl = _Shaders\UI\TextureUI.hlsl
 	EndProjectSection
 EndProject
 Global

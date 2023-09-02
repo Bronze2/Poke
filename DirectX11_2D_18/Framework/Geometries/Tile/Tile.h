@@ -21,6 +21,11 @@ public:
 	ID3D11ShaderResourceView* GetSRV() { return srv; }
 	void SetSRV(ID3D11ShaderResourceView* srv) { this->srv = srv; }
 
+	void SetCol() { if (!bCol)bCol = true; else bCol = false; }
+	void SetAppear() { if (!bAppear)bAppear = true; else bAppear = false; }
+	void SetAnimation() { if (!bAnimation)bAnimation = true; else bAnimation = false; }
+	void SetTeleport(){ if (!bTeleport)bTeleport = true; else bTeleport = false; }
+	bool& GetCol() { return bCol; }
 private:
 	Vector3 position = Values::ZeroVec3;
 	Color color = Values::Black;
@@ -31,4 +36,9 @@ private:
 	ID3D11ShaderResourceView* srv = nullptr;
 
 	uint index = -1;
+	
+	bool bCol = false;
+	bool bAppear = false;
+	bool bAnimation = false;
+	bool bTeleport = false;
 };

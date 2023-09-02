@@ -80,6 +80,12 @@ void TMap::Update()
 			tile->SetEndUV(endUV);
 		}
 	}
+
+	if (PRESS(VK_F2)) {
+		if (nullptr != tile) {
+			tile->SetCol();
+		}
+	}
 }
 
 void TMap::Render()
@@ -136,6 +142,7 @@ void TMap::GUI()
 	ImGui::Begin("TileMap");
 	{
 		ImGui::RadioButton("Normal", (int*)&mode, 0);
+		
 	}
 	ImGui::End();
 

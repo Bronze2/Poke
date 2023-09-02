@@ -1,6 +1,5 @@
 #include "Framework.h"
 #include "EventMgr.h"
-
 #include "SceneMgr.h"
 #include "../UnitTest/Scene/Scene.h"
 #include "Object/CObject.h"

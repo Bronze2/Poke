@@ -23,4 +23,7 @@ public:
 
     static wstring ToWstring(string str);
     static string ToString(wstring str);
+
+    static string ToString(D3DXVECTOR3 vec3, int precision = 5);
+    static wstring ToWstring(D3DXVECTOR3 vec3, int precision = 5);
 };

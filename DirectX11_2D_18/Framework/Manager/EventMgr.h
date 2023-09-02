@@ -1,5 +1,7 @@
 #pragma once
 class CObject;
+
+
 class EventMgr:public SingletonBase<EventMgr>
 {
 public:

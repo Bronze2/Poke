@@ -146,3 +146,31 @@ LRESULT Window::WndProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc(handle, message, wParam, lParam);
 }
 
+void Window::MainRender()
+{
+	if (ImGui::GetIO().WantCaptureMouse == false)
+	{
+		Mouse::Get()->Update();
+		Keyboard::Get()->Update();
+	}
+
+	Time::Get()->Update();
+	Gui::Get()->Update();
+
+	//	mainObj->Update();
+
+	SceneMgr::Get()->Update();
+	Camera::Get()->Update();
+	Graphics::Get()->Begin();
+	{
+		//mainObj->Render();
+		SceneMgr::Get()->Render();
+
+
+		Gui::Get()->Render();
+		EventMgr::Get()->Update();
+	}
+	Graphics::Get()->End();
+
+}
+

@@ -141,3 +141,27 @@ string String::ToString(wstring str)
     temp.assign(str.begin(), str.end());
     return temp;
 }
+
+string String::ToString(D3DXVECTOR3 vec3, int precision)
+{
+    string temp;
+    stringstream stream1, stream2, stream3;
+    stream1 << fixed << setprecision(precision) << vec3.x;
+    stream2 << fixed << setprecision(precision) << vec3.y;
+    stream3 << fixed << setprecision(precision) << vec3.z;
+    temp = "X : " + stream1.str() + " Y : " + stream2.str()
+        + " Z : " + stream3.str();
+    return temp;
+}
+
+wstring String::ToWstring(D3DXVECTOR3 vec3, int precision)
+{
+    wstring temp;
+    wstringstream stream1, stream2, stream3;
+    stream1 << fixed << setprecision(precision) << vec3.x;
+    stream2 << fixed << setprecision(precision) << vec3.y;
+    stream3 << fixed << setprecision(precision) << vec3.z;
+    temp = L"X : " + stream1.str() + L" Y : " + stream2.str()
+        + L" Z : " + stream3.str();
+    return temp;
+}

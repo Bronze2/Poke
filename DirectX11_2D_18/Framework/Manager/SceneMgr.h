@@ -5,7 +5,6 @@ class SceneMgr: public SingletonBase<SceneMgr>
 private:
 	Scene* m_arrScene[(UINT)SCENE_TYPE::END];
 	Scene* m_pCurScene;
-	VPBuffer* vpb = nullptr;
 	Matrix view, proj;
 
 private:

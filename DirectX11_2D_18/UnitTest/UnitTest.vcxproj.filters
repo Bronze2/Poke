@@ -11,6 +11,7 @@
     </ClInclude>
     <ClInclude Include="Scene\FieldScene.h" />
     <ClInclude Include="Scene\TileMap.h" />
+    <ClInclude Include="Scene\BattleScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Program.cpp" />
@@ -22,6 +23,7 @@
     </ClCompile>
     <ClCompile Include="Scene\FieldScene.cpp" />
     <ClCompile Include="Scene\TileMap.cpp" />
+    <ClCompile Include="Scene\BattleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Scene">
