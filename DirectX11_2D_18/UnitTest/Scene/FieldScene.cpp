@@ -4,6 +4,8 @@
 #include "Object/CObject.h"
 #include "Object/Pokemon.h"
 #include "Geometries/AnimationRect.h"
+#include "Object/Player.h"
+#include "Object/Npc.h"
 void FieldScene::Init()
 {
 	Pokemon* pObj = PokemonMgr::Get()->GetPokemons()[0];

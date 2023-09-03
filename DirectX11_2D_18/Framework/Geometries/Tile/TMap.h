@@ -51,6 +51,13 @@ public:
 	class Tile* GetTile(Vector3 mPos);
 
 private:
+
+	bool bColTile = false;
+	bool bAppearTile = false;
+	bool bTeleportTile = false;
+	bool bAnimTile = false;
+
+
 	uint width = 0;
 	uint height = 0;
 	uint spacing = 0;

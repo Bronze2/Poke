@@ -21,10 +21,10 @@ public:
 	ID3D11ShaderResourceView* GetSRV() { return srv; }
 	void SetSRV(ID3D11ShaderResourceView* srv) { this->srv = srv; }
 
-	void SetCol() { if (!bCol)bCol = true; else bCol = false; }
-	void SetAppear() { if (!bAppear)bAppear = true; else bAppear = false; }
-	void SetAnimation() { if (!bAnimation)bAnimation = true; else bAnimation = false; }
-	void SetTeleport(){ if (!bTeleport)bTeleport = true; else bTeleport = false; }
+	void SetCol(const bool& _bCol) { bCol = _bCol; }
+	void SetAppear(const bool& _bAppear) { bAppear = _bAppear; }
+	void SetAnimation(const bool& _btrue) {bAnimation = _btrue;}
+	void SetTeleport(const bool& _btrue) { bTeleport = _btrue; }
 	bool& GetCol() { return bCol; }
 private:
 	Vector3 position = Values::ZeroVec3;

@@ -78,13 +78,16 @@ void TMap::Update()
 			Vector2 endUV = startUV + TileSet::Get()->texelTileSize;
 			tile->SetStartUV(TileSet::Get()->selectedStartUV);
 			tile->SetEndUV(endUV);
+			tile->SetCol(bColTile);
+			tile->SetAppear(bAppearTile);
 		}
 	}
 
-	if (PRESS(VK_F2)) {
-		if (nullptr != tile) {
-			tile->SetCol();
-		}
+	if (KEYUP(VK_F2)) {
+		bColTile = !bColTile;
+	}	
+	if (KEYUP(VK_F3)) {
+		bAppearTile = !bAppearTile;
 	}
 }
 
@@ -139,16 +142,28 @@ void TMap::GUI()
 {
 	TileSet::Get()->GUI();
 
-	ImGui::Begin("TileMap");
+	ImGui::Begin("ColCheck");
 	{
-		ImGui::RadioButton("Normal", (int*)&mode, 0);
-		
+		ImGui::Checkbox("ColCheck", &bColTile);
+
 	}
 	ImGui::End();
-
-	ImGui::Begin("ColorChoice");
+	ImGui::Begin("AppearCheck");
 	{
-		ImGui::RadioButton("Default", (int*)&choice, 0);
+		ImGui::Checkbox("AppearCheck", &bAppearTile);
+
+	}
+	ImGui::End();
+	ImGui::Begin("TeleportCheck");
+	{
+		ImGui::Checkbox("TeleportCheck", &bTeleportTile);
+
+	}
+	ImGui::End();
+	ImGui::Begin("animationCheck");
+	{
+		ImGui::Checkbox("Animation", &bAnimTile);
+
 	}
 	ImGui::End();
 
