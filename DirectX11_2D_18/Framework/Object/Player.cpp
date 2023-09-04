@@ -4,6 +4,24 @@
 #include "Manager/PokemonMgr.h"
 
 #include "Pokemon.h"
+void Player::SetPosition(const Vector3& _Position)
+{
+	m_Position = _Position;
+	AnimRect->SetPosition(_Position);
+}
+void Player::SetBattlePosition(const Vector3& _Position)
+{
+	m_BattlePosition = _Position;
+	BattleRect->SetPosition(_Position);
+}
+void Player::SetSize(const Vector3& _Size)
+{
+	AnimRect->SetSize(_Size); this->SetSz(_Size);
+}
+void Player::SetBattleSize(const Vector3& _Size)
+{
+	BattleRect->SetSize(_Size); this->SetSz(_Size);
+}
 void Player::Move()
 {
 
@@ -60,18 +78,36 @@ void Player::Init()
 		Vector2(srcTex->GetWidth() / 1.5f, srcTex->GetHeight() * 0.8f), 1.0f / 15.0f);
 	animator->AddAnimClip(clip);
 	AnimRect->SetAnimation(animator);
+	animator->SetCurrentAnimClip(L"IDLE_D");
 	animator = new Animator;
 	clip = new AnimationClip(L"BATTLE", srcTex, 4, Values::ZeroVec2,
 		Vector2(srcTex->GetWidth(), srcTex->GetHeight()), 1.0f / 15.0f);
+	
 	animator->AddAnimClip(clip);
+	animator->SetCurrentAnimClip(L"BATTLE");
 	BattleRect->SetAnimation(animator);
 	SAFE_DELETE(srcTex);
 	SAFE_DELETE(IconTex);
 }
 Player::Player() {
-	Pokemon* pObj = PokemonMgr::Get()->GetPokemons()[0];
+	Pokemon* pokemon = new Pokemon(L"Infernape", 100, 100, 100, 10, 30);
+	m_vecPokemon.push_back(pokemon);
+	pokemon = new Pokemon(L"Bibarel", 100, 100, 100, 10, 30);
+	m_vecPokemon.push_back(pokemon);
+	pokemon = new Pokemon(L"Bronzong", 100, 100, 100, 10, 30);
+	m_vecPokemon.push_back(pokemon);
+
 }
 
+Player::Player(const Player& _Other)
+{
+	for (int i = 0; i < _Other.m_vecPokemon.size(); ++i) {
+		Pokemon* pokemon = new Pokemon(_Other.m_vecPokemon[i]->GetName(),
+			_Other.m_vecPokemon[i]->GetMaxHp(), _Other.m_vecPokemon[i]->GetHp(), _Other.m_vecPokemon[i]->GetAttack()
+			, _Other.m_vecPokemon[i]->GetDef(), _Other.m_vecPokemon[i]->GetLevel(), m_vecPokemon[i]->GetSpeed());
+
+	}
+}
 Player::~Player() {
 
 	SAFE_DELETE(AnimRect);
@@ -84,10 +120,23 @@ Player::~Player() {
 
 void Player::Update()
 {
+
+	if (BATTLE_STATE::NONE == m_eBattleState) {
+		AnimRect->Update();
+	}
+	else {
+		BattleRect->Update();
+	}
 }
 
 void Player::Render()
 {
-	AnimRect->Render();
+
+	if (BATTLE_STATE::NONE == m_eBattleState) {
+		AnimRect->Render();
+	}
+	else {
+		BattleRect->Render();
+	}
 	
 }

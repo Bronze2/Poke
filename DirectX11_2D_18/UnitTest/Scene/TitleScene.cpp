@@ -23,7 +23,7 @@ void TitleScene::Update()
     Scene::Update();
 
     auto* key = Keyboard::Get();
-    if (key->Press('A')) {
+    if (key->Up('A')) {
       
         ChangeScene(SCENE_TYPE::FIELD);
     }

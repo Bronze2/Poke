@@ -26,6 +26,13 @@ public:
 	void SetAnimation(const bool& _btrue) {bAnimation = _btrue;}
 	void SetTeleport(const bool& _btrue) { bTeleport = _btrue; }
 	bool& GetCol() { return bCol; }
+	bool& GetAppear() { return bAppear; }
+	bool& GetAnimation() { return bAnimation; }
+	bool& GetTelePort() { return bTeleport; }
+
+
+	void Update();
+
 private:
 	Vector3 position = Values::ZeroVec3;
 	Color color = Values::Black;

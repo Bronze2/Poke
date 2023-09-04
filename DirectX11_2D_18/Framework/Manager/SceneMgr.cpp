@@ -3,8 +3,10 @@
 #include "../UnitTest/Scene/Scene.h"
 #include "../UnitTest/Scene/TitleScene.h"
 #include "../UnitTest/Scene/FieldScene.h"
+#include "../UnitTest/Scene/BattleScene.h"
 #include "../UnitTest/Scene/TileMap.h"
 #include "PokemonMgr.h"
+#include "BattleManager.h"
 void SceneMgr::ChangeScene(SCENE_TYPE _NextScene)
 {
 	if (m_pCurScene == m_arrScene[(UINT)_NextScene])
@@ -35,17 +37,17 @@ void SceneMgr::Init()
 {
 	
 	PokemonMgr::Create();
-
+	BattleManager::Create();
 	
 
 
 	PokemonMgr::Get()->Init();
 	m_arrScene[(UINT)SCENE_TYPE::TITLE] = new TitleScene;
 	m_arrScene[(UINT)SCENE_TYPE::FIELD] = new FieldScene;
-
+	m_arrScene[(UINT)SCENE_TYPE::BATTLE] = new BattleScene;
 
 	m_arrScene[(UINT)SCENE_TYPE::TOOL] = new TileMap;
-	m_pCurScene = m_arrScene[(UINT)SCENE_TYPE::TOOL];
+	m_pCurScene = m_arrScene[(UINT)SCENE_TYPE::TITLE];
 	m_pCurScene->Init();
 }
 

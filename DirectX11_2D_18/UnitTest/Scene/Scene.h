@@ -22,5 +22,6 @@ public:
 	void DeleteGroup(OBJ_TYPE _Type);
 	Scene();
 	virtual ~Scene();
+
 };
 

@@ -46,11 +46,54 @@ Pokemon::Pokemon(wstring Name, UINT maxhp, int hp, int att, int def, UINT level)
 	SAFE_DELETE(IconTex);
 
 }
+Pokemon::Pokemon(wstring Name, UINT maxhp, int hp, int att, int def, UINT level, UINT Speed)
+	:Name(Name), maxhp(maxhp), hp(hp), att(att), def(def), level(level), Speed(Speed)
+
+{
+	AnimRect = new AnimationRect(Vector3(0.f, 0.f, 0.f), Vector3(0.f, 0.f, 0.f));
+	IconRect = new AnimationRect(Vector3(0.f, 0.f, 0.f), Vector3(0.f, 0.f, 0.f));
+	Texture2D* srcTex = new Texture2D(TexturePath + L"Pokemon/Monster/" + Name + L".png");
+	Texture2D* IconTex = new Texture2D(TexturePath + L"Pokemon/Monster/" + Name + L"Icon.png");
+	AnimRect->SetHeight(srcTex->GetHeight());
+	AnimRect->SetWidth(srcTex->GetWidth() / 4);
+	IconRect->SetHeight(IconTex->GetHeight());
+	IconRect->SetWidth(IconTex->GetWidth() / 2);
+	Animator* animator = new Animator;
+	AnimationClip* Opponent_Animation = new AnimationClip(L"Opponent_Roar", srcTex, 2, Values::ZeroVec2,
+		Vector2(srcTex->GetWidth() * 0.5f, srcTex->GetHeight()), 1.0f / 15.0f);
+	animator->AddAnimClip(Opponent_Animation);
+	Opponent_Animation = new AnimationClip(L"Opponent_IDLE", srcTex, 1, Values::ZeroVec2,
+		Vector2(srcTex->GetWidth() * 0.25f, srcTex->GetHeight()), 1.0f / 15.0f);
+	animator->AddAnimClip(Opponent_Animation);
+	AnimationClip* Our_Animation = new AnimationClip(L"Our_Roar", srcTex, 2, Vector2(srcTex->GetWidth() * 0.5f, 0.f),
+		Vector2(srcTex->GetWidth(), srcTex->GetHeight()), 1.0f / 15.0f);
+	animator->AddAnimClip(Our_Animation);
+	Our_Animation = new AnimationClip(L"Our_IDLE", srcTex, 1, Vector2(srcTex->GetWidth() * 0.5f, 0.f),
+		Vector2(srcTex->GetWidth() * 0.75f, srcTex->GetHeight()), 1.0f / 15.0f);
+	animator->AddAnimClip(Our_Animation);
+	AnimationClip* Icon_Animation = new AnimationClip(L"Icon", IconTex, 2, Values::ZeroVec2,
+		Vector2(IconTex->GetWidth(), IconTex->GetHeight()), 1.0f / 15.0f);
+
+	animator->AddAnimClip(Opponent_Animation);
+	animator->AddAnimClip(Our_Animation);
+	//	animator->AddAnimClip(Icon_Animation);
+	animator->SetCurrentAnimClip(L"Our_Roar");
+	AnimRect->SetAnimation(animator);
+
+	animator = new Animator;
+	animator->AddAnimClip(Icon_Animation);
+	animator->SetCurrentAnimClip(L"Icon");
+	IconRect->SetAnimation(animator);
+
+
+	SAFE_DELETE(srcTex);
+	SAFE_DELETE(IconTex);
+}
 void Pokemon::SetPos(const Vector3& pos)
 {
-	
 	SetPosition(pos);
 	AnimRect->SetPosition(pos);
+	
 	
 }
 void Pokemon::SetSize(const Vector3& size)
@@ -110,5 +153,54 @@ void Pokemon::Render()
 {
 	AnimRect->Render();
 	IconRect->Render();
+}
+
+Pokemon::Pokemon(const Pokemon& _Other)
+{
+	this->Name = _Other.Name;
+	this->maxhp = _Other.maxhp;
+	this->hp = _Other.hp;
+	this->att = _Other.att;
+	this->def = _Other.def;
+	this->level = _Other.level;
+	this->Speed = _Other.Speed;
+	this->AnimRect = new AnimationRect(Vector3(0.f, 0.f, 0.f), Vector3(0.f, 0.f, 0.f));
+	this->IconRect = new AnimationRect(Vector3(0.f, 0.f, 0.f), Vector3(0.f, 0.f, 0.f));
+	Texture2D* srcTex = new Texture2D(TexturePath + L"Pokemon/Monster/" + Name + L".png");
+	Texture2D* IconTex = new Texture2D(TexturePath + L"Pokemon/Monster/" + Name + L"Icon.png");
+	this->AnimRect->SetHeight(srcTex->GetHeight());
+	this->AnimRect->SetWidth(srcTex->GetWidth() / 4);
+	this->IconRect->SetHeight(IconTex->GetHeight());
+	this->IconRect->SetWidth(IconTex->GetWidth() / 2);
+	Animator* animator = new Animator;
+	AnimationClip* Opponent_Animation = new AnimationClip(L"Opponent_Roar", srcTex, 2, Values::ZeroVec2,
+		Vector2(srcTex->GetWidth() * 0.5f, srcTex->GetHeight()), 1.0f / 15.0f);
+	animator->AddAnimClip(Opponent_Animation);
+	Opponent_Animation = new AnimationClip(L"Opponent_IDLE", srcTex, 1, Values::ZeroVec2,
+		Vector2(srcTex->GetWidth() * 0.25f, srcTex->GetHeight()), 1.0f / 15.0f);
+	animator->AddAnimClip(Opponent_Animation);
+	AnimationClip* Our_Animation = new AnimationClip(L"Our_Roar", srcTex, 2, Vector2(srcTex->GetWidth() * 0.5f, 0.f),
+		Vector2(srcTex->GetWidth(), srcTex->GetHeight()), 1.0f / 15.0f);
+	animator->AddAnimClip(Our_Animation);
+	Our_Animation = new AnimationClip(L"Our_IDLE", srcTex, 1, Vector2(srcTex->GetWidth() * 0.5f, 0.f),
+		Vector2(srcTex->GetWidth() * 0.75f, srcTex->GetHeight()), 1.0f / 15.0f);
+	animator->AddAnimClip(Our_Animation);
+	AnimationClip* Icon_Animation = new AnimationClip(L"Icon", IconTex, 2, Values::ZeroVec2,
+		Vector2(IconTex->GetWidth(), IconTex->GetHeight()), 1.0f / 15.0f);
+
+	animator->AddAnimClip(Opponent_Animation);
+	animator->AddAnimClip(Our_Animation);
+	//	animator->AddAnimClip(Icon_Animation);
+	animator->SetCurrentAnimClip(L"Our_Roar");
+	this->AnimRect->SetAnimation(animator);
+
+	animator = new Animator;
+	animator->AddAnimClip(Icon_Animation);
+	animator->SetCurrentAnimClip(L"Icon");
+	this->IconRect->SetAnimation(animator);
+	SAFE_DELETE(srcTex);
+	SAFE_DELETE(IconTex);
+	for(int i=0;i<4;++i)
+	this->m_sSkill[i] = _Other.m_sSkill[i];
 }
 

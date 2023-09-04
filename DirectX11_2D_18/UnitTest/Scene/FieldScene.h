@@ -3,6 +3,9 @@
 class FieldScene
 	:public Scene
 {
+private:
+	class Player* player;
+	class Npc* npc;
 public:
 	virtual void Init();
 	virtual void Destroy();	// 소멸자 대체

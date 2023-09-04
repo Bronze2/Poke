@@ -80,6 +80,8 @@ void TMap::Update()
 			tile->SetEndUV(endUV);
 			tile->SetCol(bColTile);
 			tile->SetAppear(bAppearTile);
+			tile->SetAnimation(bAnimTile);
+			tile->SetTeleport(bTeleportTile);
 		}
 	}
 
@@ -211,7 +213,10 @@ void TMap::Save(string path)
 			Tile& tile = tiles[y][x];
 			string output;
 			output += to_string(tile.GetStartUV().x) + ' ' + to_string(tile.GetStartUV().y) + ' ';
-			output += to_string(tile.GetEndUV().x) + ' ' + to_string(tile.GetEndUV().y);
+			output += to_string(tile.GetEndUV().x) + ' ' + to_string(tile.GetEndUV().y)+' ';
+			output += to_string(tile.GetCol()) + ' ' + to_string(tile.GetAppear()) + ' ';
+			output += to_string(tile.GetAnimation()) + ' ' + to_string(tile.GetTelePort()) + ' ';
+
 
 			fout << output << endl;
 		}
@@ -310,8 +315,30 @@ void TMap::Load(string path)
 						uv.y = stof(t);
 						++flag;
 						tiles[y][x].SetEndUV(uv);
+						
+					}
+					else if (flag == 4) {
+						bool i = stoi(t);
+						tiles[y][x].SetCol(i);
+						++flag;
+					}
+					else if (flag == 5) {
+						bool i = stoi(t);
+						tiles[y][x].SetAppear(i);
+						++flag;
+					}
+					else if (flag == 6) {
+						bool i = stoi(t);
+						tiles[y][x].SetAnimation(i);
+						++flag;
+					}
+					else if (flag == 7) {
+						bool i = stoi(t);
+						tiles[y][x].SetTeleport(i);
+						++flag;
 						break;
 					}
+
 
 					t.clear();
 					continue;

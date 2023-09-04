@@ -8,3 +8,8 @@ BattleManager::BattleManager()
 BattleManager::~BattleManager()
 {
 }
+
+void BattleManager::BattleStart(Player* _player, Npc* _npc)
+{
+
+}

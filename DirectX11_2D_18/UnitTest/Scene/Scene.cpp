@@ -2,6 +2,7 @@
 #include "Scene.h"
 
 #include "Object/CObject.h"
+#include "Manager/SceneMgr.h"
 void Scene::AddObj(CObject* _pObj, OBJ_TYPE _Type)
 {
 	m_vecObj[(UINT)_Type].push_back(_pObj);

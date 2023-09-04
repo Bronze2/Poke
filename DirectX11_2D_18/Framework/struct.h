@@ -21,6 +21,11 @@ enum class SKILL_TYPE {
 	ICE,
 
 };
+
+enum class BATTLE_STATE {
+	NONE,
+	BATTLE,
+};
 struct SKILL {
 	SKILL_TYPE m_eType;
 	wstring Name;
@@ -37,3 +42,4 @@ struct tEvent {
 struct Poke {
 
 };
+

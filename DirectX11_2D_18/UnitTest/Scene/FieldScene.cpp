@@ -6,16 +6,23 @@
 #include "Geometries/AnimationRect.h"
 #include "Object/Player.h"
 #include "Object/Npc.h"
+#include "Manager/BattleManager.h"
 void FieldScene::Init()
 {
-	Pokemon* pObj = PokemonMgr::Get()->GetPokemons()[0];
-	pObj->SetPos(Vector3(WinMaxWidth/2,WinMaxHeight/2,0.f));
-	pObj->SetSize(Vector3(pObj->GetAnimRect()->GetWidth(),pObj->GetAnimRect()->GetHeight(),0.f));
-	pObj->SetIconPos(Vector3(WinMaxWidth / 2, WinMaxHeight / 2+50, 0.f));
-	pObj->SetIconSize(Vector3(pObj->GetIconRect
-	()->GetWidth(), pObj->GetIconRect()->GetHeight(), 0.f));
+	player = new Player;
+	player->Init();
 
-	AddObj(pObj, OBJ_TYPE::DEFAULT);
+	player->SetPosition(Vector3(WinMaxWidth / 2, WinMaxHeight / 2, 0.f));
+	player->SetSize(Vector3(player->GetAnimRect()->GetWidth(), player->GetAnimRect()->GetHeight(), 0.f));
+	AddObj(player, OBJ_TYPE::PLAYER);
+
+	npc = new Npc(L"Npc00");
+	npc->SetPosition(Vector3(WinMaxWidth / 2, WinMaxHeight / 2+50, 0.f));
+	npc->SetSize(Vector3(npc->GetAnimRect()->GetWidth(), npc->GetAnimRect()->GetHeight(), 0.f));
+
+	npc->AddPokemon(L"Floatzel", 100, 100, 100, 10, 30,50);
+	npc->SetPlayer(player);
+	AddObj(npc, OBJ_TYPE::NPC);
 }
 
 void FieldScene::Destroy()
@@ -26,6 +33,11 @@ void FieldScene::Destroy()
 void FieldScene::Update()
 {
 	Scene::Update();
+
+	if (PRESS('A')) {
+		ChangeScene(SCENE_TYPE::BATTLE);
+		BattleManager::Get()->BattleStart(player, npc);
+	}
 }
 
 void FieldScene::Render()

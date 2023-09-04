@@ -80,6 +80,8 @@ typedef UINT		uint;
 #define WinMaxWidth 1368
 #define WinMaxHeight 768
 #define CLONE(type) type* Clone(){return new type(*this);}
+#define MAXPOKEMONCOUNT 6
+
 
 const wstring ShaderPath = L"../_Shaders/";
 const wstring TexturePath = L"../_Resources/Textures/";
