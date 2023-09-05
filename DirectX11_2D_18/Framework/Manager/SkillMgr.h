@@ -6,7 +6,7 @@ private:
 	SkillMgr();
 	~SkillMgr();
 
-	vector<Skill> m_vecSkill;
+//	vector<Skill> m_vecSkill;
 public:
 	friend class SingletonBase<SkillMgr>;
 };

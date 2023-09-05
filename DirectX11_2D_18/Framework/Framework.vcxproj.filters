@@ -30,7 +30,6 @@
     <ClCompile Include="Renders\States.cpp" />
     <ClCompile Include="Manager\SceneMgr.cpp" />
     <ClCompile Include="Manager\EventMgr.cpp" />
-    <ClCompile Include="Utilities\Scene.cpp" />
     <ClCompile Include="Object\CObject.cpp" />
     <ClCompile Include="Object\Title.cpp" />
     <ClCompile Include="Manager\PokemonMgr.cpp" />
@@ -44,6 +43,11 @@
     <ClCompile Include="Geometries\Tile\Tile.cpp" />
     <ClCompile Include="Manager\BattleManager.cpp" />
     <ClCompile Include="Geometries\TileMap.cpp" />
+    <ClCompile Include="Manager\SkillMgr.cpp" />
+    <ClCompile Include="Object\CSkill.cpp" />
+    <ClCompile Include="Object\UI.cpp" />
+    <ClCompile Include="Object\TextureObject.cpp" />
+    <ClCompile Include="Object\PokeBall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Systems\Graphics.h" />
@@ -79,7 +83,6 @@
     <ClInclude Include="Renders\States.h" />
     <ClInclude Include="Manager\SceneMgr.h" />
     <ClInclude Include="Manager\EventMgr.h" />
-    <ClInclude Include="Utilities\Scene.h" />
     <ClInclude Include="Object\CObject.h" />
     <ClInclude Include="Object\Title.h" />
     <ClInclude Include="Manager\PokemonMgr.h" />
@@ -94,6 +97,11 @@
     <ClInclude Include="Geometries\Tile\Tile.h" />
     <ClInclude Include="Manager\BattleManager.h" />
     <ClInclude Include="Geometries\TileMap.h" />
+    <ClInclude Include="Manager\SkillMgr.h" />
+    <ClInclude Include="Object\CSkill.h" />
+    <ClInclude Include="Object\UI.h" />
+    <ClInclude Include="Object\TextureObject.h" />
+    <ClInclude Include="Object\PokeBall.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NewFilter1">

@@ -3,6 +3,7 @@
 #include "Graphics.h"
 #include "Manager/EventMgr.h"
 #include "Manager/SceneMgr.h"
+#include "Manager/BattleManager.h"
 
 //상대경로 : ./ 현재폴더, ../ 상위폴더
 //절대경로 : 
@@ -114,8 +115,8 @@ WPARAM Window::Run(IObject* mainObj)
 		
 	}
 	//this->mainObj->Destroy();
-
 	SceneMgr::Delete();
+	BattleManager::Delete();
 	EventMgr::Delete();
 	Gui::Delete();
 	Time::Delete();

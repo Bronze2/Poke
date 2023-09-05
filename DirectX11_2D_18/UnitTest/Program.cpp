@@ -4,7 +4,10 @@
 #include "Systems/Window.h"
 //#include "Demos/02_TextureDemo.h"
 #include "Scene/TitleScene.h"
-
+#if _DEBUG
+#define new new(_NORMAL_BLOCK,__FILE__,__LINE__)
+#define malloc(s) _malloc_dbg(s,_NORMAL_BLOCK,__FILE__,__LINE__)
+#endif
 void Program::Init()
 {
 	
@@ -63,7 +66,8 @@ void Program::Push(IObject* obj)
 int WINAPI WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR param, int command)
 {
 	srand((UINT)time(NULL));
-
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+//	_CrtSetBreakAlloc(155);
 	DXDesc desc;
 	desc.AppName = L"D2DGame";
 	desc.instance = instance;

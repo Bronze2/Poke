@@ -25,7 +25,17 @@ enum class SKILL_TYPE {
 enum class BATTLE_STATE {
 	NONE,
 	BATTLE,
+
 };
+enum class BATTLE_CIR {
+	NONE,
+	N_READY,
+	N_ROAR,
+	P_READY,
+	P_ROAR,
+	ALL_READY,
+};
+
 struct SKILL {
 	SKILL_TYPE m_eType;
 	wstring Name;

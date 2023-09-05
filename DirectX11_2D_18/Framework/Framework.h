@@ -16,7 +16,7 @@
 #include <unordered_map>
 #include <assert.h>
 #include <fstream>
-
+#include <chrono>
 using namespace std;
 
 //DirectXTex
@@ -77,7 +77,7 @@ typedef UINT		uint;
 #define KEYUP(p) Keyboard::Get()->Up(p)
 #define KEYDOWN(p) Keyboard::Get()->Down(p)
 
-#define WinMaxWidth 1368
+#define WinMaxWidth 512
 #define WinMaxHeight 768
 #define CLONE(type) type* Clone(){return new type(*this);}
 #define MAXPOKEMONCOUNT 6
@@ -116,9 +116,12 @@ enum Pivot
 
 enum class OBJ_TYPE {
     TILE,
+    UI ,
+    UI2,
     DEFAULT,
     PLAYER,
     NPC,
+ 
     END = 32
 
 };

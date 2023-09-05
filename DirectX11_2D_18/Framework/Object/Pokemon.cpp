@@ -1,6 +1,6 @@
 #include "Framework.h"
 #include "Pokemon.h"
-
+#include "PokeBall.h"
 #include "Geometries/AnimationRect.h"
 Pokemon::Pokemon(wstring Name, UINT maxhp, int hp, int att, int def, UINT level)
 	:Name(Name), maxhp(maxhp), hp(hp), att(att), def(def), level(level)
@@ -41,7 +41,7 @@ Pokemon::Pokemon(wstring Name, UINT maxhp, int hp, int att, int def, UINT level)
 	animator->SetCurrentAnimClip(L"Icon");
 	IconRect->SetAnimation(animator);
 
-
+	m_Pokeball = new PokeBall;
 	SAFE_DELETE(srcTex);
 	SAFE_DELETE(IconTex);
 
@@ -85,7 +85,7 @@ Pokemon::Pokemon(wstring Name, UINT maxhp, int hp, int att, int def, UINT level,
 	animator->SetCurrentAnimClip(L"Icon");
 	IconRect->SetAnimation(animator);
 
-
+	m_Pokeball = new PokeBall();
 	SAFE_DELETE(srcTex);
 	SAFE_DELETE(IconTex);
 }
@@ -117,6 +117,7 @@ Pokemon::~Pokemon()
 {
 	SAFE_DELETE(AnimRect);
 	SAFE_DELETE(IconRect);
+	SAFE_DELETE(m_Pokeball);
 }
 void Pokemon::Init(wstring Name, UINT maxhp, int hp, int att, int def, UINT level, wstring Path)
 {
@@ -127,11 +128,17 @@ void Pokemon::Init(wstring Name, UINT maxhp, int hp, int att, int def, UINT leve
 	AnimRect->SetWidth(srcTex->GetWidth() / 4);
 	Texture2D* IconTex = new Texture2D(TexturePath + Name+L"Icon.png");
 	AnimationClip* Opponent_Animation = new AnimationClip(L"Opponent", srcTex, 2, Values::ZeroVec2, 
-		Vector2(srcTex->GetWidth() * 0.5f, srcTex->GetHeight()), 1.0f / 15.0f);
+		Vector2(srcTex->GetWidth() * 0.5f, srcTex->GetHeight()),0.5f);
+	Opponent_Animation->SetRepeat(false);
+	Opponent_Animation = new AnimationClip(L"Opponent_IDLE", srcTex, 1, Values::ZeroVec2,
+		Vector2(srcTex->GetWidth() * 0.25f, srcTex->GetHeight()), 0.5f);
 	AnimationClip* Our_Animation = new AnimationClip(L"Our", srcTex, 2, Vector2(srcTex->GetWidth() * 0.5f, srcTex->GetHeight()),
-		Vector2(srcTex->GetWidth() , srcTex->GetHeight()), 1.0f / 15.0f);
+		Vector2(srcTex->GetWidth() , srcTex->GetHeight()), 0.5f);
+	Our_Animation->SetRepeat(false);
+	Our_Animation = new AnimationClip(L"Our_IDLE", srcTex, 1, Vector2(srcTex->GetWidth() * 0.5f, srcTex->GetHeight()),
+		Vector2(srcTex->GetWidth()*0.75f, srcTex->GetHeight()), 0.5f);
 	AnimationClip* Icon_Animation = new AnimationClip(L"Icon", IconTex, 2, Values::ZeroVec2,
-		Vector2(IconTex->GetWidth(), IconTex->GetHeight()), 1.0f / 15.0f);
+		Vector2(IconTex->GetWidth(), IconTex->GetHeight()), 0.2f);
 	Animator* animator = new Animator;
 	animator->AddAnimClip(Opponent_Animation);
 	animator->AddAnimClip(Our_Animation);
@@ -145,14 +152,24 @@ void Pokemon::Init(wstring Name, UINT maxhp, int hp, int att, int def, UINT leve
 
 void Pokemon::Update()
 {
+	if (nullptr != m_Pokeball)
+		m_Pokeball->Update();
+	if (!bRender)
+		return;
 	AnimRect->Update();
 	IconRect->Update();
+
 }
 
 void Pokemon::Render()
 {
+	if (nullptr != m_Pokeball)
+		m_Pokeball->Render();
+	if (!bRender)
+		return;
 	AnimRect->Render();
 	IconRect->Render();
+
 }
 
 Pokemon::Pokemon(const Pokemon& _Other)
@@ -174,19 +191,21 @@ Pokemon::Pokemon(const Pokemon& _Other)
 	this->IconRect->SetWidth(IconTex->GetWidth() / 2);
 	Animator* animator = new Animator;
 	AnimationClip* Opponent_Animation = new AnimationClip(L"Opponent_Roar", srcTex, 2, Values::ZeroVec2,
-		Vector2(srcTex->GetWidth() * 0.5f, srcTex->GetHeight()), 1.0f / 15.0f);
+		Vector2(srcTex->GetWidth() * 0.5f, srcTex->GetHeight()), 0.6f);
+	Opponent_Animation->SetRepeat(false);
 	animator->AddAnimClip(Opponent_Animation);
 	Opponent_Animation = new AnimationClip(L"Opponent_IDLE", srcTex, 1, Values::ZeroVec2,
-		Vector2(srcTex->GetWidth() * 0.25f, srcTex->GetHeight()), 1.0f / 15.0f);
+		Vector2(srcTex->GetWidth() * 0.25f, srcTex->GetHeight()), 0.6f);
 	animator->AddAnimClip(Opponent_Animation);
 	AnimationClip* Our_Animation = new AnimationClip(L"Our_Roar", srcTex, 2, Vector2(srcTex->GetWidth() * 0.5f, 0.f),
-		Vector2(srcTex->GetWidth(), srcTex->GetHeight()), 1.0f / 15.0f);
+		Vector2(srcTex->GetWidth(), srcTex->GetHeight()), 0.6f);
+	Our_Animation->SetRepeat(false);
 	animator->AddAnimClip(Our_Animation);
 	Our_Animation = new AnimationClip(L"Our_IDLE", srcTex, 1, Vector2(srcTex->GetWidth() * 0.5f, 0.f),
-		Vector2(srcTex->GetWidth() * 0.75f, srcTex->GetHeight()), 1.0f / 15.0f);
+		Vector2(srcTex->GetWidth() * 0.75f, srcTex->GetHeight()), 0.6f);
 	animator->AddAnimClip(Our_Animation);
 	AnimationClip* Icon_Animation = new AnimationClip(L"Icon", IconTex, 2, Values::ZeroVec2,
-		Vector2(IconTex->GetWidth(), IconTex->GetHeight()), 1.0f / 15.0f);
+		Vector2(IconTex->GetWidth(), IconTex->GetHeight()), 1.2f);
 
 	animator->AddAnimClip(Opponent_Animation);
 	animator->AddAnimClip(Our_Animation);
@@ -198,9 +217,17 @@ Pokemon::Pokemon(const Pokemon& _Other)
 	animator->AddAnimClip(Icon_Animation);
 	animator->SetCurrentAnimClip(L"Icon");
 	this->IconRect->SetAnimation(animator);
+	this->m_Pokeball = new PokeBall(*_Other.m_Pokeball);
+	this->m_Pokeball->SetPokemon(this);
 	SAFE_DELETE(srcTex);
 	SAFE_DELETE(IconTex);
 	for(int i=0;i<4;++i)
 	this->m_sSkill[i] = _Other.m_sSkill[i];
+
 }
 
+void Pokemon::SetOpponent()
+{
+	IsOpponent = true;
+	m_Pokeball->SetOpponent();
+}

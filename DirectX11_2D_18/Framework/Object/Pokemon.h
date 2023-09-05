@@ -1,5 +1,6 @@
 #pragma once
 #include "CObject.h"
+class PokeBall;
 class Pokemon :
     public CObject
 {
@@ -11,19 +12,28 @@ private:
     int def;
     UINT level;
     UINT Speed;
+    bool CanBattle = true;
 
     class AnimationRect* AnimRect;
     class AnimationRect* IconRect;
     SKILL m_sSkill[4];
+    bool bRender = false;
 
-
+    bool IsOpponent = false;
+    PokeBall* m_Pokeball;
 public:
+    PokeBall* GetPokeBall() { return m_Pokeball; }
     UINT GetMaxHp() { return maxhp; }
     int GetHp() { return hp; }
     int GetAttack() { return att; }
     int GetDef() { return def; }
     UINT GetLevel() { return level; }
     UINT GetSpeed() { return Speed; }
+
+
+    void SetRender(const bool& _bRender) { bRender = _bRender; }
+    void SetOpponent();
+    bool GetOpponent() { return IsOpponent; }
    
     class AnimationRect* GetAnimRect() { return AnimRect; }
     class AnimationRect* GetIconRect() { return IconRect; }

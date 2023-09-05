@@ -21,7 +21,7 @@ private:
     NPC_STATE m_eState = NPC_STATE::IDLE;
     bool IsDefeat = false;
 private:
-
+    wstring Name;
     class AnimationRect* AnimRect;
     class AnimationRect* BattleRect;
 
@@ -32,6 +32,7 @@ private:
 
     Vector3 m_Position;
     Vector3 m_BattlePosition;
+    UINT m_curPokemon = 0;
 
 public:
     class AnimationRect* GetAnimRect() { return AnimRect; }
@@ -40,6 +41,12 @@ public:
     void SetBattlePosition(const Vector3& _Position);
     void SetSize(const Vector3& _Size);
     void SetBattleSize(const Vector3& _Size);
+
+    void Move();
+
+    void SetBattleMode() { m_eBattleState = BATTLE_STATE::BATTLE; }
+    void SetIdleMode() { m_eBattleState = BATTLE_STATE::NONE; }
+
 
     void SetDefeat() { IsDefeat = true; }
     const bool& GetDefeat() { return IsDefeat; }

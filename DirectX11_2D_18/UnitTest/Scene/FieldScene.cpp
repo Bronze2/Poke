@@ -17,6 +17,7 @@ void FieldScene::Init()
 	AddObj(player, OBJ_TYPE::PLAYER);
 
 	npc = new Npc(L"Npc00");
+	npc->Init();
 	npc->SetPosition(Vector3(WinMaxWidth / 2, WinMaxHeight / 2+50, 0.f));
 	npc->SetSize(Vector3(npc->GetAnimRect()->GetWidth(), npc->GetAnimRect()->GetHeight(), 0.f));
 
@@ -35,8 +36,8 @@ void FieldScene::Update()
 	Scene::Update();
 
 	if (PRESS('A')) {
-		ChangeScene(SCENE_TYPE::BATTLE);
 		BattleManager::Get()->BattleStart(player, npc);
+		ChangeScene(SCENE_TYPE::BATTLE);
 	}
 }
 

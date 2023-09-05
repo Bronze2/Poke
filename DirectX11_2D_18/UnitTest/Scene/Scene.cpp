@@ -11,7 +11,7 @@ void Scene::AddObj(CObject* _pObj, OBJ_TYPE _Type)
 void Scene::Destroy()
 {
 	for (UINT i = 0; i < (UINT)OBJ_TYPE::END; ++i) {
-		for (int j = 0; j < m_vecObj[i].size(); ++i) {
+		for (int j = 0; j < m_vecObj[i].size(); ++j) {
 			if (nullptr != m_vecObj[i][j])
 			{
 				delete m_vecObj[i][j];
@@ -23,7 +23,7 @@ void Scene::Destroy()
 void Scene::Update()
 {
 	for (UINT i = 0; i < (UINT)OBJ_TYPE::END; ++i) {
-		for (int j = 0; j < m_vecObj[i].size(); ++i) {
+		for (int j = 0; j < m_vecObj[i].size(); ++j) {
 			if (nullptr != m_vecObj[i][j])
 			{
 				m_vecObj[i][j]->Update();
@@ -35,7 +35,7 @@ void Scene::Update()
 void Scene::Render()
 {
 	for (UINT i = 0; i < (UINT)OBJ_TYPE::END; ++i) {
-		for (int j = 0; j < m_vecObj[i].size(); ++i) {
+		for (int j = 0; j < m_vecObj[i].size(); ++j) {
 			if (nullptr != m_vecObj[i][j])
 			{
 				m_vecObj[i][j]->Render();
@@ -47,7 +47,7 @@ void Scene::Render()
 void Scene::PostRender()
 {
 	for (UINT i = 0; i < (UINT)OBJ_TYPE::END; ++i) {
-		for (int j = 0; j < m_vecObj[i].size(); ++i) {
+		for (int j = 0; j < m_vecObj[i].size(); ++j) {
 			if (nullptr != m_vecObj[i][j])
 			{
 				m_vecObj[i][j]->PostRender();
@@ -59,7 +59,7 @@ void Scene::PostRender()
 void Scene::GUI()
 {
 	for (UINT i = 0; i < (UINT)OBJ_TYPE::END; ++i) {
-		for (int j = 0; j < m_vecObj[i].size(); ++i) {
+		for (int j = 0; j < m_vecObj[i].size(); ++j) {
 			if (nullptr != m_vecObj[i][j])
 			{
 				m_vecObj[i][j]->GUI();
@@ -95,7 +95,7 @@ Scene::Scene()
 Scene::~Scene()
 {
 	for (UINT i = 0; i < (UINT)OBJ_TYPE::END; ++i) {
-		for (int j = 0; j < m_vecObj[i].size(); ++i) {
+		for (int j = 0; j < m_vecObj[i].size(); ++j) {
 			if (nullptr != m_vecObj[i][j])
 			{
 				delete m_vecObj[i][j];

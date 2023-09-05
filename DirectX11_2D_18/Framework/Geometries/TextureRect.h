@@ -22,6 +22,8 @@ public:
 
     virtual void Move();
     void SetPosition(const Vector3& pos) { position = pos; }
+    Vector3 GetPosition() { return position; }
+    Vector3 GetSize() { return size; }
     void SetSize(const Vector3& _size) { size = _size; }
     const UINT& GetHeight() { return m_Height; }
     const UINT& GetWidth() { return m_Width; }

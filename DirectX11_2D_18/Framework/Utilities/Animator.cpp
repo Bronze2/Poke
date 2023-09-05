@@ -45,15 +45,28 @@ Animator::~Animator()
 
 void Animator::Update()
 {
+    if (currentClip->bPause)
+    {
+        return;
+    }
+
     if (deltaTime > currentClip->playRate)
     {
         if (currentClip->bReversed == false)
         {
-            currentFrameIndex++;
+            if (currentFrameIndex != currentClip->frameCount)
+                currentFrameIndex++;
 
             if (currentFrameIndex == currentClip->frameCount)
-                currentFrameIndex = 0;
-
+            {
+                if(currentClip->bRepeat)
+                    currentFrameIndex = 0;
+                else {
+                    currentFrameIndex = currentClip->frameCount;
+                    bEnd = true;
+                    return;
+                }
+            }
             currentFrame = currentClip->keyFrames[currentFrameIndex];
         }
         else
@@ -83,6 +96,7 @@ void Animator::SetCurrentAnimClip(wstring clipName)
     else if (currentClip != nullptr && currentClip->clipName == clipName)
         return;
 
+    bEnd = false;
     if (CheckExist(clipName))
     {
         currentClip = animClips.find(clipName)->second;

@@ -35,13 +35,10 @@ SceneMgr::~SceneMgr()
 
 void SceneMgr::Init()
 {
-	
-	PokemonMgr::Create();
 	BattleManager::Create();
-	
+	BattleManager::Get()->Init();
 
 
-	PokemonMgr::Get()->Init();
 	m_arrScene[(UINT)SCENE_TYPE::TITLE] = new TitleScene;
 	m_arrScene[(UINT)SCENE_TYPE::FIELD] = new FieldScene;
 	m_arrScene[(UINT)SCENE_TYPE::BATTLE] = new BattleScene;

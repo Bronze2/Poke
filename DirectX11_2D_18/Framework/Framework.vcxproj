@@ -158,6 +158,10 @@
     <ClCompile Include="Geometries\Tile\TileSet.cpp" />
     <ClCompile Include="Geometries\Tile\TMap.cpp" />
     <ClCompile Include="Manager\BattleManager.cpp" />
+    <ClCompile Include="Manager\SkillMgr.cpp" />
+    <ClCompile Include="Object\CSkill.cpp" />
+    <ClCompile Include="Object\TextureObject.cpp" />
+    <ClCompile Include="Object\PokeBall.cpp" />
     <ClCompile Include="Systems\Camera.cpp" />
     <ClCompile Include="func.cpp" />
     <ClCompile Include="Object\Npc.cpp" />
@@ -183,7 +187,7 @@
     <ClCompile Include="Renders\States.cpp" />
     <ClCompile Include="Manager\SceneMgr.cpp" />
     <ClCompile Include="Object\Title.cpp" />
-    <ClCompile Include="Utilities\Scene.cpp" />
+    <ClCompile Include="Object\UI.cpp" />
     <ClCompile Include="Systems\Graphics.cpp" />
     <ClCompile Include="Systems\Keyboard.cpp" />
     <ClCompile Include="Systems\Mouse.cpp" />
@@ -203,6 +207,10 @@
     <ClInclude Include="Geometries\Tile\TileSet.h" />
     <ClInclude Include="Geometries\Tile\TMap.h" />
     <ClInclude Include="Manager\BattleManager.h" />
+    <ClInclude Include="Manager\SkillMgr.h" />
+    <ClInclude Include="Object\CSkill.h" />
+    <ClInclude Include="Object\TextureObject.h" />
+    <ClInclude Include="Object\PokeBall.h" />
     <ClInclude Include="Systems\Camera.h" />
     <ClInclude Include="func.h" />
     <ClInclude Include="Object\Npc.h" />
@@ -232,7 +240,7 @@
     <ClInclude Include="Manager\SceneMgr.h" />
     <ClInclude Include="Object\Title.h" />
     <ClInclude Include="struct.h" />
-    <ClInclude Include="Utilities\Scene.h" />
+    <ClInclude Include="Object\UI.h" />
     <ClInclude Include="Systems\Graphics.h" />
     <ClInclude Include="Systems\Keyboard.h" />
     <ClInclude Include="Systems\Mouse.h" />

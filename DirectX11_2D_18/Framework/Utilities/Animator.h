@@ -7,7 +7,9 @@ public:
     AnimationClip(wstring clipName, Texture2D* srcTex, UINT frameCount,
                   Vector2 startPos, Vector2 endPos, float playRate,
                   bool bReversed = false);
-
+    void SetRepeat(const bool& _bRepeat) { bRepeat = _bRepeat; }
+    void SetPause(const bool& _bPause) { bPause = _bPause; }
+   
 protected:
     wstring clipName = L"";
     vector<Vector2> keyFrames;
@@ -16,6 +18,8 @@ protected:
     Vector2 texelFrameSize = Values::ZeroVec2;
     float playRate = 0.0f;
     bool bReversed = false;
+    bool bRepeat = true;
+    bool bPause = false;
 };
 
 class Animator
@@ -30,8 +34,12 @@ public:
     Vector2 GetTexelFrameSize() { return currentClip->texelFrameSize; }
     ID3D11ShaderResourceView* GetCurrentSRV() { return currentClip->srv; }
 
+    UINT GetCurrentFraneIdx() { return currentFrameIndex; }
+    bool GetEnd() { return bEnd; }
+
     void AddAnimClip(AnimationClip* animClip);
     void SetCurrentAnimClip(wstring clipName);
+    void SetPause(const bool& _bPause) { currentClip->SetPause(_bPause); }
 
 private:
     bool CheckExist(wstring clipName) { return animClips.find(clipName) != animClips.end(); }
@@ -44,4 +52,6 @@ private:
     Vector2 currentFrame = Values::ZeroVec2;
 
     float deltaTime = 0.0f;
+
+    bool bEnd = false;
 };
