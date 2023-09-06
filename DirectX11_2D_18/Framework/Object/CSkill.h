@@ -6,10 +6,13 @@ class CSkill:public CObject
 {
 private:
 	SKILL m_Skill;
+	class AnimationRect* TypeRect;
 	class AnimationRect* AnimRect;
 	bool m_bCast = false;
 	Pokemon* m_Pokemon;
 public:
+
+	CSkill(const CSkill& _Other);
 	CSkill(const wstring& _Name, const SKILL_TYPE& _type,const UINT& _maxPP,const UINT& _curPP,const UINT& _dmg);
 	~CSkill();
 	void SetPokemon(Pokemon* _pPokemon) { m_Pokemon = _pPokemon; }

@@ -34,6 +34,9 @@ enum class BATTLE_CIR {
 	P_READY,
 	P_ROAR,
 	ALL_READY,
+	P_PHASE,
+	N_PHASE,
+	BATTLE_END,
 };
 
 struct SKILL {
@@ -53,3 +56,12 @@ struct Poke {
 
 };
 
+
+enum class SELECT_PHASE {
+	NONE,
+	COMPREHENSIVE,
+	SKILL,
+	ITEM,
+	POKEMON,
+	RUN,
+};

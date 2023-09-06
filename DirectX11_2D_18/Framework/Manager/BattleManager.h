@@ -28,13 +28,19 @@ private:
 	TextureObject* OurDecorator;
 
 
+	TextureObject* BackGround;
+	UI* ItemSelect;
 private:
 
 	BattleManager();
 	~BattleManager();
 
+	void SelectorUpdate();
 
 public:
+	void PhaseIn();
+	void PhaseOut();
+	void AllReady();
 	void SetCircumStance(const BATTLE_CIR& _State) { m_eCir =_State; }
 	const BATTLE_CIR& GetCircumStance() { return m_eCir; }
 

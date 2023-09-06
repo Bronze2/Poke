@@ -35,6 +35,7 @@ void TextureObject::Update()
 
 void TextureObject::Render()
 {
+    if(m_bRender)
     m_pTex->Render();
 }
 

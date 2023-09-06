@@ -17,11 +17,18 @@ private:
 	bool bPause = false;
 	UINT m_curPokemon = 0;
 
-	UINT m_iSelect = 0;
+	int m_iSelect = 0;
+	SELECT_PHASE m_eSelect=SELECT_PHASE::NONE;
 public:  
+
+	void SetSelectPhase(const SELECT_PHASE& _ePhase) { m_eSelect = _ePhase; }
+	const SELECT_PHASE& GetSelectPhase() { return m_eSelect; }
 	class AnimationRect* GetAnimRect() { return AnimRect; }
 	  class AnimationRect* GetBattleRect() { return BattleRect; }
 	
+	  const int& GetSelect() { return m_iSelect; }
+	 void BattlePhase();
+
 	void SetPosition(const Vector3& _Position);
 	void SetSize(const Vector3& _Size);
 	void SetBattlePosition(const Vector3& _Position);
@@ -29,7 +36,7 @@ public:
 	
 	void Move();
 
-	const UINT& GetSelect() { return m_iSelect; }
+//	const UINT& GetSelect() { return m_iSelect; }
 	void SetSelect(const UINT& _Select) { m_iSelect = _Select; }
 
 	void SetBattleMode() { m_eBattleState = BATTLE_STATE::BATTLE; }

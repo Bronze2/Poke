@@ -5,6 +5,99 @@
 #include "Manager/BattleManager.h"
 #include "Pokemon.h"
 #include "PokeBall.h"
+void Player::BattlePhase()
+{
+	if (BATTLE_STATE::NONE == m_eBattleState)
+		return;
+	if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::ALL_READY) {
+		if (KEYUP(VK_RIGHT))
+		{
+			m_iSelect += 1;
+				switch (m_eSelect)
+				{
+
+				case SELECT_PHASE::COMPREHENSIVE:
+					if(m_iSelect>4)
+					m_iSelect = 1;
+					break;
+				case SELECT_PHASE::SKILL:
+					if (m_iSelect > 5)
+					m_iSelect = 1;
+					break;
+				case SELECT_PHASE::ITEM:
+					m_iSelect = 6;
+					break;
+				case SELECT_PHASE::POKEMON:
+					m_iSelect = 7;
+					break;
+				case SELECT_PHASE::RUN:
+					break;
+
+			}
+		}
+	
+		if (KEYUP(VK_LEFT)) {
+			m_iSelect -= 1;
+			if (m_iSelect < 0) {
+				switch (m_eSelect)
+				{
+			
+				case SELECT_PHASE::COMPREHENSIVE:
+					m_iSelect = 4;
+					break;
+				case SELECT_PHASE::SKILL:
+					m_iSelect = 5;
+					break;
+				case SELECT_PHASE::ITEM:
+					m_iSelect = 6;
+					break;
+				case SELECT_PHASE::POKEMON:
+					m_iSelect = 7;
+					break;
+				case SELECT_PHASE::RUN:
+					break;
+
+				}
+			}
+		}
+	}
+	switch (m_eSelect)
+	{
+
+	case SELECT_PHASE::COMPREHENSIVE:
+	{
+		if (m_iSelect == 1) {
+			if (KEYUP(VK_SPACE)) {
+				BattleManager::Get()->PhaseIn();
+				m_eSelect = SELECT_PHASE::SKILL;
+				m_iSelect = 0;
+			}
+		}
+	}
+		break;
+	case SELECT_PHASE::SKILL:
+	{
+		if (m_iSelect == 5) {
+			if (KEYUP(VK_SPACE)) {
+			BattleManager::Get()->PhaseOut();
+			m_eSelect = SELECT_PHASE::COMPREHENSIVE;
+			m_iSelect = 0;
+			}
+		}
+	
+	}
+		break;
+	case SELECT_PHASE::ITEM:
+		
+		break;
+	case SELECT_PHASE::POKEMON:
+		
+		break;
+	case SELECT_PHASE::RUN:
+		break;
+
+	}
+}
 void Player::SetPosition(const Vector3& _Position)
 {
 	m_Position = _Position;
@@ -55,6 +148,8 @@ void Player::Move()
 		if (m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->GetEnd()) {
 			m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->SetCurrentAnimClip(L"Our_IDLE");
 			BattleManager::Get()->SetCircumStance(BATTLE_CIR::ALL_READY);
+			BattleManager::Get()->AllReady();
+			m_eSelect = SELECT_PHASE::COMPREHENSIVE;
 		}
 	}
 }
@@ -158,6 +253,7 @@ Player::~Player() {
 void Player::Update()
 {
 	Move();
+	BattlePhase();
 	if (BATTLE_STATE::NONE == m_eBattleState) {
 		AnimRect->Update();
 	}
