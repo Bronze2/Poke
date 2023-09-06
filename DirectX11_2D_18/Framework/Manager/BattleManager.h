@@ -18,6 +18,7 @@ private:
 	TextureObject* MediumSelector;
 	TextureObject* SmallSelector;
 	TextureObject* CancelSelector;
+
 	TextureObject* OpponentHpBar;
 	TextureObject* OurHpBar;
 	

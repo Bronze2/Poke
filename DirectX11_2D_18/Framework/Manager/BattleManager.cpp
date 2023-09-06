@@ -17,6 +17,8 @@ BattleManager::~BattleManager()
 	SAFE_DELETE(CancelSelector);
 	SAFE_DELETE(MediumSelector);
 	SAFE_DELETE(SmallSelector);
+	SAFE_DELETE(OurHpBar);
+	SAFE_DELETE(OpponentHpBar)
 }
 
 void BattleManager::BattleStart(Player* _player, Npc* _npc)
@@ -53,6 +55,8 @@ void BattleManager::Render()
 		CancelSelector->Render();
 		SmallSelector->Render();
 		MediumSelector->Render();
+		OpponentHpBar->Render();
+		OurHpBar->Render();
 	}
 }
 
@@ -79,63 +83,63 @@ void BattleManager::Init()
 	FightSelector->GetTex()->SetPosition(Vector3(WinMaxWidth / 2,230, 1.0f)); FightSelector->GetTex()->SetSize(Vector3(434, 180, 0));
 	CancelSelector = new TextureObject;
 	CancelSelector->Init(L"Pokemon/Battle/BattleUI/CancelSelector.png");
-	CancelSelector->GetTex()->SetWidth(236); CancelSelector->GetTex()->SetHeight(45);
-	CancelSelector->GetTex()->SetPosition(Vector3(WinMaxWidth / 2, 230, 1.0f));
-	CancelSelector->GetTex()->SetSize(Vector3(236, 45, 0));
+	CancelSelector->GetTex()->SetWidth(472); CancelSelector->GetTex()->SetHeight(80);
+	CancelSelector->GetTex()->SetPosition(Vector3(256, 40, 1.0f));
+	CancelSelector->GetTex()->SetSize(Vector3(472, 80, 0));
 
 	MediumSelector = new TextureObject;
 	MediumSelector->Init(L"Pokemon/Battle/BattleUI/MediumSelector.png");
 	MediumSelector->GetTex()->SetWidth(248); MediumSelector->GetTex()->SetHeight(110);
-	MediumSelector->GetTex()->SetPosition(Vector3(WinMaxWidth / 2, 230, 1.0f));
+	MediumSelector->GetTex()->SetPosition(Vector3(WinMaxWidth / 4, 290, 1.0f));
 	MediumSelector->GetTex()->SetSize(Vector3(248,110, 0));
 
 	SmallSelector = new TextureObject;
 	SmallSelector->Init(L"Pokemon/Battle/BattleUI/SmallSelector.png");
 	SmallSelector->GetTex()->SetWidth(78); SmallSelector->GetTex()->SetHeight(44);
-	SmallSelector->GetTex()->SetPosition(Vector3(WinMaxWidth / 2, 230, 1.0f));
+	SmallSelector->GetTex()->SetPosition(Vector3(80, 55, 1.0f)); //80 55 -> 256 45-> 432 55
 	SmallSelector->GetTex()->SetSize(Vector3(78*2, 44*2, 0));
+
+	OurHpBar = new TextureObject;
+	OurHpBar->Init(L"Pokemon/Battle/BattleUI/OurHpBAR.png");
+	OurHpBar->GetTex()->SetWidth(266); OurHpBar->GetTex()->SetHeight(90);
+	OurHpBar->GetTex()->SetPosition(Vector3(390, 543, 1.0f));
+	OurHpBar->GetTex()->SetSize(Vector3(266,90, 0));
+
+	OpponentHpBar = new TextureObject;
+	OpponentHpBar->Init(L"Pokemon/Battle/BattleUI/EnemyHpBar.png");
+	OpponentHpBar->GetTex()->SetWidth(252); OpponentHpBar->GetTex()->SetHeight(78);
+	OpponentHpBar->GetTex()->SetPosition(Vector3(126, 700, 1.0f));
+	OpponentHpBar->GetTex()->SetSize(Vector3(252, 78, 0));
 }
 
 void BattleManager::GUI()
 {
-	Vector3 vPos = CancelSelector->GetTex()->GetPosition();
-	Vector3 vSize =CancelSelector->GetTex()->GetSize ();
+	Vector3 vPos = OpponentHpBar->GetTex()->GetPosition();
+	Vector3 vSize = OpponentHpBar->GetTex()->GetSize ();
 	using namespace ImGui;
-	Begin("CancelSelector");
+	Begin("OpponentHpBar");
 	{
 		InputFloat3("Pos", vPos, 2);
 		InputFloat3("Size", vSize, 2);
 	}
-	CancelSelector->GetTex()->SetPosition(vPos);
-	CancelSelector->GetTex()->SetSize(vSize);
+	OpponentHpBar->GetTex()->SetPosition(vPos);
+	OpponentHpBar->GetTex()->SetSize(vSize);
 	End();
 
-	vPos = MediumSelector->GetTex()->GetPosition();
-	vSize = MediumSelector->GetTex()->GetSize();
+	vPos = OurHpBar->GetTex()->GetPosition();
+	vSize = OurHpBar->GetTex()->GetSize();
 	using namespace ImGui;
-	Begin("MediumSelector");
+	Begin("OurHpBar");
 	{
 		InputFloat3("Pos", vPos, 2);
 		InputFloat3("Size", vSize, 2);
 
 	}
-	MediumSelector->GetTex()->SetPosition(vPos);
-	MediumSelector->GetTex()->SetSize(vSize);
+	OurHpBar->GetTex()->SetPosition(vPos);
+	OurHpBar->GetTex()->SetSize(vSize);
 	End();
 
-	vPos = SmallSelector->GetTex()->GetPosition();
-	vSize = SmallSelector->GetTex()->GetSize();
-	using namespace ImGui;
-	Begin("SmallSelector");
-	{
-		InputFloat3("Pos", vPos, 2); 
-		
-		InputFloat3("Size", vSize, 2);
 
-	}
-	SmallSelector->GetTex()->SetSize(vSize);
-	SmallSelector->GetTex()->SetPosition(vPos);
-	End();
 }
 
 
@@ -147,6 +151,8 @@ void BattleManager::Update()
 		CancelSelector->Update();
 		SmallSelector->Update();
 		MediumSelector->Update();
+		OpponentHpBar->Update();
+		OurHpBar->Update();
 		if (KEYUP('A'))
 		{
 			BattlePhase->GetTex()->GetAnimator()->SetCurrentAnimClip(L"BattlePhaseIn");
