@@ -35,6 +35,7 @@ private:
     UINT m_curPokemon = 0;
 
 public:
+    Pokemon* GetPokemons(UINT i) { return m_vecPokemon[i]; }
     class AnimationRect* GetAnimRect() { return AnimRect; }
     class AnimationRect* GetBattleRect() { return BattleRect; }
     void SetPosition(const Vector3& _Position);

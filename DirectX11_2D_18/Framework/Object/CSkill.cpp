@@ -1,7 +1,14 @@
 #include "Framework.h"
 #include "CSkill.h"
-
+#include "Pokemon.h"
 #include "Geometries/AnimationRect.h"
+
+void CSkill::Cast()
+{
+	m_bCast = true;
+	start = std::chrono::steady_clock::now();
+
+}
 
 void CSkill::SetPos(const Vector3& _Pos)
 {
@@ -14,7 +21,7 @@ CSkill::CSkill(const CSkill& _Other)
 	m_Skill.Name = _Other.m_Skill.Name;
 	m_Skill.m_eType = _Other.m_Skill.m_eType;
 	this->TypeRect = new AnimationRect(Vector3(0.f, 0.f, 0.f), Vector3(0.f, 0.f, 0.f));
-	Texture2D* srcTex = new Texture2D(TexturePath + L"PokemonBattle/BattleUI/BattleSkillType.png");
+	Texture2D* srcTex = new Texture2D(TexturePath + L"Pokemon/Battle/BattleUI/BattleSkillType.png");
 
 	float height = srcTex->GetHeight() / 3; float Width = srcTex->GetWidth() / 6;
 	this->TypeRect->SetHeight(height);
@@ -45,7 +52,9 @@ CSkill::CSkill(const CSkill& _Other)
 	m_Skill.maxPP = _Other.m_Skill.maxPP;
 	m_Skill.curPP = _Other.m_Skill.curPP;
 	m_Skill.Dmg = _Other.m_Skill.Dmg;
+	this->m_mvType = _Other.m_mvType;
 	SAFE_DELETE(srcTex);
+	this->m_Pokemon = _Other.m_Pokemon;
 }
 
 CSkill::CSkill(const wstring& _Name, const SKILL_TYPE& _type, const UINT& _maxPP, const UINT& _curPP, const UINT& _dmg)
@@ -53,7 +62,7 @@ CSkill::CSkill(const wstring& _Name, const SKILL_TYPE& _type, const UINT& _maxPP
 	m_Skill.Name = _Name;
 	m_Skill.m_eType = _type;
 	TypeRect = new AnimationRect(Vector3(0.f, 0.f, 0.f), Vector3(0.f, 0.f, 0.f));
-	Texture2D* srcTex = new Texture2D(TexturePath + L"PokemonBattle/BattleUI/BattleSkillType.png");
+	Texture2D* srcTex = new Texture2D(TexturePath + L"Pokemon/Battle/BattleUI/BattleSkillType.png");
 
 	float height = srcTex->GetHeight() / 3; float Width = srcTex->GetWidth() / 6;
 	TypeRect->SetHeight(height);
@@ -98,6 +107,36 @@ void CSkill::Update()
 	
 	if(nullptr!= TypeRect)
 		TypeRect->Update();
+	if (nullptr != AnimRect)
+		AnimRect->Update();
+
+	if (m_bCast) {
+		if (SKILL_MVTYPE::RIGHT == m_mvType)
+		{
+			std::chrono::duration<double> p =chrono::steady_clock::now() - start;
+			if (p.count() >= 0.5f) {
+				if (!bMove)
+				{
+					bMove = true;
+					Vector3 vPos=m_Pokemon->GetPos();
+					vPos.x += 100;
+					m_Pokemon->SetPos(vPos);
+					start = chrono::steady_clock::now();
+				}
+				else {
+					Vector3 vPos = m_Pokemon->GetPos();
+					vPos.x -= 100;
+					m_Pokemon->SetPos(vPos);
+					bMove = false;
+					m_bCast = false;
+
+				}
+
+			}
+		}
+	}
+	
+
 }
 
 void CSkill::Render()
@@ -105,4 +144,7 @@ void CSkill::Render()
 	
 	if (nullptr != TypeRect)
 		TypeRect->Render();
+	if (nullptr != AnimRect)
+		AnimRect->Render();
+
 }

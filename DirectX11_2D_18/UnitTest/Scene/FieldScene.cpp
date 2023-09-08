@@ -22,6 +22,8 @@ void FieldScene::Init()
 	npc->SetSize(Vector3(npc->GetAnimRect()->GetWidth(), npc->GetAnimRect()->GetHeight(), 0.f));
 
 	npc->AddPokemon(L"Floatzel", 100, 100, 100, 10, 30,50);
+	npc->GetPokemons(0)->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 30);
+
 	npc->SetPlayer(player);
 	AddObj(npc, OBJ_TYPE::NPC);
 }

@@ -6,6 +6,8 @@
 #include "Object/TextureObject.h"
 #include "Geometries/TextureRect.h"
 #include "Geometries/AnimationRect.h"
+#include "Object/Pokemon.h"
+#include "Object/CSkill.h"
 BattleManager::BattleManager()
 {
 }
@@ -28,6 +30,7 @@ void BattleManager::SelectorUpdate()
 	case SELECT_PHASE::COMPREHENSIVE:
 		
 	{
+		CancelSelector->SetRender(false);
 		if (m_Player->GetSelect() == 1) {
 			FightSelector->SetRender(true);
 		}
@@ -87,6 +90,20 @@ void BattleManager::SelectorUpdate()
 	MediumSelector->Update();
 	OpponentHpBar->Update();
 	OurHpBar->Update();
+
+	switch (m_Player->GetSelectPhase())
+	{
+	case SELECT_PHASE::SKILL:
+	{
+		for (int i = 0; i < m_Player->GetCurPokemons()->GetSkills().size(); ++i) {
+			m_Player->GetCurPokemons()->GetSkills()[i]->Update();
+		}
+	}
+	break;
+
+	default:
+		break;
+	}
 }
 
 void BattleManager::PhaseIn()
@@ -114,6 +131,20 @@ void BattleManager::BattleStart(Player* _player, Npc* _npc)
 	SAFE_DELETE(m_Npc);
 	m_Player = new Player(*_player);
 	m_Player->SetBattleMode();
+
+	for (int j = 0; j < m_Player->GetPokemons().size(); ++j)
+		for (int i = 0; i < m_Player->GetPokemons()[j]->GetSkills().size(); ++i) {
+			if (i == 0)
+				m_Player->GetPokemons()[j]->GetSkills()[i]->GetTypeTex()->SetPosition(Vector3(WinMaxWidth / 4, 290, 1.0f));
+			if (i == 1)
+				m_Player->GetPokemons()[j]->GetSkills()[i]->GetTypeTex()->SetPosition(Vector3(WinMaxWidth * 0.75f, 290, 1.0f));
+			if (i == 2)
+				m_Player->GetPokemons()[j]->GetSkills()[i]->GetTypeTex()->SetPosition(Vector3(WinMaxWidth / 4, 165, 1.0f));
+			if (i == 3)
+				m_Player->GetPokemons()[j]->GetSkills()[i]->GetTypeTex()->SetPosition(Vector3(WinMaxWidth * 0.75f, 165, 1.0f));
+			m_Player->GetPokemons()[j]->GetSkills()[i]->GetTypeTex()->SetSize(Vector3((float)m_Player->GetPokemons()[j]->GetSkills()[i]->GetTypeTex()->GetWidth(), (float)m_Player->GetPokemons()[j]->GetSkills()[i]->GetTypeTex()->GetHeight(), (float)0.0f));
+
+		}
 	m_Npc = new Npc(*_npc);
 	m_Npc->SetBattleMode();
 }
@@ -143,6 +174,20 @@ void BattleManager::Render()
 		MediumSelector->Render();
 		OpponentHpBar->Render();
 		OurHpBar->Render();
+
+		switch (m_Player->GetSelectPhase())
+		{
+		case SELECT_PHASE::SKILL:
+		{
+			for (int i = 0; i < m_Player->GetCurPokemons()->GetSkills().size(); ++i) {
+				m_Player->GetCurPokemons()->GetSkills()[i]->Render();
+			}
+		}
+			break;
+
+		default:
+			break;
+		}
 	}
 }
 
@@ -160,7 +205,7 @@ void BattleManager::Init()
 	animator->SetCurrentAnimClip(L"BattlePhase");//128 64
 	BattlePhase->GetTex()->SetAnimation(animator); 
 	BattlePhase->GetTex()->SetPosition(Vector3(WinMaxWidth / 2, WinMaxHeight / 2 - 192, 1.0f));
-	BattlePhase->GetTex()->SetSize(Vector3(BattlePhase->GetTex()->GetWidth(), BattlePhase->GetTex()->GetHeight(), 0.0f));
+	BattlePhase->GetTex()->SetSize(Vector3((float)BattlePhase->GetTex()->GetWidth(), (float)BattlePhase->GetTex()->GetHeight(), (float)0.0f));
 	BattlePhase->DeleteTexture();
 
 	FightSelector = new TextureObject;
@@ -197,46 +242,14 @@ void BattleManager::Init()
 	OpponentHpBar->GetTex()->SetPosition(Vector3(126, 700, 1.0f));
 	OpponentHpBar->GetTex()->SetSize(Vector3(252, 78, 0));
 	OpponentHpBar->SetRender(false);
+
+	
+	
 }
 
 void BattleManager::GUI()
 {
-	Vector3 vPos = OpponentHpBar->GetTex()->GetPosition();
-	Vector3 vSize = OpponentHpBar->GetTex()->GetSize ();
-	using namespace ImGui;
-	Begin("OpponentHpBar");
-	{
-		InputFloat3("Pos", vPos, 2);
-		InputFloat3("Size", vSize, 2);
-	}
-	OpponentHpBar->GetTex()->SetPosition(vPos);
-	OpponentHpBar->GetTex()->SetSize(vSize);
-	End();
-	vPos = MediumSelector->GetTex()->GetPosition();
- vSize = MediumSelector->GetTex()->GetSize();
-	using namespace ImGui;
-	Begin("MediumSelector");
-	{
-		InputFloat3("Pos", vPos, 2);
-		InputFloat3("Size", vSize, 2);
-	}
-	MediumSelector->GetTex()->SetPosition(vPos);
-	MediumSelector->GetTex()->SetSize(vSize);
-	End();
-
-	vPos = OurHpBar->GetTex()->GetPosition();
-	vSize = OurHpBar->GetTex()->GetSize();
-	using namespace ImGui;
-	Begin("OurHpBar");
-	{
-		InputFloat3("Pos", vPos, 2);
-		InputFloat3("Size", vSize, 2);
-
-	}
-	OurHpBar->GetTex()->SetPosition(vPos);
-	OurHpBar->GetTex()->SetSize(vSize);
-	End();
-
+	
 
 }
 

@@ -5,6 +5,7 @@
 #include "Manager/BattleManager.h"
 #include "Pokemon.h"
 #include "PokeBall.h"
+#include "CSkill.h"
 void Player::BattlePhase()
 {
 	if (BATTLE_STATE::NONE == m_eBattleState)
@@ -84,7 +85,11 @@ void Player::BattlePhase()
 			m_iSelect = 0;
 			}
 		}
-	
+		if (m_iSelect == m_curPokemon + 1) {
+			if (KEYUP(VK_SPACE)) {
+				m_vecPokemon[m_curPokemon]->GetSkills()[m_curPokemon]->Cast();
+			}
+		}
 	}
 		break;
 	case SELECT_PHASE::ITEM:
@@ -212,15 +217,21 @@ void Player::Init()
 	animator->AddAnimClip(clip);
 	animator->SetCurrentAnimClip(L"BATTLE");
 	BattleRect->SetAnimation(animator);
+
+
 	SAFE_DELETE(srcTex);
 	SAFE_DELETE(IconTex);
 }
 Player::Player() {
 	Pokemon* pokemon = new Pokemon(L"Infernape", 100, 100, 100, 10, 30);
+	pokemon->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 30);
+	pokemon->AddSkill(L"BURN", SKILL_TYPE::FIRE, 30, 30, 30);
 	m_vecPokemon.push_back(pokemon);
 	pokemon = new Pokemon(L"Bibarel", 100, 100, 100, 10, 30);
+	pokemon->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 30);
 	m_vecPokemon.push_back(pokemon);
 	pokemon = new Pokemon(L"Bronzong", 100, 100, 100, 10, 30);
+	pokemon->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 30);
 	m_vecPokemon.push_back(pokemon);
 	AnimRect = nullptr;
 	BattleRect = nullptr;

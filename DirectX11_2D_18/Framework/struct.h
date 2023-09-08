@@ -65,3 +65,8 @@ enum class SELECT_PHASE {
 	POKEMON,
 	RUN,
 };
+
+enum class SKILL_MVTYPE {
+	NONE,
+	RIGHT,
+};

@@ -43,6 +43,10 @@ Pokemon::Pokemon(wstring Name, UINT maxhp, int hp, int att, int def, UINT level)
 	IconRect->SetAnimation(animator);
 
 	m_Pokeball = new PokeBall;
+
+	
+
+	
 	SAFE_DELETE(srcTex);
 	SAFE_DELETE(IconTex);
 
@@ -120,6 +124,8 @@ Pokemon::~Pokemon()
 	SAFE_DELETE(AnimRect);
 	SAFE_DELETE(IconRect);
 	SAFE_DELETE(m_Pokeball);
+	for (size_t i = 0; i < m_vecSkill.size(); ++i)
+		SAFE_DELETE(m_vecSkill[i]);
 }
 void Pokemon::Init(wstring Name, UINT maxhp, int hp, int att, int def, UINT level, wstring Path)
 {
@@ -160,7 +166,7 @@ void Pokemon::Update()
 		return;
 	AnimRect->Update();
 	IconRect->Update();
-
+	
 }
 
 void Pokemon::Render()
@@ -171,6 +177,7 @@ void Pokemon::Render()
 		return;
 	AnimRect->Render();
 	IconRect->Render();
+	
 
 }
 
@@ -223,9 +230,21 @@ Pokemon::Pokemon(const Pokemon& _Other)
 	this->m_Pokeball->SetPokemon(this);
 	SAFE_DELETE(srcTex);
 	SAFE_DELETE(IconTex);
-	for(int i=0;i<m_vecSkill.size();++i)
-		if(nullptr!=m_vecSkill[i])
-	this->m_vecSkill[i] =new CSkill(*_Other.m_vecSkill[i]);
+	for (int i = 0; i < _Other.m_vecSkill.size(); ++i) {
+	
+		CSkill* pSkill = new CSkill(*_Other.m_vecSkill[i]);
+		this->m_vecSkill.push_back(pSkill);
+		
+	}
+}
+
+void Pokemon::AddSkill(const wstring& _Name, const SKILL_TYPE& _type, const UINT& _maxPP, const UINT& _curPP, const UINT& _dmg)
+{
+	if (m_vecSkill.size() >= MAXSKILLCOUNT)return;
+	CSkill* pSkill = new CSkill(
+		_Name, _type, _maxPP, _curPP, _dmg);
+	pSkill->SetPokemon(this);
+	m_vecSkill.push_back(pSkill);
 
 }
 

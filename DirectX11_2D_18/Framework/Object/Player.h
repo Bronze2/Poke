@@ -20,7 +20,8 @@ private:
 	int m_iSelect = 0;
 	SELECT_PHASE m_eSelect=SELECT_PHASE::NONE;
 public:  
-
+	vector<Pokemon*> GetPokemons() { return m_vecPokemon; }
+	Pokemon* GetCurPokemons() { return m_vecPokemon[m_curPokemon]; }
 	void SetSelectPhase(const SELECT_PHASE& _ePhase) { m_eSelect = _ePhase; }
 	const SELECT_PHASE& GetSelectPhase() { return m_eSelect; }
 	class AnimationRect* GetAnimRect() { return AnimRect; }

@@ -45,6 +45,7 @@ public:
     void SetPos(const Vector3& pos);
     void SetSize(const Vector3& size); 
 
+    vector<CSkill*> GetSkills() { return m_vecSkill; }
 
     void StartAnimation(const wstring& _Name);
 
@@ -59,6 +60,8 @@ public:
     void Render();
     Pokemon(const Pokemon& _Other);
 
+
+    void AddSkill(const wstring& _Name, const SKILL_TYPE& _type, const UINT& _maxPP, const UINT& _curPP, const UINT& _dmg);
 
     const wstring& GetName() { return Name; }
     void Attack();
