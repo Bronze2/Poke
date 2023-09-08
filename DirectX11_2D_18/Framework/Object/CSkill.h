@@ -11,7 +11,8 @@ private:
 	bool m_bCast = false;
 	Pokemon* m_Pokemon;
 public:
-
+	void SetPos(const Vector3& _Pos);
+	class AnimationRect* GetTypeTex() { return TypeRect; }
 	CSkill(const CSkill& _Other);
 	CSkill(const wstring& _Name, const SKILL_TYPE& _type,const UINT& _maxPP,const UINT& _curPP,const UINT& _dmg);
 	~CSkill();

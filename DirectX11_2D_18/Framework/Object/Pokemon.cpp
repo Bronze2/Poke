@@ -2,6 +2,7 @@
 #include "Pokemon.h"
 #include "PokeBall.h"
 #include "Geometries/AnimationRect.h"
+#include "CSkill.h"
 Pokemon::Pokemon(wstring Name, UINT maxhp, int hp, int att, int def, UINT level)
 	:Name(Name), maxhp(maxhp), hp(hp), att(att), def(def), level(level)
 {
@@ -88,6 +89,7 @@ Pokemon::Pokemon(wstring Name, UINT maxhp, int hp, int att, int def, UINT level,
 	m_Pokeball = new PokeBall();
 	SAFE_DELETE(srcTex);
 	SAFE_DELETE(IconTex);
+	
 }
 void Pokemon::SetPos(const Vector3& pos)
 {
@@ -221,8 +223,9 @@ Pokemon::Pokemon(const Pokemon& _Other)
 	this->m_Pokeball->SetPokemon(this);
 	SAFE_DELETE(srcTex);
 	SAFE_DELETE(IconTex);
-	for(int i=0;i<4;++i)
-	this->m_sSkill[i] = _Other.m_sSkill[i];
+	for(int i=0;i<m_vecSkill.size();++i)
+		if(nullptr!=m_vecSkill[i])
+	this->m_vecSkill[i] =new CSkill(*_Other.m_vecSkill[i]);
 
 }
 

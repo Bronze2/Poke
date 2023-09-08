@@ -3,6 +3,12 @@
 
 #include "Geometries/AnimationRect.h"
 
+void CSkill::SetPos(const Vector3& _Pos)
+{
+
+	TypeRect->SetPosition(_Pos);
+}
+
 CSkill::CSkill(const CSkill& _Other)
 {
 	m_Skill.Name = _Other.m_Skill.Name;
@@ -89,14 +95,14 @@ CSkill::~CSkill()
 
 void CSkill::Update()
 {
-	if(m_bCast)
-		if(nullptr!= TypeRect)
-			TypeRect->Update();
+	
+	if(nullptr!= TypeRect)
+		TypeRect->Update();
 }
 
 void CSkill::Render()
 {
-	if (m_bCast)
-		if (nullptr != TypeRect)
-			TypeRect->Render();
+	
+	if (nullptr != TypeRect)
+		TypeRect->Render();
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "CObject.h"
 class PokeBall;
+class CSkill;
 class Pokemon :
     public CObject
 {
@@ -16,7 +17,7 @@ private:
 
     class AnimationRect* AnimRect;
     class AnimationRect* IconRect;
-    SKILL m_sSkill[4];
+    vector<CSkill*> m_vecSkill;
     bool bRender = false;
 
     bool IsOpponent = false;
