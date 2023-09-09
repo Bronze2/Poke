@@ -48,6 +48,8 @@
     <ClCompile Include="Object\UI.cpp" />
     <ClCompile Include="Object\TextureObject.cpp" />
     <ClCompile Include="Object\PokeBall.cpp" />
+    <ClCompile Include="Object\UI\ProgressBar.cpp" />
+    <ClCompile Include="Object\UI\GI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Systems\Graphics.h" />
@@ -102,6 +104,8 @@
     <ClInclude Include="Object\UI.h" />
     <ClInclude Include="Object\TextureObject.h" />
     <ClInclude Include="Object\PokeBall.h" />
+    <ClInclude Include="Object\UI\GI.h" />
+    <ClInclude Include="Object\UI\ProgressBar.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NewFilter1">

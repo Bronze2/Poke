@@ -52,9 +52,6 @@ struct tEvent {
 	DWORD_PTR wParam;
 	DWORD_PTR lParam;
 };
-struct Poke {
-
-};
 
 
 enum class SELECT_PHASE {
@@ -69,4 +66,25 @@ enum class SELECT_PHASE {
 enum class SKILL_MVTYPE {
 	NONE,
 	RIGHT,
+};
+
+enum class BATTLE_TYPE {
+	SKILL,
+	ITEM,
+	CHANGE,
+	RUN,
+};
+struct BATTLE_BEHAVIOR {
+	BATTLE_TYPE eBattle;
+	DWORD_PTR wParam;// skill
+	DWORD_PTR lParam; //item
+};
+
+enum class BATTLE_PRIORITY {
+	NONE,
+	FIRST_P,
+	FIRST_N,
+	SECOND_P,
+	SECOND_N,
+	END,
 };

@@ -233,6 +233,7 @@ Pokemon::Pokemon(const Pokemon& _Other)
 	for (int i = 0; i < _Other.m_vecSkill.size(); ++i) {
 	
 		CSkill* pSkill = new CSkill(*_Other.m_vecSkill[i]);
+		pSkill->SetPokemon(this);
 		this->m_vecSkill.push_back(pSkill);
 		
 	}

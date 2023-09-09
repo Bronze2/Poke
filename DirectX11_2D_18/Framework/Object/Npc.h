@@ -36,6 +36,7 @@ private:
 
 public:
     Pokemon* GetPokemons(UINT i) { return m_vecPokemon[i]; }
+    Pokemon* GetCurPokemons() { return m_vecPokemon[m_curPokemon]; }
     class AnimationRect* GetAnimRect() { return AnimRect; }
     class AnimationRect* GetBattleRect() { return BattleRect; }
     void SetPosition(const Vector3& _Position);
@@ -43,6 +44,7 @@ public:
     void SetSize(const Vector3& _Size);
     void SetBattleSize(const Vector3& _Size);
 
+    void DoBehavior();
     void Move();
 
     void SetBattleMode() { m_eBattleState = BATTLE_STATE::BATTLE; }

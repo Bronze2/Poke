@@ -54,7 +54,7 @@ CSkill::CSkill(const CSkill& _Other)
 	m_Skill.Dmg = _Other.m_Skill.Dmg;
 	this->m_mvType = _Other.m_mvType;
 	SAFE_DELETE(srcTex);
-	this->m_Pokemon = _Other.m_Pokemon;
+	this->m_mvType = _Other.m_mvType;
 }
 
 CSkill::CSkill(const wstring& _Name, const SKILL_TYPE& _type, const UINT& _maxPP, const UINT& _curPP, const UINT& _dmg)
@@ -114,18 +114,18 @@ void CSkill::Update()
 		if (SKILL_MVTYPE::RIGHT == m_mvType)
 		{
 			std::chrono::duration<double> p =chrono::steady_clock::now() - start;
-			if (p.count() >= 0.5f) {
+			if (p.count() >= 0.25f) {
 				if (!bMove)
 				{
 					bMove = true;
 					Vector3 vPos=m_Pokemon->GetPos();
-					vPos.x += 100;
+					vPos.x += 60;
 					m_Pokemon->SetPos(vPos);
 					start = chrono::steady_clock::now();
 				}
 				else {
 					Vector3 vPos = m_Pokemon->GetPos();
-					vPos.x -= 100;
+					vPos.x -= 60;
 					m_Pokemon->SetPos(vPos);
 					bMove = false;
 					m_bCast = false;

@@ -16,6 +16,7 @@ private:
 	std::chrono::steady_clock::time_point start;
 public:
 
+	bool GetCasting() { return m_bCast; }
 	void Cast();
 	void SetSkillMVRIGHType() { m_mvType = SKILL_MVTYPE::RIGHT; }
 	void SetPokemon(Pokemon* _pPokemon) { m_Pokemon = _pPokemon; }

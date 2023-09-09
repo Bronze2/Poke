@@ -85,9 +85,16 @@ void Player::BattlePhase()
 			m_iSelect = 0;
 			}
 		}
-		if (m_iSelect == m_curPokemon + 1) {
+		else {
+			if (m_iSelect == 0)
+				return;
 			if (KEYUP(VK_SPACE)) {
-				m_vecPokemon[m_curPokemon]->GetSkills()[m_curPokemon]->Cast();
+				BATTLE_BEHAVIOR behavior;
+				behavior.eBattle = BATTLE_TYPE::SKILL;
+				behavior.wParam = (DWORD_PTR)m_vecPokemon[m_curPokemon]->GetSkills()[m_iSelect];
+				BattleManager::Get()->DoBehavior();
+				BattleManager::Get()->PlayerBehavior(behavior);
+				bbehavior = true;
 			}
 		}
 	}
@@ -223,14 +230,16 @@ void Player::Init()
 	SAFE_DELETE(IconTex);
 }
 Player::Player() {
-	Pokemon* pokemon = new Pokemon(L"Infernape", 100, 100, 100, 10, 30);
+	Pokemon* pokemon = new Pokemon(L"Infernape", 100, 100, 100, 10, 30,100);
 	pokemon->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 30);
+	pokemon->GetSkills()[0]->SetSkillMVRIGHType();
+
 	pokemon->AddSkill(L"BURN", SKILL_TYPE::FIRE, 30, 30, 30);
 	m_vecPokemon.push_back(pokemon);
-	pokemon = new Pokemon(L"Bibarel", 100, 100, 100, 10, 30);
+	pokemon = new Pokemon(L"Bibarel", 100, 100, 100, 10, 30,70);
 	pokemon->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 30);
 	m_vecPokemon.push_back(pokemon);
-	pokemon = new Pokemon(L"Bronzong", 100, 100, 100, 10, 30);
+	pokemon = new Pokemon(L"Bronzong", 100, 100, 100, 10, 30,60);
 	pokemon->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 30);
 	m_vecPokemon.push_back(pokemon);
 	AnimRect = nullptr;

@@ -59,7 +59,10 @@ void BattleManager::SelectorUpdate()
 		}
 		else {
 			CancelSelector->SetRender(false);
-			MediumSelector->SetRender(true);
+			if (m_Player->GetSelect() == 0) {
+				MediumSelector->SetRender(false);
+			}
+			else MediumSelector->SetRender(true);
 			switch (m_Player->GetSelect())
 			{
 			case 1:
@@ -104,6 +107,57 @@ void BattleManager::SelectorUpdate()
 	default:
 		break;
 	}
+}
+
+void BattleManager::DoBattlePhase()
+{
+	if (bPlayerBehavior) {
+
+		if (!bSpeedCheck) {
+			if (BATTLE_TYPE::SKILL == playerbehavior.eBattle) {
+				if (m_Player->GetCurPokemons()->GetSpeed() >= m_Npc->GetCurPokemons()->GetSpeed()) {
+					((CSkill*)playerbehavior.wParam)->Cast();
+					ptr = playerbehavior.wParam;
+					m_eCir = BATTLE_CIR::P_PHASE;
+
+				}
+				else {
+					((CSkill*)npcbehavior.wParam)->Cast();
+					ptr = npcbehavior.wParam;
+					m_eCir = BATTLE_CIR::N_PHASE;
+				}
+				m_iPhase = 1;
+				
+				bSpeedCheck = true;
+			}
+		
+		}
+		else {
+			if (bSpeedCheck) {
+				if (1 == m_iPhase) {
+					if (!((CSkill*)ptr)->GetCasting())
+					{
+
+					}
+
+					switch (m_eCir)
+					{
+					case BATTLE_CIR::P_PHASE:
+						
+						break;
+					case BATTLE_CIR::N_PHASE:
+						
+						break;
+				
+					}
+					m_iPhase += 1;
+				}
+			}
+		}
+		
+	}
+
+	
 }
 
 void BattleManager::PhaseIn()
@@ -167,11 +221,14 @@ void BattleManager::BattleEnd(Player* _player, Npc* _npc)
 void BattleManager::Render()
 {
 	if (m_eCir == BATTLE_CIR::ALL_READY) {
-		BattlePhase->Render();
-		FightSelector->Render();
-		CancelSelector->Render();
-		SmallSelector->Render();
-		MediumSelector->Render();
+		if (!bPlayerBehavior)
+		{
+			BattlePhase->Render();
+			FightSelector->Render();
+			CancelSelector->Render();
+			SmallSelector->Render();
+			MediumSelector->Render();
+		}
 		OpponentHpBar->Render();
 		OurHpBar->Render();
 
@@ -263,6 +320,7 @@ void BattleManager::Update()
 		
 		
 	}
+	DoBattlePhase();
 }
 void BattleManager::NPCDefeat()
 {

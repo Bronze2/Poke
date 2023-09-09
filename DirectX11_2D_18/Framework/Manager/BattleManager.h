@@ -30,6 +30,14 @@ private:
 
 	TextureObject* BackGround;
 	UI* ItemSelect;
+
+	bool bPlayerBehavior = false;
+	BATTLE_BEHAVIOR playerbehavior;
+	BATTLE_BEHAVIOR npcbehavior;
+	bool bSpeedCheck = false;
+	UINT m_iPhase = 0;
+	bool bCast = false;
+	DWORD_PTR ptr;
 private:
 
 	BattleManager();
@@ -38,6 +46,13 @@ private:
 	void SelectorUpdate();
 
 public:
+
+	void NpcBehavior(const BATTLE_BEHAVIOR& _behavior) { npcbehavior = _behavior; }
+
+	void PlayerBehavior(const BATTLE_BEHAVIOR& _behavior){playerbehavior=_behavior;}
+	void DoBehavior() { bPlayerBehavior = true; }
+	bool Getbehavior() { return bPlayerBehavior; }
+	void DoBattlePhase();
 	void PhaseIn();
 	void PhaseOut();
 	void AllReady();

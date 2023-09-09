@@ -4,6 +4,7 @@
 #include "Pokemon.h"
 #include "PokeBall.h"
 #include "Manager/BattleManager.h"
+#include "Player.h"
 void Npc::SetPosition(const Vector3& _Position)
 {
 	m_Position = _Position;
@@ -24,6 +25,10 @@ void Npc::SetSize(const Vector3& _Size)
 void Npc::SetBattleSize(const Vector3& _Size)
 {
 	BattleRect->SetSize(_Size); this->SetSz(_Size);
+}
+
+void Npc::DoBehavior()
+{
 }
 
 void Npc::Move()
@@ -59,6 +64,15 @@ void Npc::Move()
 		}
 		
 	}
+	if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::ALL_READY) {
+		if (player->GetDobehavior()) {
+			int i = rand() % m_vecPokemon[m_curPokemon]->GetSkills().size();
+			BATTLE_BEHAVIOR behavior;
+			behavior.eBattle=BATTLE_TYPE::SKILL;
+			behavior.wParam = (DWORD_PTR)m_vecPokemon[m_curPokemon]->GetSkills()[i];
+			BattleManager::Get()->NpcBehavior(behavior);
+		}
+	}
 }
 
 
@@ -77,7 +91,8 @@ Npc::~Npc()
 
 Npc::Npc(const wstring& _Name, bool bBattle)
 	:m_bBattle(bBattle),Name(_Name)
-{	
+{
+	IsNpc = true;
 }
 
 Npc::Npc(const Npc& _Other)
@@ -92,6 +107,7 @@ Npc::Npc(const Npc& _Other)
 	this->m_BattlePosition = _Other.m_BattlePosition;
 	this->IsDefeat = _Other.IsDefeat;
 	this->Init();
+	this->IsNpc = true;
 }
 
 void Npc::AddPokemon(const wstring& Name, UINT maxhp, int hp, int att, int def, UINT level, UINT Speed)

@@ -18,8 +18,12 @@ private:
 	UINT m_curPokemon = 0;
 
 	int m_iSelect = 0;
+	
 	SELECT_PHASE m_eSelect=SELECT_PHASE::NONE;
+	bool bbehavior = false;
 public:  
+
+	const bool& GetDobehavior() { return bbehavior; }
 	vector<Pokemon*> GetPokemons() { return m_vecPokemon; }
 	Pokemon* GetCurPokemons() { return m_vecPokemon[m_curPokemon]; }
 	void SetSelectPhase(const SELECT_PHASE& _ePhase) { m_eSelect = _ePhase; }

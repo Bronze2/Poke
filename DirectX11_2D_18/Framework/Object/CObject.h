@@ -10,10 +10,12 @@ private:
 
 	AnimationRect* m_pAnimRect;
 	Animator* m_pAnimator;
-
+	
 protected:
-
+	bool IsNpc = false;
 public:
+	void SetIsNpc() { IsNpc = true; }
+	bool GetIsNpc() { return IsNpc; }
 	void SetPosition(Vector3 _pos) { m_Position = _pos; }
 	void SetSz(Vector3 _size) { m_Size = _size; }
 	void SetDead() { m_bDead = true; }
