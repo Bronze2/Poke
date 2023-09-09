@@ -237,6 +237,7 @@ Pokemon::Pokemon(const Pokemon& _Other)
 		this->m_vecSkill.push_back(pSkill);
 		
 	}
+	this->IsNpc = _Other.IsNpc;
 }
 
 void Pokemon::AddSkill(const wstring& _Name, const SKILL_TYPE& _type, const UINT& _maxPP, const UINT& _curPP, const UINT& _dmg)

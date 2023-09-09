@@ -193,7 +193,7 @@ Graphics::~Graphics()
 	SAFE_RELEASE(swapChain);
 	SAFE_RELEASE(deviceContext);
 	SAFE_RELEASE(device);
-	for (int i = 0; i < adapterInfos.size(); ++i)
+	for (size_t i = 0; i < adapterInfos.size(); ++i)
 		SAFE_DELETE(adapterInfos[i]);
 }
 

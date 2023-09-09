@@ -113,12 +113,13 @@ void CSkill::Update()
 	if (m_bCast) {
 		if (SKILL_MVTYPE::RIGHT == m_mvType)
 		{
+			if(!m_Pokemon->GetIsNpc()){
 			std::chrono::duration<double> p =chrono::steady_clock::now() - start;
-			if (p.count() >= 0.25f) {
+			if (p.count() >= 0.5f) {
 				if (!bMove)
 				{
 					bMove = true;
-					Vector3 vPos=m_Pokemon->GetPos();
+					Vector3 vPos = m_Pokemon->GetPos();
 					vPos.x += 60;
 					m_Pokemon->SetPos(vPos);
 					start = chrono::steady_clock::now();
@@ -131,7 +132,28 @@ void CSkill::Update()
 					m_bCast = false;
 
 				}
+			}
+			}
+			else {
+				std::chrono::duration<double> p = chrono::steady_clock::now() - start;
+				if (p.count() >= 0.5f) {
+					if (!bMove)
+					{
+						bMove = true;
+						Vector3 vPos = m_Pokemon->GetPos();
+						vPos.x -= 60;
+						m_Pokemon->SetPos(vPos);
+						start = chrono::steady_clock::now();
+					}
+					else {
+						Vector3 vPos = m_Pokemon->GetPos();
+						vPos.x += 60;
+						m_Pokemon->SetPos(vPos);
+						bMove = false;
+						m_bCast = false;
 
+					}
+				}
 			}
 		}
 	}

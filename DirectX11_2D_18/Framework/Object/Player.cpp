@@ -91,9 +91,10 @@ void Player::BattlePhase()
 			if (KEYUP(VK_SPACE)) {
 				BATTLE_BEHAVIOR behavior;
 				behavior.eBattle = BATTLE_TYPE::SKILL;
-				behavior.wParam = (DWORD_PTR)m_vecPokemon[m_curPokemon]->GetSkills()[m_iSelect];
+				behavior.wParam = (DWORD_PTR)m_vecPokemon[m_curPokemon]->GetSkills()[m_iSelect-1];
 				BattleManager::Get()->DoBehavior();
 				BattleManager::Get()->PlayerBehavior(behavior);
+
 				bbehavior = true;
 			}
 		}
@@ -238,9 +239,11 @@ Player::Player() {
 	m_vecPokemon.push_back(pokemon);
 	pokemon = new Pokemon(L"Bibarel", 100, 100, 100, 10, 30,70);
 	pokemon->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 30);
+	pokemon->GetSkills()[0]->SetSkillMVRIGHType();
 	m_vecPokemon.push_back(pokemon);
 	pokemon = new Pokemon(L"Bronzong", 100, 100, 100, 10, 30,60);
 	pokemon->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 30);
+	pokemon->GetSkills()[0]->SetSkillMVRIGHType();
 	m_vecPokemon.push_back(pokemon);
 	AnimRect = nullptr;
 	BattleRect = nullptr;

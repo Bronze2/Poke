@@ -50,6 +50,7 @@
     <ClCompile Include="Object\PokeBall.cpp" />
     <ClCompile Include="Object\UI\ProgressBar.cpp" />
     <ClCompile Include="Object\UI\GI.cpp" />
+    <ClCompile Include="Systems\SRV.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Systems\Graphics.h" />
@@ -106,6 +107,7 @@
     <ClInclude Include="Object\PokeBall.h" />
     <ClInclude Include="Object\UI\GI.h" />
     <ClInclude Include="Object\UI\ProgressBar.h" />
+    <ClInclude Include="Systems\SRV.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NewFilter1">

@@ -116,13 +116,16 @@ void BattleManager::DoBattlePhase()
 		if (!bSpeedCheck) {
 			if (BATTLE_TYPE::SKILL == playerbehavior.eBattle) {
 				if (m_Player->GetCurPokemons()->GetSpeed() >= m_Npc->GetCurPokemons()->GetSpeed()) {
-					((CSkill*)playerbehavior.wParam)->Cast();
+					CSkill* pSkill=((CSkill*)playerbehavior.wParam);
+
+					pSkill->Cast();
 					ptr = playerbehavior.wParam;
 					m_eCir = BATTLE_CIR::P_PHASE;
 
 				}
 				else {
-					((CSkill*)npcbehavior.wParam)->Cast();
+					CSkill* pSkill = ((CSkill*)npcbehavior.wParam);
+					pSkill->Cast();
 					ptr = npcbehavior.wParam;
 					m_eCir = BATTLE_CIR::N_PHASE;
 				}
@@ -143,14 +146,35 @@ void BattleManager::DoBattlePhase()
 					switch (m_eCir)
 					{
 					case BATTLE_CIR::P_PHASE:
-						
+					{
+					CSkill* pSkill = ((CSkill*)npcbehavior.wParam);
+						pSkill->Cast();
+					ptr = npcbehavior.wParam;
+					m_eCir = BATTLE_CIR::N_PHASE; }
 						break;
-					case BATTLE_CIR::N_PHASE:
-						
+					case BATTLE_CIR::N_PHASE: {
+						CSkill* pSkill = ((CSkill*)playerbehavior.wParam);
+						pSkill->Cast();
+						ptr = playerbehavior.wParam;
+						m_eCir = BATTLE_CIR::P_PHASE; }
 						break;
 				
 					}
 					m_iPhase += 1;
+				}
+				else if (2 == m_iPhase) {
+					if (!((CSkill*)ptr)->GetCasting())
+					{
+
+					}
+
+					m_eCir = BATTLE_CIR::BATTLE_END;
+					m_iPhase += 1;
+				}
+
+				else {
+					m_iPhase = 0;
+					m_eCir = BATTLE_CIR::ALL_READY;
 				}
 			}
 		}
@@ -228,23 +252,25 @@ void BattleManager::Render()
 			CancelSelector->Render();
 			SmallSelector->Render();
 			MediumSelector->Render();
+
+			switch (m_Player->GetSelectPhase())
+			{
+			case SELECT_PHASE::SKILL:
+			{
+				for (int i = 0; i < m_Player->GetCurPokemons()->GetSkills().size(); ++i) {
+					m_Player->GetCurPokemons()->GetSkills()[i]->Render();
+				}
+			}
+			break;
+
+			default:
+				break;
+			}
 		}
 		OpponentHpBar->Render();
 		OurHpBar->Render();
 
-		switch (m_Player->GetSelectPhase())
-		{
-		case SELECT_PHASE::SKILL:
-		{
-			for (int i = 0; i < m_Player->GetCurPokemons()->GetSkills().size(); ++i) {
-				m_Player->GetCurPokemons()->GetSkills()[i]->Render();
-			}
-		}
-			break;
-
-		default:
-			break;
-		}
+		
 	}
 }
 

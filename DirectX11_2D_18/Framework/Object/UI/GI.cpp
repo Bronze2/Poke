@@ -200,7 +200,7 @@ inline void GI::SetVertices(vector<T>& vertices, FillType type)
 {
 	switch (type)
 	{
-		case UI::NONE:
+		case GI::NONE:
 		{
 			vertices[0].position = Vector3(-0.5f, -0.5f, 0.0f);
 			vertices[1].position = Vector3(+0.5f, +0.5f, 0.0f);
@@ -209,7 +209,7 @@ inline void GI::SetVertices(vector<T>& vertices, FillType type)
 			break;
 		}
 
-		case UI::LEFT_TO_RIGHT:
+		case GI::LEFT_TO_RIGHT:
 		{
 			vertices[0].position = Vector3(+0.0f, -0.5f, 0.0f);
 			vertices[1].position = Vector3(+1.0f, +0.5f, 0.0f);
@@ -218,7 +218,7 @@ inline void GI::SetVertices(vector<T>& vertices, FillType type)
 			break;
 		}
 
-		case UI::RIGHT_TO_LEFT:
+		case GI::RIGHT_TO_LEFT:
 		{
 			vertices[0].position = Vector3(-1.0f, -0.5f, 0.0f);
 			vertices[1].position = Vector3(+0.0f, +0.5f, 0.0f);
@@ -227,7 +227,7 @@ inline void GI::SetVertices(vector<T>& vertices, FillType type)
 			break;
 		}
 
-		case UI::UP_TO_DOWN:
+		case GI::UP_TO_DOWN:
 		{
 			vertices[0].position = Vector3(-0.5f, -1.0f, 0.0f);
 			vertices[1].position = Vector3(+0.5f, -0.0f, 0.0f);
@@ -236,7 +236,7 @@ inline void GI::SetVertices(vector<T>& vertices, FillType type)
 			break;
 		}
 
-		case UI::DOWN_TO_UP:
+		case GI::DOWN_TO_UP:
 		{
 			vertices[0].position = Vector3(-0.5f, +0.0f, 0.0f);
 			vertices[1].position = Vector3(+0.5f, +1.0f, 0.0f);
