@@ -7,6 +7,7 @@
 #include "Geometries/TextureRect.h"
 #include "Geometries/AnimationRect.h"
 #include "Object/Pokemon.h"
+#include "Geometries/AnimationRect.h"
 #include "Object/CSkill.h"
 BattleManager::BattleManager()
 {
@@ -20,7 +21,9 @@ BattleManager::~BattleManager()
 	SAFE_DELETE(MediumSelector);
 	SAFE_DELETE(SmallSelector);
 	SAFE_DELETE(OurHpBar);
-	SAFE_DELETE(OpponentHpBar)
+	SAFE_DELETE(OpponentHpBar);
+	SAFE_DELETE(OurHpPoint);
+	SAFE_DELETE(OpponentHpPoint);
 }
 
 void BattleManager::SelectorUpdate()
@@ -91,6 +94,13 @@ void BattleManager::SelectorUpdate()
 	CancelSelector->Update();
 	SmallSelector->Update();
 	MediumSelector->Update();
+
+
+}
+
+void BattleManager::DoBattlePhase()
+{
+
 	OpponentHpBar->Update();
 	OurHpBar->Update();
 
@@ -98,19 +108,19 @@ void BattleManager::SelectorUpdate()
 	{
 	case SELECT_PHASE::SKILL:
 	{
-		for (int i = 0; i < m_Player->GetCurPokemons()->GetSkills().size(); ++i) {
+		for (size_t i = 0; i < m_Player->GetCurPokemons()->GetSkills().size(); ++i) {
 			m_Player->GetCurPokemons()->GetSkills()[i]->Update();
 		}
+
 	}
 	break;
 
 	default:
 		break;
 	}
-}
-
-void BattleManager::DoBattlePhase()
-{
+	for (size_t i = 0; i < m_Npc->GetCurPokemons()->GetSkills().size(); ++i) {
+		m_Npc->GetCurPokemons()->GetSkills()[i]->Update();
+	}
 	if (bPlayerBehavior) {
 
 		if (!bSpeedCheck) {
@@ -138,10 +148,14 @@ void BattleManager::DoBattlePhase()
 		else {
 			if (bSpeedCheck) {
 				if (1 == m_iPhase) {
-					if (!((CSkill*)ptr)->GetCasting())
+					CSkill* pSkill = (CSkill*)ptr;
+					if (!(pSkill->GetCasting()))
 					{
-
+						if(!bHitted)
+						HitEffect();
 					}
+					if (!bHitted)
+						return;
 
 					switch (m_eCir)
 					{
@@ -149,24 +163,33 @@ void BattleManager::DoBattlePhase()
 					{
 					CSkill* pSkill = ((CSkill*)npcbehavior.wParam);
 						pSkill->Cast();
+						
 					ptr = npcbehavior.wParam;
-					m_eCir = BATTLE_CIR::N_PHASE; }
+					m_eCir = BATTLE_CIR::N_PHASE; 
+					bHitted = false;
+					}
 						break;
 					case BATTLE_CIR::N_PHASE: {
 						CSkill* pSkill = ((CSkill*)playerbehavior.wParam);
 						pSkill->Cast();
 						ptr = playerbehavior.wParam;
-						m_eCir = BATTLE_CIR::P_PHASE; }
+						m_eCir = BATTLE_CIR::P_PHASE;
+						bHitted = false;
+					}
 						break;
 				
 					}
 					m_iPhase += 1;
 				}
 				else if (2 == m_iPhase) {
-					if (!((CSkill*)ptr)->GetCasting())
+					CSkill* pSkill = (CSkill*)ptr;
+					if (!(pSkill->GetCasting()))
 					{
-
+						if (!bHitted)
+						HitEffect();
 					}
+					if (!bHitted)
+						return;
 
 					m_eCir = BATTLE_CIR::BATTLE_END;
 					m_iPhase += 1;
@@ -175,6 +198,15 @@ void BattleManager::DoBattlePhase()
 				else {
 					m_iPhase = 0;
 					m_eCir = BATTLE_CIR::ALL_READY;
+					playerbehavior = {};
+					npcbehavior = {};
+					bPlayerBehavior = false;
+					m_Player->SetSelect(0);
+					m_Player->SetSelectPhase(SELECT_PHASE::COMPREHENSIVE);
+					BattlePhase->GetTex()->GetAnimator()->SetCurrentAnimClip(L"BattlePhase");
+					MediumSelector->SetRender(false);
+					bSpeedCheck = false;
+					bHitted = false;
 				}
 			}
 		}
@@ -202,6 +234,83 @@ void BattleManager::AllReady()
 	OpponentHpBar->SetRender(true);
 }
 
+void BattleManager::HitEffect()
+{
+	
+	switch (m_eCir)
+	{
+	case BATTLE_CIR::P_PHASE:
+	{
+		if (!bHitEffectCheck)
+		{
+			start = chrono::steady_clock::now();
+			bHitEffectCheck = true;
+		}
+		else {
+			if (TimeCheck(0.125f, start)) {
+				bHitEffectCheck = false;
+				m_iHitEffectCount += 1;
+				if (m_iHitEffectCount % 2 == 0) {
+					m_Npc->GetCurPokemons()->SetSize(
+						Vector3(m_Npc->GetCurPokemons()->GetAnimRect()->GetWidth(), m_Npc->GetCurPokemons()->GetAnimRect()->GetHeight(), 0.f)
+
+					);
+					
+				}
+				else {
+					m_Npc->GetCurPokemons()->SetSize(
+						Vector3(0.f, 0.f, 0.f)
+
+					);
+				}
+				if (m_iHitEffectCount == 6) {
+					bHitted = true;
+					m_iHitEffectCount = 0;
+			}
+			}
+
+		}
+	}
+		break;
+	case BATTLE_CIR::N_PHASE:
+	{
+		if (!bHitEffectCheck)
+		{
+			start = chrono::steady_clock::now();
+			bHitEffectCheck = true;
+		}
+		else {
+			if (TimeCheck(0.125f, start)) {
+				bHitEffectCheck = false;
+				m_iHitEffectCount += 1;
+				if (m_iHitEffectCount % 2 == 0) {
+					m_Player->GetCurPokemons()->SetSize(
+						Vector3(m_Player->GetCurPokemons()->GetAnimRect()->GetWidth(), m_Player->GetCurPokemons()->GetAnimRect()->GetHeight(), 0.f)
+
+					);
+
+				}
+				else {
+					m_Player->GetCurPokemons()->SetSize(
+						Vector3(0.f, 0.f, 0.f)
+
+					);
+				}
+				if (m_iHitEffectCount == 6) {
+					bHitted = true;
+					m_iHitEffectCount = 0;
+				}
+			}
+
+		}
+	}
+		break;
+
+	}
+
+
+}
+
 void BattleManager::BattleStart(Player* _player, Npc* _npc)
 {
 	
@@ -210,8 +319,8 @@ void BattleManager::BattleStart(Player* _player, Npc* _npc)
 	m_Player = new Player(*_player);
 	m_Player->SetBattleMode();
 
-	for (int j = 0; j < m_Player->GetPokemons().size(); ++j)
-		for (int i = 0; i < m_Player->GetPokemons()[j]->GetSkills().size(); ++i) {
+	for (size_t j = 0; j < m_Player->GetPokemons().size(); ++j)
+		for (size_t i = 0; i < m_Player->GetPokemons()[j]->GetSkills().size(); ++i) {
 			if (i == 0)
 				m_Player->GetPokemons()[j]->GetSkills()[i]->GetTypeTex()->SetPosition(Vector3(WinMaxWidth / 4, 290, 1.0f));
 			if (i == 1)
@@ -257,7 +366,7 @@ void BattleManager::Render()
 			{
 			case SELECT_PHASE::SKILL:
 			{
-				for (int i = 0; i < m_Player->GetCurPokemons()->GetSkills().size(); ++i) {
+				for (size_t i = 0; i < m_Player->GetCurPokemons()->GetSkills().size(); ++i) {
 					m_Player->GetCurPokemons()->GetSkills()[i]->Render();
 				}
 			}

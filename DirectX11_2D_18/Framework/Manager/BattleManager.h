@@ -5,6 +5,7 @@ class Npc;
 
 class UI;
 class TextureObject;
+class ProgressBar;
 class BattleManager : public SingletonBase<BattleManager>
 {
 
@@ -27,7 +28,8 @@ private:
 	TextureObject* OpponentDecorator;
 	TextureObject* OurDecorator;
 
-
+	ProgressBar* OurHpPoint;
+	ProgressBar* OpponentHpPoint;
 	TextureObject* BackGround;
 	UI* ItemSelect;
 
@@ -37,7 +39,13 @@ private:
 	bool bSpeedCheck = false;
 	UINT m_iPhase = 0;
 	bool bCast = false;
+	bool bHitted = false;
 	DWORD_PTR ptr;
+
+	UINT m_iHitEffectCount = 0;
+	std::chrono::steady_clock::time_point start;
+	bool bHitEffectCheck = false;
+
 private:
 
 	BattleManager();
@@ -60,6 +68,8 @@ public:
 	const BATTLE_CIR& GetCircumStance() { return m_eCir; }
 
 
+
+	void HitEffect();
 	Player* GetPlayer() { if (nullptr != m_Player)return m_Player; }
 	Npc* GetNpc() { if (nullptr != m_Npc)return m_Npc; }
 	void BattleStart(Player* _player, Npc* _npc);

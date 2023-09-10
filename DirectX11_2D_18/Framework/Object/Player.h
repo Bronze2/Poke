@@ -23,10 +23,13 @@ private:
 	bool bbehavior = false;
 public:  
 
+
 	const bool& GetDobehavior() { return bbehavior; }
 	vector<Pokemon*> GetPokemons() { return m_vecPokemon; }
 	Pokemon* GetCurPokemons() { return m_vecPokemon[m_curPokemon]; }
+	
 	void SetSelectPhase(const SELECT_PHASE& _ePhase) { m_eSelect = _ePhase; }
+
 	const SELECT_PHASE& GetSelectPhase() { return m_eSelect; }
 	class AnimationRect* GetAnimRect() { return AnimRect; }
 	  class AnimationRect* GetBattleRect() { return BattleRect; }

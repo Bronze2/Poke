@@ -29,3 +29,12 @@ void ChangeScene(SCENE_TYPE _NextScene)
 
 	EventMgr::Get()->AddEvent(evn);
 }
+
+bool TimeCheck(float fduration, chrono::steady_clock::time_point b)
+{
+	std::chrono::duration<double> p = chrono::steady_clock::now() - b;
+	if (fduration <= p.count()) {
+		return true;
+	}
+	return false;
+}

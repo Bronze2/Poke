@@ -113,7 +113,7 @@ void CSkill::Update()
 	if (m_bCast) {
 		if (SKILL_MVTYPE::RIGHT == m_mvType)
 		{
-			if(!m_Pokemon->GetIsNpc()){
+			if(!m_Pokemon->GetOpponent()){
 			std::chrono::duration<double> p =chrono::steady_clock::now() - start;
 			if (p.count() >= 0.5f) {
 				if (!bMove)

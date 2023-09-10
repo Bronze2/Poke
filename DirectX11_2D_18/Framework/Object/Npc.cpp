@@ -5,6 +5,7 @@
 #include "PokeBall.h"
 #include "Manager/BattleManager.h"
 #include "Player.h"
+#include "CSkill.h"
 void Npc::SetPosition(const Vector3& _Position)
 {
 	m_Position = _Position;
@@ -67,6 +68,7 @@ void Npc::Move()
 	if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::ALL_READY) {
 		if (player->GetDobehavior()) {
 			int i = rand() % m_vecPokemon[m_curPokemon]->GetSkills().size();
+			if (m_vecPokemon[m_curPokemon]->GetSkills()[i]->GetCurPP() <= 0)return;
 			BATTLE_BEHAVIOR behavior;
 			behavior.eBattle=BATTLE_TYPE::SKILL;
 			behavior.wParam = (DWORD_PTR)m_vecPokemon[m_curPokemon]->GetSkills()[i];

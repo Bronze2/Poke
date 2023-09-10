@@ -89,6 +89,7 @@ void Player::BattlePhase()
 			if (m_iSelect == 0)
 				return;
 			if (KEYUP(VK_SPACE)) {
+				if (m_vecPokemon[m_curPokemon]->GetSkills()[m_iSelect - 1]->GetCurPP() <= 0)return;
 				BATTLE_BEHAVIOR behavior;
 				behavior.eBattle = BATTLE_TYPE::SKILL;
 				behavior.wParam = (DWORD_PTR)m_vecPokemon[m_curPokemon]->GetSkills()[m_iSelect-1];

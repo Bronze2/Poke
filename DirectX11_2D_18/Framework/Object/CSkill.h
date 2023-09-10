@@ -16,6 +16,8 @@ private:
 	std::chrono::steady_clock::time_point start;
 public:
 
+	void SubCurPP() { if (m_Skill.curPP > 0)m_Skill.curPP-=1; }
+	UINT GetCurPP() { return m_Skill.curPP; }
 	bool GetCasting() { return m_bCast; }
 	void Cast();
 	void SetSkillMVRIGHType() { m_mvType = SKILL_MVTYPE::RIGHT; }
