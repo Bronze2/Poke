@@ -15,6 +15,8 @@ private:
 
 	BATTLE_CIR m_eCir=BATTLE_CIR::NONE;
 	UI* BattlePhase;
+
+
 	TextureObject* FightSelector;
 	TextureObject* MediumSelector;
 	TextureObject* SmallSelector;
@@ -24,15 +26,22 @@ private:
 	TextureObject* OurHpBar;
 	
 	vector<UI*> ourvecPokemon;
-	vector<UI*> opponentvecPokemon;
+
 	TextureObject* OpponentDecorator;
 	TextureObject* OurDecorator;
+
+
 
 	ProgressBar* OurHpPoint;
 	ProgressBar* OpponentHpPoint;
 
 
 	TextureObject* BackGround;
+
+	TextureObject* BattleItemBar;
+	UI* BackButton;
+
+
 	UI* ItemSelect;
 
 	bool bPlayerBehavior = false;
@@ -61,6 +70,10 @@ private:
 
 public:
 
+	void BattleAnimationButton(UINT _prev,UINT _now);
+
+	void RenderBattleItemBar();
+	void RenderPokemonSelect();
 	void NpcBehavior(const BATTLE_BEHAVIOR& _behavior) { npcbehavior = _behavior; }
 
 	void PlayerBehavior(const BATTLE_BEHAVIOR& _behavior){playerbehavior=_behavior;}

@@ -22,12 +22,14 @@ void UI::Init(const wstring& _Path, const int& _Number, const int& _Width, const
 
 void UI::Update()
 {
+	if (bRender)
 	if (nullptr != m_pTex)
 		m_pTex->Update();
 }
 
 void UI::Render()
 {
+	if(bRender)
 	if (nullptr != m_pTex)
 		m_pTex->Render();
 }

@@ -6,8 +6,11 @@ class UI :
 private:
 	class AnimationRect* m_pTex;
 	class Texture2D* srcTex;
+
+	bool bRender = true;
 public:
 	class Texture2D* GetTexture();
+	void SetRender(const bool& _bRender) { bRender = _bRender; }
 
 	class AnimationRect* GetTex();
 	void DeleteTexture();

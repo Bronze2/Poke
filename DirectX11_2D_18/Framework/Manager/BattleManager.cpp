@@ -7,9 +7,116 @@
 #include "Geometries/TextureRect.h"
 #include "Geometries/AnimationRect.h"
 #include "Object/Pokemon.h"
-#include "Geometries/AnimationRect.h"
+#include "Utilities/Animator.h"
 #include "Object/CSkill.h"
 #include "Object/UI/ProgressBar.h"
+void BattleManager::BattleAnimationButton(UINT _prev, UINT _now)
+{
+	switch (_prev)
+	{
+	case 1:
+		ourvecPokemon[0]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurPokemon");
+		break;
+	case 2:
+		if (ourvecPokemon[1]->GetTex()->GetAnimator()->GetCurrentClip()->GetName() != L"Nope")
+		{
+			ourvecPokemon[1]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurPokemon");
+		}
+		break;
+	case 3:
+		if (ourvecPokemon[2]->GetTex()->GetAnimator()->GetCurrentClip()->GetName() != L"Nope")
+		{
+			ourvecPokemon[2]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurPokemon");
+		}
+		
+		break;
+	case 4:
+		if (ourvecPokemon[3]->GetTex()->GetAnimator()->GetCurrentClip()->GetName() != L"Nope")
+		{
+			ourvecPokemon[3]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurPokemon");
+		}
+		break;
+	case 5:
+		if (ourvecPokemon[4]->GetTex()->GetAnimator()->GetCurrentClip()->GetName() != L"Nope")
+		{
+			ourvecPokemon[4]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurPokemon");
+		}
+		break;
+	case 6:
+		if (ourvecPokemon[5]->GetTex()->GetAnimator()->GetCurrentClip()->GetName() != L"Nope")
+		{
+			ourvecPokemon[5]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurPokemon");
+		}
+		break;
+	case 7:
+		BackButton->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurButton");
+		break;
+	default:
+		break;
+	}
+	switch (_now)
+	{
+	case 1:
+		ourvecPokemon[0]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectPokemon");
+		break;
+	case 2:
+		if (ourvecPokemon[1]->GetTex()->GetAnimator()->GetCurrentClip()->GetName() != L"Nope")
+		{
+			ourvecPokemon[1]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectPokemon");
+		}
+		break;
+	case 3:
+		if (ourvecPokemon[2]->GetTex()->GetAnimator()->GetCurrentClip()->GetName() != L"Nope")
+		{
+			ourvecPokemon[2]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectPokemon");
+		}
+		break;
+	case 4:
+		if (ourvecPokemon[3]->GetTex()->GetAnimator()->GetCurrentClip()->GetName() != L"Nope")
+		{
+			ourvecPokemon[3]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectPokemon");
+		}
+		break;
+	case 5:
+		if (ourvecPokemon[4]->GetTex()->GetAnimator()->GetCurrentClip()->GetName() != L"Nope")
+		{
+			ourvecPokemon[4]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectPokemon");
+		}
+		break;
+	case 6:
+		if (ourvecPokemon[5]->GetTex()->GetAnimator()->GetCurrentClip()->GetName() != L"Nope")
+		{
+			ourvecPokemon[5]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectPokemon");
+		}
+		break;
+	case 7:
+		BackButton->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectButton");
+		break;
+	default:
+		break;
+	}
+}
+void BattleManager::RenderBattleItemBar()
+{
+}
+void BattleManager::RenderPokemonSelect()
+{
+
+	BackGround->SetRender(true);
+	for (size_t i = 0; i < ourvecPokemon.size(); ++i) {
+		if (i < m_Player->GetPokemons().size()) {
+			ourvecPokemon[i]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurPokemon");
+		}
+		else {
+			ourvecPokemon[i]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"Nope");
+		}
+		ourvecPokemon[i]->SetRender(true);
+	}
+	BackButton->SetRender(true);
+	for (size_t i = 0; i < m_Player->GetPokemons().size(); ++i) {
+		m_Player->GetPokemons()[i]->SetIconSize(Vector3(m_Player->GetPokemons()[i]->GetIconRect()->GetWidth(), m_Player->GetPokemons()[i]->GetIconRect()->GetHeight(), 0));
+	}
+}
 void BattleManager::UpdateHpBar()
 {
 	switch (m_eCir)
@@ -92,6 +199,11 @@ BattleManager::~BattleManager()
 	SAFE_DELETE(OpponentHpBar);
 	SAFE_DELETE(OurHpPoint);
 	SAFE_DELETE(OpponentHpPoint);
+	SAFE_DELETE(BackGround);
+	SAFE_DELETE(BattleItemBar);
+	for (size_t i = 0; i < ourvecPokemon.size(); ++i)
+		SAFE_DELETE(ourvecPokemon[i]);
+	SAFE_DELETE(BackButton);
 }
 
 void BattleManager::SelectorUpdate()
@@ -291,7 +403,10 @@ void BattleManager::DoBattlePhase()
 		}
 		
 	}
-
+	BackButton->Update();
+	for (size_t i = 0; i < ourvecPokemon.size(); ++i)
+		ourvecPokemon[i]->Update();
+	BackGround->Update();
 	
 }
 
@@ -456,7 +571,21 @@ void BattleManager::Render()
 				}
 			}
 			break;
-
+			case SELECT_PHASE::ITEM:
+			{
+				BattleItemBar->Render();
+			}
+			break;
+			case SELECT_PHASE::POKEMON:
+			{
+				BackGround->Render();
+				for (size_t i = 0; i < ourvecPokemon.size(); ++i) {
+					ourvecPokemon[i]->Render();
+				}
+				
+				BackButton->Render();
+			}
+			break;
 			default:
 				break;
 			}
@@ -529,13 +658,103 @@ void BattleManager::Init()
 	OpponentHpPoint = new ProgressBar(Vector3(102, 683, 1.0f), Vector3(96, 5, 0),0.f, Color(0, 1, 0, 1), GI::LEFT_TO_RIGHT);
 	OpponentHpPoint->SetRender(false);
 	
+
+
+	BackGround = new TextureObject;
+	BackGround->Init(L"Pokemon/Battle/Battle_Back.png");
+	BackGround->GetTex()->SetWidth(512); BackGround->GetTex()->SetHeight(384);
+	BackGround->GetTex()->SetPosition(Vector3(WinMaxWidth / 2, WinMaxHeight / 2 - 192, 1.0f));
+	BackGround->GetTex()->SetSize(Vector3(512, 384, 0));
+	BackGround->SetRender(false);
+
+	 BackButton = new UI;
+	BackButton->Init(L"Battle/BattleUI/BattleBackButton02",4,4,1);
+	animator = new Animator;
+	animation = new AnimationClip(L"CurButton", BackButton->GetTexture(), 1, Vector2(0.f, 0.f),
+		Vector2(BackButton->GetTex()->GetWidth(), BackButton->GetTex()->GetHeight()), 1.0f / 15.0f);
+	animator->AddAnimClip(animation);
+
+	animation = new AnimationClip(L"SelectButton", BackButton->GetTexture(), 1, Vector2(BackButton->GetTex()->GetWidth(), 0.f),
+		Vector2(BackButton->GetTex()->GetWidth()*2, BackButton->GetTex()->GetHeight()), 1.0f / 15.0f);
+	animator->AddAnimClip(animation);
+	animation = new AnimationClip(L"Nope", BackButton->GetTexture(), 1, Vector2(BackButton->GetTexture()->GetWidth() * 3, 0),
+		Vector2(BackButton->GetTexture()->GetWidth() * 4, BackButton->GetTexture()->GetHeight()), 1.0f / 15.0f);
+	animator->AddAnimClip(animation);
+	animator->SetCurrentAnimClip(L"CurButton");
+	BackButton->DeleteTexture();
+	BackButton->GetTex()->SetAnimation(animator);
+	BackButton->GetTex()->SetPosition(Vector3(450	, 50, 1.0f));
+	BackButton->GetTex()->SetSize(Vector3(BackButton->GetTex()->GetWidth(), BackButton->GetTex()->GetHeight(), 0));
+	BackButton->SetRender(false);
+
+
+
+	BattleItemBar = new TextureObject;
+	BattleItemBar->Init(L"Pokemon/Battle/Battle_Back.png");
+
+
+	BattleItemBar->GetTex()->SetWidth(512); BattleItemBar->GetTex()->SetHeight(384);
+	BattleItemBar->GetTex()->SetPosition(Vector3(WinMaxWidth / 2, WinMaxHeight / 2 - 192, 1.0f));
+	BattleItemBar->GetTex()->SetSize(Vector3(512, 384, 0));
+	BattleItemBar->SetRender(false);
+
+	for (int i = 0; i < MAXPOKEMONCOUNT; ++i) {
+		UI* pPokemon = new UI;
+
+		pPokemon->Init(L"Battle/BattleUI/BattlePokemon", 4, 4, 1);
+		animator = new Animator;
+		animation = new AnimationClip(L"CurPokemon", pPokemon->GetTexture(), 1, Vector2(0.f, 0.f),
+			Vector2(pPokemon->GetTex()->GetWidth(), pPokemon->GetTex()->GetHeight()), 1.0f / 15.0f);
+		animator->AddAnimClip(animation);
+		animation = new AnimationClip(L"SelectPokemon", pPokemon->GetTexture(), 1, Vector2(pPokemon->GetTex()->GetWidth(), 0.f),
+			Vector2(pPokemon->GetTex()->GetWidth()*2, pPokemon->GetTex()->GetHeight()), 1.0f / 15.0f);
+		animator->AddAnimClip(animation);
+		animation = new AnimationClip(L"Nope", pPokemon->GetTexture(), 1, Vector2(pPokemon->GetTex()->GetWidth() * 3, 0),
+			Vector2(pPokemon->GetTex()->GetWidth() * 4, pPokemon->GetTex()->GetHeight()), 1.0f / 15.0f);
+		animator->AddAnimClip(animation);
+		animator->SetCurrentAnimClip(L"CurPokemon");//128 64
+		pPokemon->GetTex()->SetAnimation(animator);
+		if( i==0)
+			pPokemon->GetTex()->SetPosition(Vector3(WinMaxWidth / 4,330, 1.0f));
+		else if (i==1)
+			pPokemon->GetTex()->SetPosition(Vector3(WinMaxWidth*0.75, 330, 1.0f));
+		else if (i == 2)
+			pPokemon->GetTex()->SetPosition(Vector3(WinMaxWidth / 4, 240, 1.0f));
+		else if (i == 3)
+			pPokemon->GetTex()->SetPosition(Vector3(WinMaxWidth * 0.75, 240, 1.0f));
+		else if (i == 4)
+			pPokemon->GetTex()->SetPosition(Vector3(WinMaxWidth / 4, 150, 1.0f));
+		else if (i == 5)
+			pPokemon->GetTex()->SetPosition(Vector3(WinMaxWidth * 0.75, 150, 1.0f));
+		pPokemon->GetTex()->SetSize(Vector3((float)pPokemon->GetTex()->GetWidth(), (float)pPokemon->GetTex()->GetHeight(), (float)0.0f));
+		pPokemon->DeleteTexture();
+		pPokemon->SetRender(false);
+
+		ourvecPokemon.push_back(pPokemon);
+	}
+
+
 }
 
 void BattleManager::GUI()
 {
-	
-}
+	using namespace ImGui;
+	for (int i = 0; i < m_Player->GetPokemons().size(); ++i) {
+		string str = "Pokemon";
+		string str2 = std::to_string(i + 1);
+		str += str2;
+		Begin(str.c_str());
+		Vector3 vPos= m_Player->GetPokemons()[i]->GetIconRect()->GetPosition();
+		{
+			InputFloat3("Pos", vPos, 2);
+		
 
+		
+		}
+		m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(vPos);
+		End();
+	}
+}
 
 void BattleManager::Update()
 {

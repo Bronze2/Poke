@@ -40,7 +40,7 @@ public:
     void AddAnimClip(AnimationClip* animClip);
     void SetCurrentAnimClip(wstring clipName);
     void SetPause(const bool& _bPause) { currentClip->SetPause(_bPause); }
-
+    AnimationClip* GetCurrentClip() { return currentClip; }
 private:
     bool CheckExist(wstring clipName) { return animClips.find(clipName) != animClips.end(); }
 

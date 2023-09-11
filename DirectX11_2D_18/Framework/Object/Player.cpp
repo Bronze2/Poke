@@ -13,6 +13,7 @@ void Player::BattlePhase()
 	if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::ALL_READY) {
 		if (KEYUP(VK_RIGHT))
 		{
+		int	m_prevselect = m_iSelect;
 			m_iSelect += 1;
 				switch (m_eSelect)
 				{
@@ -26,10 +27,13 @@ void Player::BattlePhase()
 					m_iSelect = 1;
 					break;
 				case SELECT_PHASE::ITEM:
-					m_iSelect = 6;
+					if (m_iSelect > 6)
+					m_iSelect = 1;
 					break;
 				case SELECT_PHASE::POKEMON:
-					m_iSelect = 7;
+					if (m_iSelect > 7)
+					m_iSelect = 1;
+					BattleManager::Get()->BattleAnimationButton(m_prevselect, m_iSelect);
 					break;
 				case SELECT_PHASE::RUN:
 					break;
@@ -38,28 +42,33 @@ void Player::BattlePhase()
 		}
 	
 		if (KEYUP(VK_LEFT)) {
+			int	m_prevselect = m_iSelect;
 			m_iSelect -= 1;
-			if (m_iSelect < 0) {
-				switch (m_eSelect)
-				{
-			
-				case SELECT_PHASE::COMPREHENSIVE:
-					m_iSelect = 4;
-					break;
-				case SELECT_PHASE::SKILL:
-					m_iSelect = 5;
-					break;
-				case SELECT_PHASE::ITEM:
-					m_iSelect = 6;
-					break;
-				case SELECT_PHASE::POKEMON:
-					m_iSelect = 7;
-					break;
-				case SELECT_PHASE::RUN:
-					break;
+			switch (m_eSelect)
+			{
 
-				}
+			case SELECT_PHASE::COMPREHENSIVE:
+				if (m_iSelect < 0) 
+				m_iSelect = 4;
+				break;
+			case SELECT_PHASE::SKILL:
+				if (m_iSelect < 0)
+				m_iSelect = 5;
+				break;
+			case SELECT_PHASE::ITEM:
+				if (m_iSelect < 0)
+				m_iSelect = 6;
+				break;
+			case SELECT_PHASE::POKEMON:
+				if (m_iSelect < 0)
+				m_iSelect = 7;
+				BattleManager::Get()->BattleAnimationButton(m_prevselect, m_iSelect);
+				break;
+			case SELECT_PHASE::RUN:
+				break;
+
 			}
+			
 		}
 	}
 	switch (m_eSelect)
@@ -71,6 +80,27 @@ void Player::BattlePhase()
 			if (KEYUP(VK_SPACE)) {
 				BattleManager::Get()->PhaseIn();
 				m_eSelect = SELECT_PHASE::SKILL;
+				m_iSelect = 0;
+			}
+		}
+		else if (m_iSelect == 2) {
+			if (KEYUP(VK_SPACE)) {
+				if (KEYUP(VK_SPACE)) {
+					m_eSelect = SELECT_PHASE::ITEM;
+					BattleManager::Get()->RenderBattleItemBar();
+					m_iSelect = 0;
+				}
+			}
+		}
+		else if (m_iSelect == 3) {
+			if (KEYUP(VK_SPACE)) {
+
+			}
+		}
+		else if (m_iSelect == 4) {
+			if (KEYUP(VK_SPACE)) {
+				m_eSelect = SELECT_PHASE::POKEMON;
+				BattleManager::Get()->RenderPokemonSelect();
 				m_iSelect = 0;
 			}
 		}
@@ -166,6 +196,9 @@ void Player::Move()
 			m_eSelect = SELECT_PHASE::COMPREHENSIVE;
 		}
 	}
+
+
+
 }
 void Player::Init()
 {
