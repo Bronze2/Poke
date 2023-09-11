@@ -9,6 +9,74 @@
 #include "Object/Pokemon.h"
 #include "Geometries/AnimationRect.h"
 #include "Object/CSkill.h"
+#include "Object/UI/ProgressBar.h"
+void BattleManager::UpdateHpBar()
+{
+	switch (m_eCir)
+	{
+
+	case BATTLE_CIR::P_PHASE:
+	{
+		if (1==bUpdateHpBar)
+		{
+			CSkill* pSkill = (CSkill*)playerbehavior.wParam;
+			m_iTempValue = m_Npc->GetCurPokemons()->GetHp()-pSkill->GetDamage();
+			if (m_iTempValue < 0)m_iTempValue = 0;
+			bUpdateHpBar = 2;
+		}
+		else if (2 == bUpdateHpBar) {
+			int i=m_Npc->GetCurPokemons()->GetHp();
+			i -= 1;
+			float percent =(float) ((float)i / (float)m_Npc->GetCurPokemons()->GetMaxHp());
+			if (0.2f < percent && percent <= 0.5f) {
+			
+				OpponentHpPoint->SetColor(Color(1, 1, 0, 1));
+
+			}
+			else if (percent <= 0.2f)
+				OpponentHpPoint->SetColor(Color(1, 0, 0, 1));
+			OpponentHpPoint->UpdateProgressBar(percent);
+			m_Npc->GetCurPokemons()->SetHp(i);
+			if (i == m_iTempValue)
+				bUpdateHpBar = 3;
+		}
+	}
+		break;
+	case BATTLE_CIR::N_PHASE:
+	{
+		if (1 == bUpdateHpBar)
+		{
+			CSkill* pSkill = (CSkill*)npcbehavior.wParam;
+			m_iTempValue = m_Player->GetCurPokemons()->GetHp() - pSkill->GetDamage();
+			if (m_iTempValue < 0)m_iTempValue = 0;
+			bUpdateHpBar = 2;
+		}
+		else if (2 == bUpdateHpBar) {
+			int i = m_Player->GetCurPokemons()->GetHp();
+			i -= 1;
+			float percent = (float)((float)i / (float)m_Player->GetCurPokemons()->GetMaxHp());
+			if (0.2f < percent && percent <= 0.5f) {
+			
+				OurHpPoint->SetColor(Color(1, 1, 0, 1));
+
+			}
+			else if(percent<=0.2f)
+				OurHpPoint->SetColor(Color(1, 0,0, 1));
+
+
+			OurHpPoint->UpdateProgressBar(percent);
+			m_Player->GetCurPokemons()->SetHp(i);
+			if (i == m_iTempValue)
+				bUpdateHpBar = 3;
+		}
+	}
+		break;
+
+	default:
+		break;
+
+	}
+}
 BattleManager::BattleManager()
 {
 }
@@ -103,7 +171,8 @@ void BattleManager::DoBattlePhase()
 
 	OpponentHpBar->Update();
 	OurHpBar->Update();
-
+	OpponentHpPoint->Update();
+	OurHpPoint->Update();
 	switch (m_Player->GetSelectPhase())
 	{
 	case SELECT_PHASE::SKILL:
@@ -151,22 +220,29 @@ void BattleManager::DoBattlePhase()
 					CSkill* pSkill = (CSkill*)ptr;
 					if (!(pSkill->GetCasting()))
 					{
-						if(!bHitted)
-						HitEffect();
+						if (!bHitted) {
+							HitEffect();
+						}
 					}
-					if (!bHitted)
+					UpdateHpBar();
+					if (!bHitted||3!=bUpdateHpBar)
 						return;
+					
 
 					switch (m_eCir)
 					{
 					case BATTLE_CIR::P_PHASE:
 					{
-					CSkill* pSkill = ((CSkill*)npcbehavior.wParam);
+						CSkill* pSkill = ((CSkill*)playerbehavior.wParam);
+					
+
+					pSkill = ((CSkill*)npcbehavior.wParam);
 						pSkill->Cast();
-						
+					
 					ptr = npcbehavior.wParam;
 					m_eCir = BATTLE_CIR::N_PHASE; 
 					bHitted = false;
+					bUpdateHpBar = 0;
 					}
 						break;
 					case BATTLE_CIR::N_PHASE: {
@@ -175,6 +251,7 @@ void BattleManager::DoBattlePhase()
 						ptr = playerbehavior.wParam;
 						m_eCir = BATTLE_CIR::P_PHASE;
 						bHitted = false;
+						bUpdateHpBar = 0;
 					}
 						break;
 				
@@ -188,11 +265,13 @@ void BattleManager::DoBattlePhase()
 						if (!bHitted)
 						HitEffect();
 					}
-					if (!bHitted)
+					UpdateHpBar();
+					if (!bHitted || 3 != bUpdateHpBar)
 						return;
 
 					m_eCir = BATTLE_CIR::BATTLE_END;
 					m_iPhase += 1;
+					bUpdateHpBar = 0;
 				}
 
 				else {
@@ -232,6 +311,9 @@ void BattleManager::AllReady()
 {
 	OurHpBar->SetRender(true);
 	OpponentHpBar->SetRender(true);
+
+	OurHpPoint->SetRender(true);
+	OpponentHpPoint->SetRender(true);
 }
 
 void BattleManager::HitEffect()
@@ -266,6 +348,8 @@ void BattleManager::HitEffect()
 				if (m_iHitEffectCount == 6) {
 					bHitted = true;
 					m_iHitEffectCount = 0;
+					bUpdateHpBar = 1;
+
 			}
 			}
 
@@ -299,6 +383,7 @@ void BattleManager::HitEffect()
 				if (m_iHitEffectCount == 6) {
 					bHitted = true;
 					m_iHitEffectCount = 0;
+					bUpdateHpBar = 1;
 				}
 			}
 
@@ -376,11 +461,14 @@ void BattleManager::Render()
 				break;
 			}
 		}
-		OpponentHpBar->Render();
-		OurHpBar->Render();
-
+		
 		
 	}
+	OpponentHpBar->Render();
+	OurHpBar->Render();
+	OpponentHpPoint->Render();
+	OurHpPoint->Render();
+
 }
 
 void BattleManager::Init()
@@ -436,13 +524,16 @@ void BattleManager::Init()
 	OpponentHpBar->SetRender(false);
 
 	
+	OurHpPoint = new ProgressBar(Vector3(405, 535, 1.0f), Vector3(96, 5, 0), 0.f ,Color(0,1,0,1),GI::LEFT_TO_RIGHT );
+	OurHpPoint->SetRender(false);
+	OpponentHpPoint = new ProgressBar(Vector3(102, 683, 1.0f), Vector3(96, 5, 0),0.f, Color(0, 1, 0, 1), GI::LEFT_TO_RIGHT);
+	OpponentHpPoint->SetRender(false);
 	
 }
 
 void BattleManager::GUI()
 {
 	
-
 }
 
 

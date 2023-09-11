@@ -28,9 +28,13 @@ public:
 	void UnmapVertexBuffer();
 
 	void SetShader(wstring shaderpath);
+	void SetPosition(const Vector3& _pos) { position = _pos; }
+	void SetSize(const Vector3& _size) { size = _size; }
 
+	void UpdateColor();
+	void SetColor(const Color& _color) { color = _color; }
 	const Vector3 GetPosition() { return position; }
-
+	const Vector3 GetSize() { return size; }
 private:
 	template<typename T>
 	void SetVertices(vector<T>& vertices, FillType type);

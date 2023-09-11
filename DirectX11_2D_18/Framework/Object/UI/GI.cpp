@@ -154,10 +154,25 @@ void GI::SetShader(wstring shaderpath)
 	ps->Create(shaderpath, "PS");
 }
 
+void GI::UpdateColor()
+{
+
+	D3D11_MAPPED_SUBRESOURCE subResource;
+	DC->Map(vb->GetResource(), 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource);
+	{
+		for (VertexColor& v : colorVertices)
+			v.color = color;
+
+		memcpy(subResource.pData, colorVertices.data(), vb->GetCount() * vb->GetStride());
+	}
+	DC->Unmap(vb->GetResource(), 0);
+}
+
 void GI::Update()
 {
 	UpdatePosition();
 	UpdateWorld();
+	UpdateColor();
 }
 
 void GI::UpdateWorld()
@@ -172,8 +187,8 @@ void GI::UpdateWorld()
 
 void GI::UpdatePosition()
 {
-	Vector3 centerPos = CAMERA->GetPosition() + Vector3(WinMaxWidth / 2, WinMaxHeight / 2, 0.f);
-	position = centerPos + originPosition;
+//	Vector3 centerPos = CAMERA->GetPosition() + Vector3(WinMaxWidth / 2, WinMaxHeight / 2, 0.f);
+//	position = centerPos + originPosition;
 }
 
 void GI::Render()

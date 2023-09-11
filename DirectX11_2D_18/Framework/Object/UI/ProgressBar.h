@@ -13,10 +13,12 @@ public:
 	virtual void Update() override;
 	virtual void Render() override;
 	
+
+	void SetRender(const bool& _bRender) { bRender = _bRender; }
 	void UpdateProgressBar(float percent);
 
 	FillType type = NONE;
 
 private:
-
+	bool bRender = false;
 };

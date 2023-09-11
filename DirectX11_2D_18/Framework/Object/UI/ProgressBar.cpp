@@ -26,11 +26,14 @@ ProgressBar::~ProgressBar()
 
 void ProgressBar::Update()
 {
+
+	if (bRender)
 	GI::Update();
 }
 
 void ProgressBar::Render()
 {
+	if(bRender)
 	GI::Render();
 }
 

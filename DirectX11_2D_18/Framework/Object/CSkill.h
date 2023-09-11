@@ -15,6 +15,7 @@ private:
 
 	std::chrono::steady_clock::time_point start;
 public:
+	const UINT& GetDamage() { return m_Skill.Dmg; }
 
 	void SubCurPP() { if (m_Skill.curPP > 0)m_Skill.curPP-=1; }
 	UINT GetCurPP() { return m_Skill.curPP; }

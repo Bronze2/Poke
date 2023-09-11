@@ -93,7 +93,7 @@ void Rect::GUI()
         if (ColorPicker4("Color", color))
             UpdateColor();
     }
-    End();
+    End(); 
 }
 
 void Rect::SetColor(Color color)

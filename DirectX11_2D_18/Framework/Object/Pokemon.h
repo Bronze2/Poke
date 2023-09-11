@@ -26,6 +26,8 @@ public:
     PokeBall* GetPokeBall() { return m_Pokeball; }
     UINT GetMaxHp() { return maxhp; }
     int GetHp() { return hp; }
+
+    void SetHp(const int& _hp) { hp = _hp; }
     int GetAttack() { return att; }
     int GetDef() { return def; }
     UINT GetLevel() { return level; }

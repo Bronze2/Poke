@@ -30,6 +30,8 @@ private:
 
 	ProgressBar* OurHpPoint;
 	ProgressBar* OpponentHpPoint;
+
+
 	TextureObject* BackGround;
 	UI* ItemSelect;
 
@@ -46,8 +48,12 @@ private:
 	std::chrono::steady_clock::time_point start;
 	bool bHitEffectCheck = false;
 
-private:
+	UINT bUpdateHpBar = 0;
 
+	int m_iTempValue = 0;
+
+private:
+	void UpdateHpBar();
 	BattleManager();
 	~BattleManager();
 
