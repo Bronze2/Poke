@@ -6,15 +6,92 @@
 #include "Pokemon.h"
 #include "PokeBall.h"
 #include "CSkill.h"
+void Player::Roar()
+{
+	if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::P_READY) {
+		m_BattlePosition.x -= 200 * Time::Delta();
+		BattleRect->SetPosition(m_BattlePosition);
+		BattleManager::Get()->GetPlayer()->GetBattleRect()->GetAnimator()->SetPause(false);
+		if (m_BattlePosition.x + (BattleRect->GetWidth() / 2) < 0.f)
+		{
+			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetRender(true);
+			m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->SetPause(false);
+			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetTopHeight(WinMaxHeight / 2 + (115 + 64) + 75);
+			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetPos(Vector3(0.f, WinMaxHeight / 2 + (115 + 64), 0.f));
+			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetSize(
+				Vector3(m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetWidth(), m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetHeight(), 0.f)
+			);
+			m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->SetCurrentAnimClip(L"Throw");
+			BattleManager::Get()->SetCircumStance(BATTLE_CIR::P_ROAR);
+		}
+	}
+	if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::P_ROAR) {
+		if (m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->GetEnd() && !m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->GetEnd()) {
+			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetRender(false);
+			m_vecPokemon[m_curPokemon]->SetPos(Vector3(WinMaxWidth / 2 - 150, WinMaxHeight / 2 + (115 + 74), 0.f));
+			m_vecPokemon[m_curPokemon]->SetSize(Vector3(
+				m_vecPokemon[m_curPokemon]->GetAnimRect()->GetWidth(), m_vecPokemon[m_curPokemon]->GetAnimRect()->GetHeight(), 0.f
+			));
+			m_vecPokemon[m_curPokemon]->SetRender(true);
+			m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->SetCurrentAnimClip(L"Our_Roar");
+		}
+		if (m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->GetEnd()) {
+			m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->SetCurrentAnimClip(L"Our_IDLE");
+			BattleManager::Get()->SetCircumStance(BATTLE_CIR::ALL_READY);
+			BattleManager::Get()->AllReady();
+			BattleManager::Get()->DoBehavior(false);
+			BattleManager::Get()->PhaseOut();
+			BattleManager::Get()->StartHpBar();
+			BattleManager::Get()->PhaseReset();
+			m_eSelect = SELECT_PHASE::COMPREHENSIVE;
+		}
+	}
+}
+void Player::Roar_BattleCir()
+{
+	if (BattleManager::Get()->ChangePokemonPhase() == (UINT)BATTLE_CIR::P_READY) {
+		BattleManager::Get()->GetPlayer()->GetBattleRect()->GetAnimator()->SetPause(false);
+		if (m_BattlePosition.x + (BattleRect->GetWidth() / 2) < 0.f)
+		{
+			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetRender(true);
+			m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->SetPause(false);
+			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetTopHeight(WinMaxHeight / 2 + (115 + 64) + 75);
+			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetPos(Vector3(0.f, WinMaxHeight / 2 + (115 + 64), 0.f));
+			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetSize(
+				Vector3(m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetWidth(), m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetHeight(), 0.f)
+			);
+			m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->SetCurrentAnimClip(L"Throw");
+			BattleManager::Get()->addChangePokemonPhase();
+		}
+	}
+	if (BattleManager::Get()->ChangePokemonPhase() == (UINT)BATTLE_CIR::P_ROAR) {
+		if (m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->GetEnd() && !m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->GetEnd()) {
+			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetRender(false);
+			m_vecPokemon[m_curPokemon]->SetPos(Vector3(WinMaxWidth / 2 - 150, WinMaxHeight / 2 + (115 + 74), 0.f));
+			m_vecPokemon[m_curPokemon]->SetSize(Vector3(
+				m_vecPokemon[m_curPokemon]->GetAnimRect()->GetWidth(), m_vecPokemon[m_curPokemon]->GetAnimRect()->GetHeight(), 0.f
+			));
+			m_vecPokemon[m_curPokemon]->SetRender(true);
+			m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->SetCurrentAnimClip(L"Our_Roar");
+		}
+		if (m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->GetEnd()) {
+			m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->SetCurrentAnimClip(L"Our_IDLE");
+			BattleManager::Get()->addChangePokemonPhase();
+			BattleManager::Get()->OurHpBarRender(true);
+		}
+	}
+}
 void Player::BattlePhase()
 {
 	if (BATTLE_STATE::NONE == m_eBattleState)
 		return;
-	if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::ALL_READY) {
+	if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::ALL_READY
+		|| BattleManager::Get()->GetCircumStance() == BATTLE_CIR::N_DEAD
+		|| BattleManager::Get()->GetCircumStance() == BATTLE_CIR::P_DEAD) {
 		if (KEYUP(VK_RIGHT))
 		{
 		int	m_prevselect = m_iSelect;
-			m_iSelect += 1;
+			m_iSelect += 1; 
 				switch (m_eSelect)
 				{
 
@@ -33,11 +110,17 @@ void Player::BattlePhase()
 				case SELECT_PHASE::POKEMON:
 					if (m_iSelect > 7)
 					m_iSelect = 1;
+					if(!bChangePokemon)
 					BattleManager::Get()->BattleAnimationButton(m_prevselect, m_iSelect);
+					else
+						BattleManager::Get()->BattleAnimationChangeButton(m_prevselect, m_iSelect);
 					break;
 				case SELECT_PHASE::RUN:
 					break;
-
+				case SELECT_PHASE::CHANGEORNOT:
+					if (m_iSelect >2)
+						m_iSelect = 0;
+					break;
 			}
 		}
 	
@@ -61,11 +144,19 @@ void Player::BattlePhase()
 				break;
 			case SELECT_PHASE::POKEMON:
 				if (m_iSelect < 0)
-				m_iSelect = 7;
-				BattleManager::Get()->BattleAnimationButton(m_prevselect, m_iSelect);
+				
+				if (!bChangePokemon) {
+					m_iSelect = 7;
+					BattleManager::Get()->BattleAnimationButton(m_prevselect, m_iSelect);
+				}
+				else {
+					m_iSelect = 2;
+					BattleManager::Get()->BattleAnimationChangeButton(m_prevselect, m_iSelect);
+				}
 				break;
 			case SELECT_PHASE::RUN:
 				break;
+		
 
 			}
 			
@@ -125,7 +216,7 @@ void Player::BattlePhase()
 				behavior.wParam = (DWORD_PTR)m_vecPokemon[m_curPokemon]->GetSkills()[m_iSelect-1];
 				BattleManager::Get()->DoBehavior();
 				BattleManager::Get()->PlayerBehavior(behavior);
-
+				m_iSelect = 0;
 				bbehavior = true;
 			}
 		}
@@ -135,9 +226,153 @@ void Player::BattlePhase()
 		
 		break;
 	case SELECT_PHASE::POKEMON:
-		
+	{
+		if (m_iSelect == 7) {
+			if (KEYUP(VK_SPACE)) {
+				if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::ALL_READY) {
+					BattleManager::Get()->NotRenderPokemonSelect();
+					m_iSelect = 0;
+					m_eSelect = SELECT_PHASE::COMPREHENSIVE;
+				}
+				else
+				{
+					m_iSelect = 0;
+					m_eSelect = SELECT_PHASE::CHANGEORNOT;
+					BattleManager::Get()->NotRenderPokemonSelect();
+					BattleManager::Get()->ChangeButtonRender(true);
+				}
+			}
+			
+		}
+		else {
+			
+				if (m_iSelect != 0) {
+					if (KEYUP(VK_SPACE)) {
+						if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::ALL_READY) {
+							if (!bChangePokemon) {
+								m_iChangePokemon = m_iSelect;
+								BattleManager::Get()->RenderChangeButton(true);
+								m_iSelect = 0;
+								bChangePokemon = true;
+							}
+							else {
+								if (m_iSelect == 2) {
+									BattleManager::Get()->RenderChangeButton(false);
+									m_iSelect = 0;
+									bChangePokemon = false;
+								}
+								if (1 == m_iSelect) {
+									//포켓몬 변경
+									if (m_vecPokemon[m_iChangePokemon - 1]->GetHp() <= 0)
+										return;
+									BattleManager::Get()->RenderChangeButton(false, false);
+									BattleManager::Get()->NotRenderPokemonSelect();
+									swap(m_vecPokemon[m_curPokemon], m_vecPokemon[m_iChangePokemon - 1]);
+
+									if (BattleManager::Get()->GetCircumStance() != BATTLE_CIR::N_DEAD ||
+										BattleManager::Get()->GetCircumStance() != BATTLE_CIR::P_DEAD) {
+										BATTLE_BEHAVIOR behavior;
+										behavior.eBattle = BATTLE_TYPE::CHANGE;
+										behavior.wParam = m_iChangePokemon;
+										BattleManager::Get()->DoBehavior();
+										BattleManager::Get()->PlayerBehavior(behavior);
+										BattleManager::Get()->OurHpBarRender(false);
+										bbehavior = true;
+
+									}
+									else {
+										BATTLE_BEHAVIOR behavior;
+										behavior.eBattle = BATTLE_TYPE::CHANGE;
+										behavior.wParam = m_iChangePokemon;
+										BattleManager::Get()->PlayerBehavior(behavior);
+									}
+									bChangePokemon = false;
+								}
+							}
+						}
+						else {
+							if (!bChangePokemon) {
+								m_iChangePokemon = m_iSelect;
+								BattleManager::Get()->RenderChangeButton(true);
+								m_iSelect = 0;
+								bChangePokemon = true;
+							}
+							else {
+								if (m_iSelect == 2) {
+									BattleManager::Get()->RenderChangeButton(false);
+									m_iSelect = 0;
+							
+									bChangePokemon = false;
+									
+								}
+								if (1 == m_iSelect) {
+									//포켓몬 변경
+									if (m_vecPokemon[m_iChangePokemon - 1]->GetHp() <= 0)
+										return;
+									BattleManager::Get()->ChangeButtonRender(false);
+									BattleManager::Get()->RenderChangeButton(false, false);
+									BattleManager::Get()->NotRenderPokemonSelect();
+									swap(m_vecPokemon[m_curPokemon], m_vecPokemon[m_iChangePokemon - 1]);
+									BattleManager::Get()->NPCCurDead();
+									BattleManager::Get()->SetOurChangePokemon(true);
+									BattleManager::Get()->SetCircumStance(BATTLE_CIR::N_DEAD);
+									bChangePokemon = false;
+									m_iSelect = 0;
+
+								}
+							}
+						}
+
+					}
+					if (bChangePokemon) {
+						if (KEYUP(VK_LEFT)) {
+							if (m_iSelect < 0)
+								m_iSelect = 2;
+						}
+						if (KEYUP(VK_RIGHT)) {
+
+							if (m_iSelect > 2)
+								m_iSelect = 0;
+						}
+					}
+
+					
+				}
+			
+		}
+	}
 		break;
 	case SELECT_PHASE::RUN:
+		break;
+	case SELECT_PHASE::CHANGEORNOT:
+		if (KEYUP(VK_SPACE)) {
+			if (m_iSelect == 1) {
+				m_eSelect = SELECT_PHASE::POKEMON;
+				BattleManager::Get()->RenderPokemonSelect();
+				BattleManager::Get()->ChangeButtonRender(false);
+				BattleManager::Get()->CancelSelectorRender(false);
+				m_iSelect = 0;
+
+			}
+			else if (m_iSelect == 2) {
+				BattleManager::Get()->SetOurChangePokemon(false);
+				BattleManager::Get()->ChangeButtonRender(false);
+				BattleManager::Get()->CancelSelectorRender(false);
+				BattleManager::Get()->SetOurChangePokemon(false);
+				BattleManager::Get()->NPCCurDead();
+				m_iSelect = 0;
+			}
+		}
+		if (KEYUP(VK_RIGHT)) {
+			if (m_iSelect > 2)
+				m_iSelect = 0;
+
+		}
+		if (KEYUP(VK_LEFT)) {
+			if (m_iSelect < 0)
+				m_iSelect = 2;
+
+		}
 		break;
 
 	}
@@ -162,40 +397,7 @@ void Player::SetBattleSize(const Vector3& _Size)
 }
 void Player::Move()
 {
-	if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::P_READY) {
-		m_BattlePosition.x -= 200 * Time::Delta();
-		BattleRect->SetPosition(m_BattlePosition);
-		BattleManager::Get()->GetPlayer()->GetBattleRect()->GetAnimator()->SetPause(false);
-		if (m_BattlePosition.x + (BattleRect->GetWidth() / 2) < 0.f)
-		{
-			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetRender(true);
-			m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->SetPause(false);
-			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetTopHeight(WinMaxHeight / 2 + (115 + 64) + 75);
-			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetPos(Vector3(0.f, WinMaxHeight / 2 + (115 + 64), 0.f));
-			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetSize(
-				Vector3(m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetWidth(), m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetHeight(), 0.f)
-			);
-			m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->SetCurrentAnimClip(L"Throw");
-			BattleManager::Get()->SetCircumStance(BATTLE_CIR::P_ROAR);
-		}
-	}
-	if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::P_ROAR) {
-		if (m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->GetEnd()&& !m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->GetEnd()) {
-			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetRender(false);
-			m_vecPokemon[m_curPokemon]->SetPos(Vector3(WinMaxWidth / 2 - 150, WinMaxHeight / 2 + (115 + 74), 0.f));
-			m_vecPokemon[m_curPokemon]->SetSize(Vector3(
-				m_vecPokemon[m_curPokemon]->GetAnimRect()->GetWidth(), m_vecPokemon[m_curPokemon]->GetAnimRect()->GetHeight(), 0.f
-			));
-			m_vecPokemon[m_curPokemon]->SetRender(true);
-			m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->SetCurrentAnimClip(L"Our_Roar");
-		}
-		if (m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->GetEnd()) {
-			m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->SetCurrentAnimClip(L"Our_IDLE");
-			BattleManager::Get()->SetCircumStance(BATTLE_CIR::ALL_READY);
-			BattleManager::Get()->AllReady();
-			m_eSelect = SELECT_PHASE::COMPREHENSIVE;
-		}
-	}
+
 
 
 
@@ -266,7 +468,7 @@ void Player::Init()
 }
 Player::Player() {
 	Pokemon* pokemon = new Pokemon(L"Infernape", 100, 100, 100, 10, 30,100);
-	pokemon->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 30);
+	pokemon->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 100);
 	pokemon->GetSkills()[0]->SetSkillMVRIGHType();
 
 	pokemon->AddSkill(L"BURN", SKILL_TYPE::FIRE, 30, 30, 30);
@@ -299,7 +501,7 @@ Player::~Player() {
 	SAFE_DELETE(AnimRect);
 	SAFE_DELETE(BattleRect);
 
-	for (int i = 0; i < m_vecPokemon.size(); ++i) {
+	for (size_t i = 0; i < m_vecPokemon.size(); ++i) {
 		SAFE_DELETE(m_vecPokemon[i]);
 	}
 
@@ -310,6 +512,7 @@ Player::~Player() {
 void Player::Update()
 {
 	Move();
+	Roar();
 	BattlePhase();
 	if (BATTLE_STATE::NONE == m_eBattleState) {
 		AnimRect->Update();
@@ -320,6 +523,10 @@ void Player::Update()
 	if (nullptr != m_vecPokemon[m_curPokemon])
 	{
 		m_vecPokemon[m_curPokemon]->Update();
+	}
+
+	for (size_t i = 1; i < m_vecPokemon.size(); ++i) {
+		m_vecPokemon[i]->Update();
 	}
 }
 
@@ -335,5 +542,12 @@ void Player::Render()
 	if (nullptr != m_vecPokemon[m_curPokemon])
 	{
 		m_vecPokemon[m_curPokemon]->Render();
+	}
+}
+
+void Player::PostRender()
+{
+	for (size_t i = 0; i < m_vecPokemon.size(); ++i) {
+		m_vecPokemon[i]->PostRender();
 	}
 }

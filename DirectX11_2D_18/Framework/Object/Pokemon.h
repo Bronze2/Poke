@@ -34,12 +34,18 @@ public:
     UINT GetSpeed() { return Speed; }
 
 
+    void UpdateHpBar();
+
+    class ProgressBar* HpBar;
     void SetRender(const bool& _bRender) { bRender = _bRender; }
     void SetOpponent();
     bool GetOpponent() { return IsOpponent; }
+    class ProgressBar* GetBar() { return HpBar; }
+    void SetHpBarRender(const bool& _bRender);
    
     class AnimationRect* GetAnimRect() { return AnimRect; }
     class AnimationRect* GetIconRect() { return IconRect; }
+    Vector3 GetAnimationSize();
     Pokemon(wstring Name
         , UINT maxhp, int hp, int att, int def, UINT level);
     Pokemon(wstring Name
@@ -62,7 +68,7 @@ public:
     void Render();
     Pokemon(const Pokemon& _Other);
 
-
+    void PostRender();
     void AddSkill(const wstring& _Name, const SKILL_TYPE& _type, const UINT& _maxPP, const UINT& _curPP, const UINT& _dmg);
 
     const wstring& GetName() { return Name; }

@@ -3,6 +3,11 @@
 #include "PokeBall.h"
 #include "Geometries/AnimationRect.h"
 #include "CSkill.h"
+#include "UI/ProgressBar.h"
+Vector3 Pokemon::GetAnimationSize()
+{
+	return AnimRect->GetSize();
+}
 Pokemon::Pokemon(wstring Name, UINT maxhp, int hp, int att, int def, UINT level)
 	:Name(Name), maxhp(maxhp), hp(hp), att(att), def(def), level(level)
 {
@@ -126,6 +131,7 @@ Pokemon::~Pokemon()
 	SAFE_DELETE(m_Pokeball);
 	for (size_t i = 0; i < m_vecSkill.size(); ++i)
 		SAFE_DELETE(m_vecSkill[i]);
+	SAFE_DELETE(HpBar);
 }
 void Pokemon::Init(wstring Name, UINT maxhp, int hp, int att, int def, UINT level, wstring Path)
 {
@@ -156,6 +162,7 @@ void Pokemon::Init(wstring Name, UINT maxhp, int hp, int att, int def, UINT leve
 	SAFE_DELETE(srcTex);
 	SAFE_DELETE(IconTex);
 
+
 }
 
 void Pokemon::Update()
@@ -165,7 +172,7 @@ void Pokemon::Update()
 	if (!bRender)
 		return;
 	AnimRect->Update();
-	IconRect->Update();
+	
 	
 }
 
@@ -176,7 +183,7 @@ void Pokemon::Render()
 	if (!bRender)
 		return;
 	AnimRect->Render();
-	IconRect->Render();
+
 	
 
 }
@@ -238,6 +245,17 @@ Pokemon::Pokemon(const Pokemon& _Other)
 		
 	}
 	this->IsNpc = _Other.IsNpc;
+	HpBar = new ProgressBar(Vector3(405, 535, 1.0f), Vector3(98, 6, 0), 0.f, Color(0, 1, 0, 1), GI::LEFT_TO_RIGHT);
+	HpBar->SetRender(false);
+}
+
+void Pokemon::PostRender()
+{
+	IconRect->Update();
+	UpdateHpBar();
+	HpBar->Update();
+	HpBar->Render();
+	IconRect->Render();
 }
 
 void Pokemon::AddSkill(const wstring& _Name, const SKILL_TYPE& _type, const UINT& _maxPP, const UINT& _curPP, const UINT& _dmg)
@@ -250,8 +268,19 @@ void Pokemon::AddSkill(const wstring& _Name, const SKILL_TYPE& _type, const UINT
 
 }
 
+void Pokemon::UpdateHpBar()
+{
+	float percent = (float)hp / (float) maxhp;
+	HpBar->UpdateProgressBar(percent);
+}
+
 void Pokemon::SetOpponent()
 {
 	IsOpponent = true;
 	m_Pokeball->SetOpponent();
+}
+
+void Pokemon::SetHpBarRender(const bool& _bRender)
+{
+	HpBar->SetRender(_bRender);
 }

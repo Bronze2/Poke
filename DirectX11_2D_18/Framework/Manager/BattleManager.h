@@ -29,9 +29,6 @@ private:
 
 	TextureObject* OpponentDecorator;
 	TextureObject* OurDecorator;
-
-
-
 	ProgressBar* OurHpPoint;
 	ProgressBar* OpponentHpPoint;
 
@@ -40,9 +37,10 @@ private:
 
 	TextureObject* BattleItemBar;
 	UI* BackButton;
-
-
 	UI* ItemSelect;
+
+	UI* BattleChangeButton;
+
 
 	bool bPlayerBehavior = false;
 	BATTLE_BEHAVIOR playerbehavior;
@@ -56,28 +54,59 @@ private:
 	UINT m_iHitEffectCount = 0;
 	std::chrono::steady_clock::time_point start;
 	bool bHitEffectCheck = false;
-
 	UINT bUpdateHpBar = 0;
-
 	int m_iTempValue = 0;
 
+	bool bDeadCheck = false;
+private:
+	UINT m_iChangePokemon = 0;
+public:
+	void addChangePokemonPhase() { m_iChangePokemon += 1; }
+	void SetChangePokemonPhase(const UINT& _phase) { m_iChangePokemon = _phase; }
+	const UINT& ChangePokemonPhase() { return m_iChangePokemon; }
+
+
+private:
+	TextureObject* ChangeOrNotButton;
+	Vector3 DeadSize;
+	UINT DeadCount = 0;
+
+	bool bFightChange = false;
 private:
 	void UpdateHpBar();
 	BattleManager();
 	~BattleManager();
 
 	void SelectorUpdate();
+	void DeadEffect();
 
+	bool OurChangePokemon = false;
 public:
+	void PhaseReset() { m_iPhase = 0; bSpeedCheck = false; bDeadCheck = false; }
+	bool GetOurChangePokemon() { return OurChangePokemon; }
+	void SetOurChangePokemon(const bool& _bChange); 
 
+	void  ChangeButtonRender(const bool& _bRender);
+	void CancelSelectorRender(const bool& _bRender);
+	void NPCCurDead();
+
+
+	void OurHpBarRender(const bool& _bRender);
+
+	void OpponentHpBarRender(const bool& _bRender);
 	void BattleAnimationButton(UINT _prev,UINT _now);
-
+	void BattleAnimationChangeButton(UINT _prev, UINT _now);
 	void RenderBattleItemBar();
 	void RenderPokemonSelect();
+	void NotRenderPokemonSelect();
+	void RenderChangeButton(bool _bRender,bool _bRend=true);
+
 	void NpcBehavior(const BATTLE_BEHAVIOR& _behavior) { npcbehavior = _behavior; }
 
+	void StartHpBar();
+
 	void PlayerBehavior(const BATTLE_BEHAVIOR& _behavior){playerbehavior=_behavior;}
-	void DoBehavior() { bPlayerBehavior = true; }
+	void DoBehavior(bool bTrue= true) { bPlayerBehavior = bTrue; }
 	bool Getbehavior() { return bPlayerBehavior; }
 	void DoBattlePhase();
 	void PhaseIn();
@@ -87,6 +116,7 @@ public:
 	const BATTLE_CIR& GetCircumStance() { return m_eCir; }
 
 
+	
 
 	void HitEffect();
 	Player* GetPlayer() { if (nullptr != m_Player)return m_Player; }

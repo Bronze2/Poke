@@ -34,7 +34,15 @@ private:
     Vector3 m_BattlePosition;
     UINT m_curPokemon = 0;
 
+    bool bCurPokemonDead = false;
+
 public:
+    void CurPokemonDead() { bCurPokemonDead = true; }
+
+    void FindPokemon();
+
+    void Roar();
+
     Pokemon* GetPokemons(UINT i) { return m_vecPokemon[i]; }
     Pokemon* GetCurPokemons() { return m_vecPokemon[m_curPokemon]; }
     class AnimationRect* GetAnimRect() { return AnimRect; }

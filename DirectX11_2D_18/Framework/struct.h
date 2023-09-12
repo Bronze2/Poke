@@ -37,6 +37,9 @@ enum class BATTLE_CIR {
 	P_PHASE,
 	N_PHASE,
 	BATTLE_END,
+
+	P_DEAD,
+	N_DEAD,
 };
 
 struct SKILL {
@@ -61,6 +64,8 @@ enum class SELECT_PHASE {
 	ITEM,
 	POKEMON,
 	RUN,
+
+	CHANGEORNOT,//
 };
 
 enum class SKILL_MVTYPE {

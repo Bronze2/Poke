@@ -2,32 +2,37 @@
 #include "CObject.h"
 class Pokemon;
 class Player :
-    public CObject
+	public CObject
 {
 private:
 	class AnimationRect* AnimRect;
 	class AnimationRect* BattleRect;
-	
-	vector<Pokemon*> m_vecPokemon;
-	
 
-	BATTLE_STATE m_eBattleState=BATTLE_STATE::NONE;
+	vector<Pokemon*> m_vecPokemon;
+
+
+	BATTLE_STATE m_eBattleState = BATTLE_STATE::NONE;
 	Vector3 m_Position;
 	Vector3 m_BattlePosition;
 	bool bPause = false;
 	UINT m_curPokemon = 0;
 
 	int m_iSelect = 0;
-	
-	SELECT_PHASE m_eSelect=SELECT_PHASE::NONE;
+
+	SELECT_PHASE m_eSelect = SELECT_PHASE::NONE;
 	bool bbehavior = false;
-public:  
+	UINT m_iChangePokemon;
+	
+public:
 
-
+	void Setbehavior(const bool& _be) { bbehavior = _be; }
 	const bool& GetDobehavior() { return bbehavior; }
 	vector<Pokemon*> GetPokemons() { return m_vecPokemon; }
 	Pokemon* GetCurPokemons() { return m_vecPokemon[m_curPokemon]; }
-	
+
+
+	void Roar();
+	void Roar_BattleCir();
 	void SetSelectPhase(const SELECT_PHASE& _ePhase) { m_eSelect = _ePhase; }
 
 	const SELECT_PHASE& GetSelectPhase() { return m_eSelect; }
@@ -51,10 +56,11 @@ public:
 	void SetIdleMode(){ m_eBattleState = BATTLE_STATE::NONE; }
 
 
+	bool bChangePokemon = false;
 	virtual void Init() ;
 	virtual void Update();
 	virtual void Render();
-	virtual void PostRender() {};
+	virtual void PostRender();
 	virtual void GUI() {};
 	Player();
 	Player(const Player& _Other);

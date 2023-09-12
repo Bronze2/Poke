@@ -10,6 +10,42 @@
 #include "Utilities/Animator.h"
 #include "Object/CSkill.h"
 #include "Object/UI/ProgressBar.h"
+void BattleManager::OurHpBarRender(const bool& _bRender)
+{
+	OurHpBar->SetRender(_bRender);
+	OurHpPoint->SetRender(_bRender);
+	if (_bRender) {
+		float percent = (float)m_Player->GetCurPokemons()->GetHp() / (float)m_Player->GetCurPokemons()->GetMaxHp();
+		if (0.2f < percent && percent <= 0.5f) {
+
+			OurHpPoint->SetColor(Color(1, 1, 0, 1));
+
+		}
+		else if (percent <= 0.2f)
+			OurHpPoint->SetColor(Color(1, 0, 0, 1));
+		else
+			OurHpPoint->SetColor(Color(0, 1, 0, 1));
+		OurHpPoint->UpdateProgressBar(percent);
+	}
+}
+void BattleManager::OpponentHpBarRender(const bool& _bRender)
+{
+	OpponentHpBar->SetRender(_bRender);
+	OpponentHpPoint->SetRender(_bRender);
+	if (_bRender) {
+		float percent = (float)m_Npc->GetCurPokemons()->GetHp() / (float)m_Npc->GetCurPokemons()->GetMaxHp();
+		if (0.2f < percent && percent <= 0.5f) {
+
+			OpponentHpPoint->SetColor(Color(1, 1, 0, 1));
+
+		}
+		else if (percent <= 0.2f)
+			OpponentHpPoint->SetColor(Color(1, 0, 0, 1));
+		else 
+			OpponentHpPoint->SetColor(Color(0, 1, 0, 1));
+		OpponentHpPoint->UpdateProgressBar(percent);
+	}
+}
 void BattleManager::BattleAnimationButton(UINT _prev, UINT _now)
 {
 	switch (_prev)
@@ -96,6 +132,32 @@ void BattleManager::BattleAnimationButton(UINT _prev, UINT _now)
 		break;
 	}
 }
+void BattleManager::BattleAnimationChangeButton(UINT _prev, UINT _now)
+{
+	switch (_prev)
+	{
+	case 1:
+		BattleChangeButton->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurButton");
+		break;
+	case 2:
+		
+		BackButton->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurButton");
+		
+		break;
+
+	}
+	switch (_now)
+	{
+	case 1:
+		BattleChangeButton->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectButton");
+		break;
+	case 2:
+		
+		BackButton->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectButton");
+		
+		break;
+	}
+}
 void BattleManager::RenderBattleItemBar()
 {
 }
@@ -106,16 +168,162 @@ void BattleManager::RenderPokemonSelect()
 	for (size_t i = 0; i < ourvecPokemon.size(); ++i) {
 		if (i < m_Player->GetPokemons().size()) {
 			ourvecPokemon[i]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurPokemon");
+			if (i == 0) {
+				m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(Vector3(55, 330, 0));
+				m_Player->GetPokemons()[i]->GetBar()->SetPosition(Vector3(127, 324, 0));
+			}
+			else if (i == 1) {
+				m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(Vector3(310, 330, 0));
+
+			
+				m_Player->GetPokemons()[i]->GetBar()->SetPosition(Vector3(383, 324, 0));
+			}
+			else if (i == 2) {
+				m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(Vector3(55, 240, 0));
+				
+				m_Player->GetPokemons()[i]->GetBar()->SetPosition(Vector3(127, 234, 0));
+			}
+			else if (i == 3) {
+				m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(Vector3(310, 240, 0));
+
+				m_Player->GetPokemons()[i]->GetIconRect()->SetSize(
+					Vector3(m_Player->GetPokemons()[i]->GetIconRect()->GetWidth(), m_Player->GetPokemons()[i]->GetIconRect()->GetHeight(), 0)
+				);
+				m_Player->GetPokemons()[i]->GetBar()->SetPosition(Vector3(383, 234, 0));
+			}
+			else if (i ==4) {
+				m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(Vector3(55, 150, 0));
+				
+				m_Player->GetPokemons()[i]->GetBar()->SetPosition(Vector3(127, 144, 0));
+			}
+			else if (i == 5) {
+				m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(Vector3(310, 150, 0));
+				
+				m_Player->GetPokemons()[i]->GetBar()->SetPosition(Vector3(383, 144, 0));
+			}
+			m_Player->GetPokemons()[i]->GetIconRect()->SetSize(
+				Vector3(m_Player->GetPokemons()[i]->GetIconRect()->GetWidth(), m_Player->GetPokemons()[i]->GetIconRect()->GetHeight(), 0)
+			);
+			m_Player->GetPokemons()[i]->GetBar()->SetRender(true);
 		}
 		else {
 			ourvecPokemon[i]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"Nope");
 		}
+		
 		ourvecPokemon[i]->SetRender(true);
 	}
 	BackButton->SetRender(true);
 	for (size_t i = 0; i < m_Player->GetPokemons().size(); ++i) {
 		m_Player->GetPokemons()[i]->SetIconSize(Vector3(m_Player->GetPokemons()[i]->GetIconRect()->GetWidth(), m_Player->GetPokemons()[i]->GetIconRect()->GetHeight(), 0));
 	}
+}
+void BattleManager::NotRenderPokemonSelect()
+{
+	BackButton->SetRender(false);
+	for (size_t i = 0; i < m_Player->GetPokemons().size(); ++i) {
+		m_Player->GetPokemons()[i]->SetIconSize(Vector3(0.f, 0.f, 0));
+		m_Player->GetPokemons()[i]->GetBar()->SetRender(false);
+	}
+	BackGround->SetRender(false);
+	for (size_t i = 0; i < ourvecPokemon.size(); ++i) {
+
+		ourvecPokemon[i]->SetRender(false);
+	}
+}
+void BattleManager::RenderChangeButton(bool _bRender,bool _bRend)
+{
+	BattleChangeButton->SetRender(_bRender);
+
+	if (_bRender == true) {
+		for (size_t i = 0; i < ourvecPokemon.size(); ++i) {
+			if (i < m_Player->GetPokemons().size()) {
+				if (m_Player->GetSelect() - 1 != i) {
+					
+					m_Player->GetPokemons()[i]->SetIconSize(Vector3(0.f, 0.f, 0));
+				}
+				else {
+					ourvecPokemon[i]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurPokemon");
+					m_Player->GetPokemons()[i]->SetIconPos(Vector3(WinMaxWidth / 2, 225, 0));
+				}
+				m_Player->GetPokemons()[i]->GetBar()->SetRender(false);
+			}
+			ourvecPokemon[i]->SetRender(false);
+			
+		}
+	}
+	else {
+		for (size_t i = 0; i < ourvecPokemon.size(); ++i) {
+			if (i < m_Player->GetPokemons().size()) {
+				if (i == 0) {
+					m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(Vector3(55, 330, 0));
+					
+				}
+				else if (i == 1) {
+					m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(Vector3(310, 330, 0));
+
+
+					
+				}
+				else if (i == 2) {
+					m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(Vector3(55, 240, 0));
+
+				}
+				else if (i == 3) {
+					m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(Vector3(310, 240, 0));
+
+					
+				}
+				else if (i == 4) {
+					m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(Vector3(55, 150, 0));
+
+					
+				}
+				else if (i == 5) {
+					m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(Vector3(310, 150, 0));
+
+					
+				}
+
+				m_Player->GetPokemons()[i]->GetBar()->SetRender(true);
+				m_Player->GetPokemons()[i]->GetIconRect()->SetSize(
+					Vector3(m_Player->GetPokemons()[i]->GetIconRect()->GetWidth(), m_Player->GetPokemons()[i]->GetIconRect()->GetHeight(), 0)
+				);
+			}
+			ourvecPokemon[i]->SetRender(true);
+
+		}
+	}
+	BackButton->SetRender(_bRend);
+}
+void BattleManager::StartHpBar()
+{
+	int i = m_Npc->GetCurPokemons()->GetHp();
+	
+	float percent = (float)((float)i / (float)m_Npc->GetCurPokemons()->GetMaxHp());
+	if (0.2f < percent && percent <= 0.5f) {
+
+		OpponentHpPoint->SetColor(Color(1, 1, 0, 1));
+
+	}
+	else if (percent <= 0.2f)
+		OpponentHpPoint->SetColor(Color(1, 0, 0, 1));
+	else
+		OpponentHpPoint->SetColor(Color(0, 1, 0, 1));
+	OpponentHpPoint->UpdateProgressBar(percent);
+	i = m_Player->GetCurPokemons()->GetHp();
+
+	percent = (float)((float)i / (float)m_Player->GetCurPokemons()->GetMaxHp());
+	if (0.2f < percent && percent <= 0.5f) {
+
+		OurHpPoint->SetColor(Color(1, 1, 0, 1));
+
+	}
+	else if (percent <= 0.2f)
+		OurHpPoint->SetColor(Color(1, 0, 0, 1));
+	else
+		OurHpPoint->SetColor(Color(0, 1, 0, 1));
+	OurHpPoint->UpdateProgressBar(percent);
+
 }
 void BattleManager::UpdateHpBar()
 {
@@ -128,7 +336,7 @@ void BattleManager::UpdateHpBar()
 		{
 			CSkill* pSkill = (CSkill*)playerbehavior.wParam;
 			m_iTempValue = m_Npc->GetCurPokemons()->GetHp()-pSkill->GetDamage();
-			if (m_iTempValue < 0)m_iTempValue = 0;
+			if (m_iTempValue <= 0) { m_iTempValue = 0; bDeadCheck = true; DeadSize = m_Npc->GetCurPokemons()->GetAnimationSize(); }
 			bUpdateHpBar = 2;
 		}
 		else if (2 == bUpdateHpBar) {
@@ -155,7 +363,8 @@ void BattleManager::UpdateHpBar()
 		{
 			CSkill* pSkill = (CSkill*)npcbehavior.wParam;
 			m_iTempValue = m_Player->GetCurPokemons()->GetHp() - pSkill->GetDamage();
-			if (m_iTempValue < 0)m_iTempValue = 0;
+			if (m_iTempValue <= 0) { m_iTempValue = 0; bDeadCheck = true; DeadSize = m_Player->GetCurPokemons()->GetAnimationSize();
+			}
 			bUpdateHpBar = 2;
 		}
 		else if (2 == bUpdateHpBar) {
@@ -204,6 +413,8 @@ BattleManager::~BattleManager()
 	for (size_t i = 0; i < ourvecPokemon.size(); ++i)
 		SAFE_DELETE(ourvecPokemon[i]);
 	SAFE_DELETE(BackButton);
+	SAFE_DELETE(BattleChangeButton);
+	SAFE_DELETE(ChangeOrNotButton);
 }
 
 void BattleManager::SelectorUpdate()
@@ -266,24 +477,80 @@ void BattleManager::SelectorUpdate()
 		}
 
 		break;
+	case SELECT_PHASE::CHANGEORNOT:
+		if (!m_Player->GetSelect())
+			CancelSelector->SetRender(false);
+		else
+			CancelSelector->SetRender(true);
+		break;
+	case SELECT_PHASE::ITEM:
 
+		break;
 	default:
 		break;
 	}
 	FightSelector->Update();
-	CancelSelector->Update();
 	SmallSelector->Update();
 	MediumSelector->Update();
 
+}
 
+void BattleManager::DeadEffect()
+{
+	if (5 == DeadCount)return;
+	switch (m_eCir)
+	{
+	case BATTLE_CIR::P_PHASE:
+	{
+		Vector3 vSize = DeadSize / 5;
+		vSize = m_Npc->GetCurPokemons()->GetAnimationSize() - vSize;
+		m_Npc->GetCurPokemons()->GetAnimRect()->SetSize(vSize);
+	}
+	break;
+	case BATTLE_CIR::N_PHASE: {
+		Vector3 vSize = DeadSize / 5;
+		vSize = m_Player->GetCurPokemons()->GetAnimationSize() - vSize;
+		m_Player->GetCurPokemons()->GetAnimRect()->SetSize(vSize);
+		
+	}
+	break;
+	}
+	DeadCount += 1;
+}
+
+void BattleManager::SetOurChangePokemon(const bool& _bChange)
+{
+	OurChangePokemon = _bChange;
+	if (_bChange) {
+		OurHpBar->SetRender(false);
+		OurHpPoint->SetRender(false);
+	}
+}
+void BattleManager::ChangeButtonRender(const bool& _bRender)
+{
+	ChangeOrNotButton->SetRender(_bRender);
+}
+
+void BattleManager::CancelSelectorRender(const bool& _bRender)
+{
+	CancelSelector->SetRender(_bRender);
+}
+
+void BattleManager::NPCCurDead()
+{
+	m_Npc->CurPokemonDead();
+	OpponentHpBar->SetRender(false);
+	OpponentHpPoint->SetRender(false);
 }
 
 void BattleManager::DoBattlePhase()
 {
+	CancelSelector->Update();
+	ChangeOrNotButton->Update();
 
 	OpponentHpBar->Update();
-	OurHpBar->Update();
 	OpponentHpPoint->Update();
+	OurHpBar->Update();
 	OurHpPoint->Update();
 	switch (m_Player->GetSelectPhase())
 	{
@@ -307,7 +574,7 @@ void BattleManager::DoBattlePhase()
 		if (!bSpeedCheck) {
 			if (BATTLE_TYPE::SKILL == playerbehavior.eBattle) {
 				if (m_Player->GetCurPokemons()->GetSpeed() >= m_Npc->GetCurPokemons()->GetSpeed()) {
-					CSkill* pSkill=((CSkill*)playerbehavior.wParam);
+					CSkill* pSkill = ((CSkill*)playerbehavior.wParam);
 
 					pSkill->Cast();
 					ptr = playerbehavior.wParam;
@@ -321,39 +588,113 @@ void BattleManager::DoBattlePhase()
 					m_eCir = BATTLE_CIR::N_PHASE;
 				}
 				m_iPhase = 1;
-				
+
 				bSpeedCheck = true;
+			}
+			else if (BATTLE_TYPE::CHANGE == playerbehavior.eBattle)
+			{
+				m_iPhase = 1;
+				m_eCir = BATTLE_CIR::P_PHASE;
+				bSpeedCheck = true;
+				m_iChangePokemon = (UINT) BATTLE_CIR::P_READY;
 			}
 		
 		}
 		else {
 			if (bSpeedCheck) {
 				if (1 == m_iPhase) {
-					CSkill* pSkill = (CSkill*)ptr;
-					if (!(pSkill->GetCasting()))
-					{
-						if (!bHitted) {
-							HitEffect();
+					if (BATTLE_CIR::P_PHASE == m_eCir) {
+						if (BATTLE_TYPE::SKILL == playerbehavior.eBattle) {
+							CSkill* pSkill = (CSkill*)ptr;
+							if (!(pSkill->GetCasting()))
+							{
+								if (!bHitted) {
+									HitEffect();
+								}
+							}
+							UpdateHpBar();
+							if (!bHitted || 3 != bUpdateHpBar)
+								return;
+						
+						}
+						else if (BATTLE_TYPE::CHANGE == playerbehavior.eBattle)
+						{
+							if (5 != m_iChangePokemon)
+								m_Player->Roar_BattleCir();
+
+							if (5 != m_iChangePokemon)
+								return;
+
 						}
 					}
-					UpdateHpBar();
-					if (!bHitted||3!=bUpdateHpBar)
-						return;
+					else if (BATTLE_CIR::N_PHASE == m_eCir) {
+						if (BATTLE_TYPE::SKILL == npcbehavior.eBattle) {
+							CSkill* pSkill = (CSkill*)ptr;
+							if (!(pSkill->GetCasting()))
+							{
+								if (!bHitted) {
+									HitEffect();
+								}
+							}
+							UpdateHpBar();
+							if (!bHitted || 3 != bUpdateHpBar)
+								return;
+						}
+					}
 					
+					if (bDeadCheck)
+					{
+						DeadEffect();
 
+						if (5 == DeadCount) {
+							m_iPhase = 4;
+							switch (m_eCir)
+							{
+							case BATTLE_CIR::P_PHASE:
+							{
+								m_eCir = BATTLE_CIR::N_DEAD;
+								
+								ChangeOrNotButton->SetRender(true);
+								m_Player->SetSelectPhase(SELECT_PHASE::CHANGEORNOT);
+								bUpdateHpBar = 0;
+								bHitted = false;
+								m_iChangePokemon = 0;
+							}
+							break;
+							case BATTLE_CIR::N_PHASE: {
+								m_eCir = BATTLE_CIR::P_DEAD;
+								ChangeOrNotButton->SetRender(true);
+								m_Player->SetSelectPhase(SELECT_PHASE::CHANGEORNOT);
+								bUpdateHpBar = 0;
+								bHitted = false;
+								m_iChangePokemon = 0;
+							}
+							break;
+							}
+						}
+						return;
+						
+					}
+					
 					switch (m_eCir)
 					{
 					case BATTLE_CIR::P_PHASE:
 					{
-						CSkill* pSkill = ((CSkill*)playerbehavior.wParam);
-					
+						if (BATTLE_TYPE::SKILL == playerbehavior.eBattle) {
+							CSkill* pSkill = ((CSkill*)playerbehavior.wParam);
 
-					pSkill = ((CSkill*)npcbehavior.wParam);
-						pSkill->Cast();
+
+							pSkill = ((CSkill*)npcbehavior.wParam);
+							pSkill->Cast();
+						}
+						else if (BATTLE_TYPE::SKILL == npcbehavior.eBattle) {
+
+						}
 					
 					ptr = npcbehavior.wParam;
 					m_eCir = BATTLE_CIR::N_PHASE; 
 					bHitted = false;
+					m_iChangePokemon = 0;
 					bUpdateHpBar = 0;
 					}
 						break;
@@ -386,7 +727,7 @@ void BattleManager::DoBattlePhase()
 					bUpdateHpBar = 0;
 				}
 
-				else {
+				else if(3==m_iPhase){
 					m_iPhase = 0;
 					m_eCir = BATTLE_CIR::ALL_READY;
 					playerbehavior = {};
@@ -398,6 +739,29 @@ void BattleManager::DoBattlePhase()
 					MediumSelector->SetRender(false);
 					bSpeedCheck = false;
 					bHitted = false;
+					m_Player->Setbehavior(false);
+				}
+				else {
+					switch (m_eCir)
+					{
+					case BATTLE_CIR::P_DEAD:
+					{
+						m_Player->SetSelectPhase(SELECT_PHASE::POKEMON);
+						RenderPokemonSelect();
+						BackButton->SetRender(false);
+
+					}
+						break;
+					case BATTLE_CIR::N_DEAD:
+					{
+						m_Npc->FindPokemon();
+						if (!m_Npc->GetDefeat()) {
+							m_Npc->Roar();
+						}
+					}
+						break;
+		
+					}
 				}
 			}
 		}
@@ -407,6 +771,7 @@ void BattleManager::DoBattlePhase()
 	for (size_t i = 0; i < ourvecPokemon.size(); ++i)
 		ourvecPokemon[i]->Update();
 	BackGround->Update();
+	BattleChangeButton->Update();
 	
 }
 
@@ -558,7 +923,7 @@ void BattleManager::Render()
 		{
 			BattlePhase->Render();
 			FightSelector->Render();
-			CancelSelector->Render();
+		
 			SmallSelector->Render();
 			MediumSelector->Render();
 
@@ -576,16 +941,7 @@ void BattleManager::Render()
 				BattleItemBar->Render();
 			}
 			break;
-			case SELECT_PHASE::POKEMON:
-			{
-				BackGround->Render();
-				for (size_t i = 0; i < ourvecPokemon.size(); ++i) {
-					ourvecPokemon[i]->Render();
-				}
-				
-				BackButton->Render();
-			}
-			break;
+		
 			default:
 				break;
 			}
@@ -593,34 +949,54 @@ void BattleManager::Render()
 		
 		
 	}
+	switch (m_Player->GetSelectPhase())
+	{
+	case SELECT_PHASE::POKEMON:
+	{
+		BackGround->Render();
+		for (size_t i = 0; i < ourvecPokemon.size(); ++i) {
+			ourvecPokemon[i]->Render();
+		}
+
+		BackButton->Render();
+	}
+	break;
+	default:
+		break;
+	}
+
 	OpponentHpBar->Render();
 	OurHpBar->Render();
 	OpponentHpPoint->Render();
 	OurHpPoint->Render();
+	BattleChangeButton->Render();
+	ChangeOrNotButton->Render();
+	CancelSelector->Render();
 
 }
 
 void BattleManager::Init()
 {
-	BattlePhase = new UI();
-	BattlePhase->Init(L"Battle/BattleUI/BattlePhase", 1, 1, 2);
-	Animator* animator = new Animator;
-	AnimationClip* animation = new AnimationClip(L"BattlePhase", BattlePhase->GetTexture(), 1, Vector2(0.f, 0.f),
-		Vector2(BattlePhase->GetTexture()->GetWidth() , BattlePhase->GetTexture()->GetHeight() / 2.f), 1.0f / 15.0f);
-	animator->AddAnimClip(animation);
-	animation = new AnimationClip(L"BattlePhaseIn", BattlePhase->GetTexture(), 1, Vector2(0.f, BattlePhase->GetTexture()->GetHeight() / 2.f),
-		Vector2(BattlePhase->GetTexture()->GetWidth(), BattlePhase->GetTexture()->GetHeight()), 1.0f / 15.0f);
-	animator->AddAnimClip(animation);
-	animator->SetCurrentAnimClip(L"BattlePhase");//128 64
-	BattlePhase->GetTex()->SetAnimation(animator); 
-	BattlePhase->GetTex()->SetPosition(Vector3(WinMaxWidth / 2, WinMaxHeight / 2 - 192, 1.0f));
-	BattlePhase->GetTex()->SetSize(Vector3((float)BattlePhase->GetTex()->GetWidth(), (float)BattlePhase->GetTex()->GetHeight(), (float)0.0f));
-	BattlePhase->DeleteTexture();
-
+	{
+		BattlePhase = new UI();
+		BattlePhase->Init(L"Battle/BattleUI/BattlePhase", 1, 1, 2);
+		Animator* animator = new Animator;
+		AnimationClip* animation = new AnimationClip(L"BattlePhase", BattlePhase->GetTexture(), 1, Vector2(0.f, 0.f),
+			Vector2(BattlePhase->GetTexture()->GetWidth(), BattlePhase->GetTexture()->GetHeight() / 2.f), 1.0f / 15.0f);
+		animator->AddAnimClip(animation);
+		animation = new AnimationClip(L"BattlePhaseIn", BattlePhase->GetTexture(), 1, Vector2(0.f, BattlePhase->GetTexture()->GetHeight() / 2.f),
+			Vector2(BattlePhase->GetTexture()->GetWidth(), BattlePhase->GetTexture()->GetHeight()), 1.0f / 15.0f);
+		animator->AddAnimClip(animation);
+		animator->SetCurrentAnimClip(L"BattlePhase");//128 64
+		BattlePhase->GetTex()->SetAnimation(animator);
+		BattlePhase->GetTex()->SetPosition(Vector3(WinMaxWidth / 2, WinMaxHeight / 2 - 192, 1.0f));
+		BattlePhase->GetTex()->SetSize(Vector3((float)BattlePhase->GetTex()->GetWidth(), (float)BattlePhase->GetTex()->GetHeight(), (float)0.0f));
+		BattlePhase->DeleteTexture();
+	
 	FightSelector = new TextureObject;
 	FightSelector->Init(L"Pokemon/Battle/BattleUI/FightSelector.png");
 	FightSelector->GetTex()->SetWidth(434); FightSelector->GetTex()->SetHeight(180);
-	FightSelector->GetTex()->SetPosition(Vector3(WinMaxWidth / 2,230, 1.0f)); FightSelector->GetTex()->SetSize(Vector3(434, 180, 0));
+	FightSelector->GetTex()->SetPosition(Vector3(WinMaxWidth / 2, 230, 1.0f)); FightSelector->GetTex()->SetSize(Vector3(434, 180, 0));
 	CancelSelector = new TextureObject;
 	CancelSelector->Init(L"Pokemon/Battle/BattleUI/CancelSelector.png");
 	CancelSelector->GetTex()->SetWidth(472); CancelSelector->GetTex()->SetHeight(80);
@@ -631,19 +1007,19 @@ void BattleManager::Init()
 	MediumSelector->Init(L"Pokemon/Battle/BattleUI/MediumSelector.png");
 	MediumSelector->GetTex()->SetWidth(248); MediumSelector->GetTex()->SetHeight(110);
 	MediumSelector->GetTex()->SetPosition(Vector3(WinMaxWidth / 4, 290, 1.0f));
-	MediumSelector->GetTex()->SetSize(Vector3(248,110, 0));
+	MediumSelector->GetTex()->SetSize(Vector3(248, 110, 0));
 	MediumSelector->SetRender(false);
 	SmallSelector = new TextureObject;
 	SmallSelector->Init(L"Pokemon/Battle/BattleUI/SmallSelector.png");
 	SmallSelector->GetTex()->SetWidth(78); SmallSelector->GetTex()->SetHeight(44);
 	SmallSelector->GetTex()->SetPosition(Vector3(80, 55, 1.0f)); //80 55 -> 256 45-> 432 55
-	SmallSelector->GetTex()->SetSize(Vector3(78*2, 44*2, 0));
+	SmallSelector->GetTex()->SetSize(Vector3(78 * 2, 44 * 2, 0));
 	SmallSelector->SetRender(false);
 	OurHpBar = new TextureObject;
 	OurHpBar->Init(L"Pokemon/Battle/BattleUI/OurHpBAR.png");
 	OurHpBar->GetTex()->SetWidth(266); OurHpBar->GetTex()->SetHeight(90);
 	OurHpBar->GetTex()->SetPosition(Vector3(390, 543, 1.0f));
-	OurHpBar->GetTex()->SetSize(Vector3(266,90, 0));
+	OurHpBar->GetTex()->SetSize(Vector3(266, 90, 0));
 	OurHpBar->SetRender(false);
 	OpponentHpBar = new TextureObject;
 	OpponentHpBar->Init(L"Pokemon/Battle/BattleUI/EnemyHpBar.png");
@@ -652,12 +1028,12 @@ void BattleManager::Init()
 	OpponentHpBar->GetTex()->SetSize(Vector3(252, 78, 0));
 	OpponentHpBar->SetRender(false);
 
-	
-	OurHpPoint = new ProgressBar(Vector3(405, 535, 1.0f), Vector3(96, 5, 0), 0.f ,Color(0,1,0,1),GI::LEFT_TO_RIGHT );
+
+	OurHpPoint = new ProgressBar(Vector3(405, 535, 1.0f), Vector3(96, 5, 0), 0.f, Color(0, 1, 0, 1), GI::LEFT_TO_RIGHT);
 	OurHpPoint->SetRender(false);
-	OpponentHpPoint = new ProgressBar(Vector3(102, 683, 1.0f), Vector3(96, 5, 0),0.f, Color(0, 1, 0, 1), GI::LEFT_TO_RIGHT);
+	OpponentHpPoint = new ProgressBar(Vector3(102, 683, 1.0f), Vector3(96, 5, 0), 0.f, Color(0, 1, 0, 1), GI::LEFT_TO_RIGHT);
 	OpponentHpPoint->SetRender(false);
-	
+
 
 
 	BackGround = new TextureObject;
@@ -667,15 +1043,15 @@ void BattleManager::Init()
 	BackGround->GetTex()->SetSize(Vector3(512, 384, 0));
 	BackGround->SetRender(false);
 
-	 BackButton = new UI;
-	BackButton->Init(L"Battle/BattleUI/BattleBackButton02",4,4,1);
+	BackButton = new UI;
+	BackButton->Init(L"Battle/BattleUI/BattleBackButton02", 4, 4, 1);
 	animator = new Animator;
 	animation = new AnimationClip(L"CurButton", BackButton->GetTexture(), 1, Vector2(0.f, 0.f),
 		Vector2(BackButton->GetTex()->GetWidth(), BackButton->GetTex()->GetHeight()), 1.0f / 15.0f);
 	animator->AddAnimClip(animation);
 
 	animation = new AnimationClip(L"SelectButton", BackButton->GetTexture(), 1, Vector2(BackButton->GetTex()->GetWidth(), 0.f),
-		Vector2(BackButton->GetTex()->GetWidth()*2, BackButton->GetTex()->GetHeight()), 1.0f / 15.0f);
+		Vector2(BackButton->GetTex()->GetWidth() * 2, BackButton->GetTex()->GetHeight()), 1.0f / 15.0f);
 	animator->AddAnimClip(animation);
 	animation = new AnimationClip(L"Nope", BackButton->GetTexture(), 1, Vector2(BackButton->GetTexture()->GetWidth() * 3, 0),
 		Vector2(BackButton->GetTexture()->GetWidth() * 4, BackButton->GetTexture()->GetHeight()), 1.0f / 15.0f);
@@ -683,7 +1059,7 @@ void BattleManager::Init()
 	animator->SetCurrentAnimClip(L"CurButton");
 	BackButton->DeleteTexture();
 	BackButton->GetTex()->SetAnimation(animator);
-	BackButton->GetTex()->SetPosition(Vector3(450	, 50, 1.0f));
+	BackButton->GetTex()->SetPosition(Vector3(450, 50, 1.0f));
 	BackButton->GetTex()->SetSize(Vector3(BackButton->GetTex()->GetWidth(), BackButton->GetTex()->GetHeight(), 0));
 	BackButton->SetRender(false);
 
@@ -697,13 +1073,13 @@ void BattleManager::Init()
 	BattleItemBar->GetTex()->SetPosition(Vector3(WinMaxWidth / 2, WinMaxHeight / 2 - 192, 1.0f));
 	BattleItemBar->GetTex()->SetSize(Vector3(512, 384, 0));
 	BattleItemBar->SetRender(false);
-
+	}
 	for (int i = 0; i < MAXPOKEMONCOUNT; ++i) {
 		UI* pPokemon = new UI;
 
 		pPokemon->Init(L"Battle/BattleUI/BattlePokemon", 4, 4, 1);
-		animator = new Animator;
-		animation = new AnimationClip(L"CurPokemon", pPokemon->GetTexture(), 1, Vector2(0.f, 0.f),
+		Animator* animator = new Animator;
+		AnimationClip* animation = new AnimationClip(L"CurPokemon", pPokemon->GetTexture(), 1, Vector2(0.f, 0.f),
 			Vector2(pPokemon->GetTex()->GetWidth(), pPokemon->GetTex()->GetHeight()), 1.0f / 15.0f);
 		animator->AddAnimClip(animation);
 		animation = new AnimationClip(L"SelectPokemon", pPokemon->GetTexture(), 1, Vector2(pPokemon->GetTex()->GetWidth(), 0.f),
@@ -733,27 +1109,40 @@ void BattleManager::Init()
 		ourvecPokemon.push_back(pPokemon);
 	}
 
+	{
+		BattleChangeButton = new UI;
+		BattleChangeButton->Init(L"Battle/BattleUI/BattleChangeButton", 4, 4, 1);
+		Animator* animator = new Animator;
+		AnimationClip* animation = new AnimationClip(L"CurButton", BattleChangeButton->GetTexture(), 1, Vector2(0.f, 0.f),
+			Vector2(BattleChangeButton->GetTex()->GetWidth(), BattleChangeButton->GetTex()->GetHeight()), 1.0f / 15.0f);
+		animator->AddAnimClip(animation);
 
+		animation = new AnimationClip(L"SelectButton", BattleChangeButton->GetTexture(), 1, Vector2(BattleChangeButton->GetTex()->GetWidth(), 0.f),
+			Vector2(BattleChangeButton->GetTex()->GetWidth() * 2, BattleChangeButton->GetTex()->GetHeight()), 1.0f / 15.0f);
+		animator->AddAnimClip(animation);
+		animator->AddAnimClip(animation);
+		animator->SetCurrentAnimClip(L"CurButton");
+		BattleChangeButton->DeleteTexture();
+		BattleChangeButton->GetTex()->SetAnimation(animator);
+		BattleChangeButton->GetTex()->SetPosition(Vector3(WinMaxWidth/2, 225, 1.0f));
+		BattleChangeButton->GetTex()->SetSize(Vector3(BattleChangeButton->GetTex()->GetWidth(), BattleChangeButton->GetTex()->GetHeight(), 0));
+		BattleChangeButton->SetRender(false);
+
+	}
+	{
+
+	ChangeOrNotButton = new TextureObject;
+	ChangeOrNotButton->Init(L"Pokemon/Battle/BattleUI/ChangeOrNot.png");
+	ChangeOrNotButton->GetTex()->SetWidth(512); ChangeOrNotButton->GetTex()->SetHeight(256);
+	ChangeOrNotButton->GetTex()->SetPosition(Vector3(WinMaxWidth / 2, WinMaxHeight/4, 1.0f)); ChangeOrNotButton->GetTex()->SetSize(Vector3(512, 256, 0));
+	ChangeOrNotButton->SetRender(false);
+	}
 }
 
 void BattleManager::GUI()
 {
-	using namespace ImGui;
-	for (int i = 0; i < m_Player->GetPokemons().size(); ++i) {
-		string str = "Pokemon";
-		string str2 = std::to_string(i + 1);
-		str += str2;
-		Begin(str.c_str());
-		Vector3 vPos= m_Player->GetPokemons()[i]->GetIconRect()->GetPosition();
-		{
-			InputFloat3("Pos", vPos, 2);
-		
 
-		
-		}
-		m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(vPos);
-		End();
-	}
+
 }
 
 void BattleManager::Update()
@@ -762,9 +1151,28 @@ void BattleManager::Update()
 	if (m_eCir == BATTLE_CIR::ALL_READY) {
 		BattlePhase->Update();
 		SelectorUpdate();
-		
-		
 	}
+	switch (m_Player->GetSelectPhase())
+	{
+
+	case SELECT_PHASE::CHANGEORNOT:
+		CancelSelector->GetTex()->SetSize(Vector3(410,79,0));
+		if (!m_Player->GetSelect())
+			CancelSelector->SetRender(false);
+		else {
+			CancelSelector->SetRender(true);
+			if (1 == m_Player->GetSelect())
+			{
+				CancelSelector->GetTex()->SetPosition(Vector3(256,250,1));
+			}
+			else {
+				CancelSelector->GetTex()->SetPosition(Vector3(256,125,1));
+			}
+		}
+		break;
+
+	}
+	
 	DoBattlePhase();
 }
 void BattleManager::NPCDefeat()

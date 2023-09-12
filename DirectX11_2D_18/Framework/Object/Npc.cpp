@@ -6,6 +6,74 @@
 #include "Manager/BattleManager.h"
 #include "Player.h"
 #include "CSkill.h"
+void Npc::FindPokemon()
+{
+	if (bCurPokemonDead) {
+		bool bDefeat = true;
+		for (size_t i = 0; i < m_vecPokemon.size(); ++i) {
+			if (m_vecPokemon[i]->GetHp() <= 0) continue;
+			else
+			{
+				swap(m_vecPokemon[m_curPokemon], m_vecPokemon[i]);
+				bDefeat = false;
+				break;
+			}
+
+		}
+		IsDefeat = bDefeat;
+	}
+}
+
+void Npc::Roar()
+{
+	if (bCurPokemonDead) {
+		if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::N_DEAD) {
+			if (m_BattlePosition.x - (BattleRect->GetWidth() / 2) > WinMaxWidth)
+			{
+				m_vecPokemon[m_curPokemon]->GetPokeBall()->SetRender(true);
+				m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->SetPause(false);
+				m_vecPokemon[m_curPokemon]->GetPokeBall()->SetPos(Vector3(WinMaxWidth / 2 + 125, WinMaxHeight / 2 + (215 + 20), 0.f));
+				m_vecPokemon[m_curPokemon]->GetPokeBall()->SetSize(
+					Vector3(m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetWidth(), m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetHeight(), 0.f)
+				);
+				m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->SetCurrentAnimClip(L"Appear");
+				BattleManager::Get()->SetCircumStance(BATTLE_CIR::N_ROAR);
+			}
+		}
+		if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::N_ROAR) {
+			if (m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->GetEnd() && !m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->GetEnd()) {
+				m_vecPokemon[m_curPokemon]->GetPokeBall()->SetRender(false);
+				m_vecPokemon[m_curPokemon]->SetPos(Vector3(WinMaxWidth / 2 + 130, WinMaxHeight / 2 + (215 + 60), 0.f));
+				m_vecPokemon[m_curPokemon]->SetSize(Vector3(
+					m_vecPokemon[m_curPokemon]->GetAnimRect()->GetWidth(), m_vecPokemon[m_curPokemon]->GetAnimRect()->GetHeight(), 0.f
+				));
+				m_vecPokemon[m_curPokemon]->SetRender(true);
+				m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->SetCurrentAnimClip(L"Opponent_Roar");
+			}
+			if (m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->GetEnd()) {
+				m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->SetCurrentAnimClip(L"Opponent_IDLE");
+				bool b=BattleManager::Get()->GetOurChangePokemon();
+				if (BattleManager::Get()->GetOurChangePokemon()) {
+					BattleManager::Get()->SetCircumStance(BATTLE_CIR::P_READY);
+
+				}
+				if (!BattleManager::Get()->GetOurChangePokemon()) {
+					BattleManager::Get()->SetCircumStance(BATTLE_CIR::ALL_READY);
+					BattleManager::Get()->AllReady();
+					BattleManager::Get()->DoBehavior(false);
+					BattleManager::Get()->PhaseOut();
+					BattleManager::Get()->StartHpBar();
+					BattleManager::Get()->PhaseReset();
+					BattleManager::Get()->GetPlayer()->SetSelectPhase(SELECT_PHASE::COMPREHENSIVE);
+				}
+				bCurPokemonDead = false;
+			}
+
+		}
+	}
+}
+
+
 void Npc::SetPosition(const Vector3& _Position)
 {
 	m_Position = _Position;
@@ -34,36 +102,38 @@ void Npc::DoBehavior()
 
 void Npc::Move()
 {
-	if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::N_READY) {
-		m_BattlePosition.x += 200 * Time::Delta();
-		BattleRect->SetPosition(m_BattlePosition);
-		if (m_BattlePosition.x - (BattleRect->GetWidth() / 2) > WinMaxWidth)
-		{
-			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetRender(true);
-			m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->SetPause(false);
-			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetPos(Vector3(WinMaxWidth / 2 + 125, WinMaxHeight / 2 + (215 + 20), 0.f));
-			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetSize(
-				Vector3(m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetWidth(), m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetHeight(), 0.f)
-			);
-			m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->SetCurrentAnimClip(L"Appear");
-			BattleManager::Get()->SetCircumStance(BATTLE_CIR::N_ROAR);
+	if (!bCurPokemonDead) {
+		if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::N_READY) {
+			m_BattlePosition.x += 200 * Time::Delta();
+			BattleRect->SetPosition(m_BattlePosition);
+			if (m_BattlePosition.x - (BattleRect->GetWidth() / 2) > WinMaxWidth)
+			{
+				m_vecPokemon[m_curPokemon]->GetPokeBall()->SetRender(true);
+				m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->SetPause(false);
+				m_vecPokemon[m_curPokemon]->GetPokeBall()->SetPos(Vector3(WinMaxWidth / 2 + 125, WinMaxHeight / 2 + (215 + 20), 0.f));
+				m_vecPokemon[m_curPokemon]->GetPokeBall()->SetSize(
+					Vector3(m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetWidth(), m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetHeight(), 0.f)
+				);
+				m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->SetCurrentAnimClip(L"Appear");
+				BattleManager::Get()->SetCircumStance(BATTLE_CIR::N_ROAR);
+			}
 		}
-	}
-	if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::N_ROAR) {
-		if (m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->GetEnd()&&!m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->GetEnd()) {
-			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetRender(false);
-			m_vecPokemon[m_curPokemon]->SetPos(Vector3(WinMaxWidth / 2 + 130, WinMaxHeight / 2 + (215 + 60), 0.f));
-			m_vecPokemon[m_curPokemon]->SetSize(Vector3(
-				m_vecPokemon[m_curPokemon]->GetAnimRect()->GetWidth(), m_vecPokemon[m_curPokemon]->GetAnimRect()->GetHeight(),0.f
-			));
-			m_vecPokemon[m_curPokemon]->SetRender(true);
-			m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->SetCurrentAnimClip(L"Opponent_Roar");
+		if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::N_ROAR) {
+			if (m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->GetEnd() && !m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->GetEnd()) {
+				m_vecPokemon[m_curPokemon]->GetPokeBall()->SetRender(false);
+				m_vecPokemon[m_curPokemon]->SetPos(Vector3(WinMaxWidth / 2 + 130, WinMaxHeight / 2 + (215 + 60), 0.f));
+				m_vecPokemon[m_curPokemon]->SetSize(Vector3(
+					m_vecPokemon[m_curPokemon]->GetAnimRect()->GetWidth(), m_vecPokemon[m_curPokemon]->GetAnimRect()->GetHeight(), 0.f
+				));
+				m_vecPokemon[m_curPokemon]->SetRender(true);
+				m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->SetCurrentAnimClip(L"Opponent_Roar");
+			}
+			if (m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->GetEnd()) {
+				m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->SetCurrentAnimClip(L"Opponent_IDLE");
+				BattleManager::Get()->SetCircumStance(BATTLE_CIR::P_READY);
+			}
+			bCurPokemonDead = false;
 		}
-		if (m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->GetEnd()) {
-			m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->SetCurrentAnimClip(L"Opponent_IDLE");
-			BattleManager::Get()->SetCircumStance(BATTLE_CIR::P_READY);
-		}
-		
 	}
 	if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::ALL_READY) {
 		if (player->GetDobehavior()) {
@@ -75,6 +145,7 @@ void Npc::Move()
 			BattleManager::Get()->NpcBehavior(behavior);
 		}
 	}
+
 }
 
 
@@ -175,7 +246,9 @@ void Npc::Init()
 
 void Npc::Update()
 {
+	FindPokemon();
 	Move();
+	Roar();
 	if (BATTLE_STATE::NONE == m_eBattleState) {
 		AnimRect->Update();
 	}

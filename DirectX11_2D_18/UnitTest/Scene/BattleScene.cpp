@@ -75,6 +75,8 @@ void BattleScene::Render()
 
 void BattleScene::PostRender()
 {
+
+	Scene::PostRender();
 }
 
 void BattleScene::GUI()
