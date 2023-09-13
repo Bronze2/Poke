@@ -12,6 +12,7 @@ class BattleManager : public SingletonBase<BattleManager>
 private:
 	Player* m_Player;
 	Npc* m_Npc;
+	vector<Npc*> m_vecNpcs;
 
 	BATTLE_CIR m_eCir=BATTLE_CIR::NONE;
 	UI* BattlePhase;
@@ -65,6 +66,10 @@ public:
 	void SetChangePokemonPhase(const UINT& _phase) { m_iChangePokemon = _phase; }
 	const UINT& ChangePokemonPhase() { return m_iChangePokemon; }
 
+	vector<Npc*> GetNpcs() { return m_vecNpcs; }
+
+
+	void PushNPC(Npc* _pOther) { m_vecNpcs.push_back(_pOther); }
 
 private:
 	TextureObject* ChangeOrNotButton;

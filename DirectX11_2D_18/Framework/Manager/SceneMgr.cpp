@@ -13,8 +13,16 @@ void SceneMgr::ChangeScene(SCENE_TYPE _NextScene)
 	{
 		return;
 	}
-	m_pCurScene = m_arrScene[(UINT)_NextScene];
-	m_pCurScene->Init();
+
+	if (m_pCurScene == m_arrScene[(UINT)SCENE_TYPE::BATTLE])
+	{
+		m_pCurScene = m_arrScene[(UINT)_NextScene];
+		
+	}
+	else {
+		m_pCurScene = m_arrScene[(UINT)_NextScene];
+		m_pCurScene->Init();
+	}
 }
 
 SceneMgr::SceneMgr() :m_arrScene{}

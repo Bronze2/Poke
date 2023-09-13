@@ -991,6 +991,7 @@ void BattleManager::BattleStart(Player* _player, Npc* _npc)
 	SAFE_DELETE(m_Player);
 	SAFE_DELETE(m_Npc);
 	m_Player = new Player(*_player);
+
 	m_Player->SetBattleMode();
 
 	for (size_t j = 0; j < m_Player->GetPokemons().size(); ++j)
@@ -1008,6 +1009,13 @@ void BattleManager::BattleStart(Player* _player, Npc* _npc)
 		}
 	m_Npc = new Npc(*_npc);
 	m_Npc->SetBattleMode();
+
+	for (size_t i = 0; i < m_vecNpcs.size(); ++i) {
+		if (_npc != m_vecNpcs[i]) {
+			Npc* npc = new Npc(*m_vecNpcs[i]);
+			m_vecNpcs[i] = npc;
+		}
+	}
 }
 
 void BattleManager::BattleEnd(Player* _player, Npc* _npc)
@@ -1246,6 +1254,9 @@ void BattleManager::Init()
 	ChangeOrNotButton->GetTex()->SetPosition(Vector3(WinMaxWidth / 2, WinMaxHeight/4, 1.0f)); ChangeOrNotButton->GetTex()->SetSize(Vector3(512, 256, 0));
 	ChangeOrNotButton->SetRender(false);
 	}
+
+
+
 }
 
 void BattleManager::GUI()

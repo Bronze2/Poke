@@ -11,6 +11,8 @@ private:
 	vector<Pokemon*> m_vecPokemon;
 
 
+	Vector3 m_PrevPos;
+
 	BATTLE_STATE m_eBattleState = BATTLE_STATE::NONE;
 	Vector3 m_Position;
 	Vector3 m_BattlePosition;
@@ -25,6 +27,7 @@ private:
 	
 public:
 
+	void SetPrevPos(Vector3 _Pos) { m_Position = _Pos; }
 	void Setbehavior(const bool& _be) { bbehavior = _be; }
 	const bool& GetDobehavior() { return bbehavior; }
 	vector<Pokemon*> GetPokemons() { return m_vecPokemon; }

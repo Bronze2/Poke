@@ -207,6 +207,7 @@ Npc::Npc(const Npc& _Other)
 	this->IsDefeat = _Other.IsDefeat;
 	this->Init();
 	this->IsNpc = true;
+	this->m_PrevPos = _Other.m_PrevPos;
 }
 
 void Npc::AddPokemon(const wstring& Name, UINT maxhp, int hp, int att, int def, UINT level, UINT Speed)

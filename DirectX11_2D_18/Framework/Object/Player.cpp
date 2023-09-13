@@ -495,6 +495,7 @@ Player::Player(const Player& _Other)
 	m_Position = _Other.m_Position;
 	m_BattlePosition = _Other.m_BattlePosition;
 	this->Init();
+	this->m_PrevPos = _Other.m_PrevPos;
 }
 Player::~Player() {
 

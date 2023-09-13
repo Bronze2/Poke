@@ -31,6 +31,26 @@ void FieldScene::Init()
 	npc->GetPokemons(1)->GetSkills()[0]->SetSkillMVRIGHType();
 	npc->SetPlayer(player);
 	AddObj(npc, OBJ_TYPE::NPC);
+	BattleManager::Get()->PushNPC(npc);
+	npcs = new Npc(L"Npc00");
+	npcs->Init();
+	npcs->SetPosition(Vector3(WinMaxWidth / 2, WinMaxHeight / 2 + 50, 0.f));
+	npcs->SetSize(Vector3(npcs->GetAnimRect()->GetWidth(), npcs->GetAnimRect()->GetHeight(), 0.f));
+
+	npcs->AddPokemon(L"Floatzel", 100, 100, 100, 10, 30, 50);
+	npcs->GetPokemons(0)->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 30);
+	npcs->GetPokemons(0)->GetSkills()[0]->SetSkillMVRIGHType();
+
+	npcs->AddPokemon(L"Garchomp", 100, 100, 100, 10, 30, 50);
+	npcs->GetPokemons(1)->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 30);
+	npcs->GetPokemons(1)->GetSkills()[0]->SetSkillMVRIGHType();
+	npcs->SetPlayer(player);
+	AddObj(npcs, OBJ_TYPE::NPC);
+	BattleManager::Get()->PushNPC(npcs);
+}
+
+void FieldScene::BattleInit()
+{
 }
 
 void FieldScene::Destroy()
@@ -43,6 +63,8 @@ void FieldScene::Update()
 	Scene::Update();
 
 	if (PRESS('A')) {
+		player->SetPrevPos(player->GetPos());
+		npc->SetPrevPos(npc->GetPos());
 		BattleManager::Get()->BattleStart(player, npc);
 		ChangeScene(SCENE_TYPE::BATTLE);
 	}

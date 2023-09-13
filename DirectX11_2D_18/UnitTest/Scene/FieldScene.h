@@ -6,8 +6,10 @@ class FieldScene
 private:
 	class Player* player;
 	class Npc* npc;
+	class Npc* npcs;
 public:
 	virtual void Init();
+	virtual void BattleInit();
 	virtual void Destroy();	// 소멸자 대체
 
 	virtual void Update();

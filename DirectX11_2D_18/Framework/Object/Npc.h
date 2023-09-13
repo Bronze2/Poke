@@ -24,7 +24,7 @@ private:
     wstring Name;
     class AnimationRect* AnimRect;
     class AnimationRect* BattleRect;
-
+    Vector3 m_PrevPos;
     vector<Pokemon*> m_vecPokemon;
     Player* player = nullptr;
 
@@ -43,7 +43,7 @@ private:
     void FDeadEffect();
 public:
     void CurPokemonDead() { bCurPokemonDead = true; }
-
+    void SetPrevPos(Vector3 _Pos) { m_Position = _Pos; }
     void SetDefeatEffect(const bool& _bDefeatEffect) {
         bDefeatEffect = true;
     }

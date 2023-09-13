@@ -11,6 +11,7 @@ public:
 	virtual void Destroy() ;	// 소멸자 대체
 
 	virtual void Update() ;
+	virtual void BattleInit() {};
 
 	virtual void Render() ;
 	virtual void PostRender();	// 후처리가 필요한 코드를 처리
