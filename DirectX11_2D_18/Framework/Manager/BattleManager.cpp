@@ -497,7 +497,7 @@ void BattleManager::SelectorUpdate()
 
 void BattleManager::DeadEffect()
 {
-	if (5 == DeadCount)return;
+	if (5 == DeadCount) { m_Npc->FindPokemon(); }return;
 	switch (m_eCir)
 	{
 	case BATTLE_CIR::P_PHASE:
@@ -646,19 +646,25 @@ void BattleManager::DoBattlePhase()
 					{
 						DeadEffect();
 
+
 						if (5 == DeadCount) {
 							m_iPhase = 4;
+							m_Npc->FindPokemon();
+							if (!m_Npc->GetDefeat())
+							{
+							
 							switch (m_eCir)
 							{
 							case BATTLE_CIR::P_PHASE:
 							{
 								m_eCir = BATTLE_CIR::N_DEAD;
-								
+
 								ChangeOrNotButton->SetRender(true);
 								m_Player->SetSelectPhase(SELECT_PHASE::CHANGEORNOT);
 								bUpdateHpBar = 0;
 								bHitted = false;
 								m_iChangePokemon = 0;
+								DeadCount = 0;
 							}
 							break;
 							case BATTLE_CIR::N_PHASE: {
@@ -668,8 +674,39 @@ void BattleManager::DoBattlePhase()
 								bUpdateHpBar = 0;
 								bHitted = false;
 								m_iChangePokemon = 0;
+								DeadCount = 0;
 							}
-							break;
+													break;
+							}
+							}
+							else {
+								switch (m_eCir)
+								{
+								case BATTLE_CIR::P_PHASE:
+								{
+									m_eCir = BATTLE_CIR::N_DEAD;
+
+									ChangeOrNotButton->SetRender(false);
+									m_Npc->SetDefeatEffect(true);
+								//	m_Player->SetSelectPhase(SELECT_PHASE::CHANGEORNOT);
+									bUpdateHpBar = 0;
+									bHitted = false;
+									m_iChangePokemon = 0;
+									DeadCount = 0;
+								}
+								break;
+								case BATTLE_CIR::N_PHASE: {
+									m_eCir = BATTLE_CIR::P_DEAD;
+									ChangeOrNotButton->SetRender(true);
+									m_Player->SetSelectPhase(SELECT_PHASE::CHANGEORNOT);
+									bUpdateHpBar = 0;
+									bHitted = false;
+									m_iChangePokemon = 0;
+									DeadCount = 0;
+								}
+														break;
+								}
+
 							}
 						}
 						return;
@@ -721,7 +758,76 @@ void BattleManager::DoBattlePhase()
 					UpdateHpBar();
 					if (!bHitted || 3 != bUpdateHpBar)
 						return;
+					if (bDeadCheck)
+					{
+						DeadEffect();
 
+
+						if (5 == DeadCount) {
+							m_iPhase = 4;
+							m_Npc->FindPokemon();
+							if (!m_Npc->GetDefeat())
+							{
+
+								switch (m_eCir)
+								{
+								case BATTLE_CIR::P_PHASE:
+								{
+									m_eCir = BATTLE_CIR::N_DEAD;
+
+									ChangeOrNotButton->SetRender(true);
+									m_Player->SetSelectPhase(SELECT_PHASE::CHANGEORNOT);
+									bUpdateHpBar = 0;
+									bHitted = false;
+									m_iChangePokemon = 0;
+									DeadCount = 0;
+								}
+								break;
+								case BATTLE_CIR::N_PHASE: {
+									m_eCir = BATTLE_CIR::P_DEAD;
+									ChangeOrNotButton->SetRender(true);
+									m_Player->SetSelectPhase(SELECT_PHASE::CHANGEORNOT);
+									bUpdateHpBar = 0;
+									bHitted = false;
+									m_iChangePokemon = 0;
+									DeadCount = 0;
+								}
+														break;
+								}
+							}
+							else {
+								switch (m_eCir)
+								{
+								case BATTLE_CIR::P_PHASE:
+								{
+									m_eCir = BATTLE_CIR::N_DEAD;
+
+									ChangeOrNotButton->SetRender(false);
+									m_Npc->SetDefeatEffect(true);
+									//	m_Player->SetSelectPhase(SELECT_PHASE::CHANGEORNOT);
+									bUpdateHpBar = 0;
+									bHitted = false;
+									m_iChangePokemon = 0;
+									DeadCount = 0;
+								}
+								break;
+								case BATTLE_CIR::N_PHASE: {
+									m_eCir = BATTLE_CIR::P_DEAD;
+									ChangeOrNotButton->SetRender(true);
+									m_Player->SetSelectPhase(SELECT_PHASE::CHANGEORNOT);
+									bUpdateHpBar = 0;
+									bHitted = false;
+									m_iChangePokemon = 0;
+									DeadCount = 0;
+								}
+														break;
+								}
+
+							}
+						}
+						return;
+
+					}
 					m_eCir = BATTLE_CIR::BATTLE_END;
 					m_iPhase += 1;
 					bUpdateHpBar = 0;
@@ -749,14 +855,17 @@ void BattleManager::DoBattlePhase()
 						m_Player->SetSelectPhase(SELECT_PHASE::POKEMON);
 						RenderPokemonSelect();
 						BackButton->SetRender(false);
-
+						bDeadCheck = false;
 					}
 						break;
 					case BATTLE_CIR::N_DEAD:
 					{
-						m_Npc->FindPokemon();
+						m_Npc->SwapPokemon();
 						if (!m_Npc->GetDefeat()) {
 							m_Npc->Roar();
+						}
+						else {
+
 						}
 					}
 						break;
@@ -1147,6 +1256,10 @@ void BattleManager::GUI()
 
 void BattleManager::Update()
 {
+	if (bBattleEnd) {
+		BattleEnd(m_Player, m_Npc);
+		return;
+	}
 
 	if (m_eCir == BATTLE_CIR::ALL_READY) {
 		BattlePhase->Update();

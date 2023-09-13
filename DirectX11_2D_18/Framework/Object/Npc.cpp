@@ -6,6 +6,15 @@
 #include "Manager/BattleManager.h"
 #include "Player.h"
 #include "CSkill.h"
+void Npc::FDeadEffect()
+{
+	if (m_PrevPosition.x <= m_BattlePosition.x) {
+		m_BattlePosition.x -= 200 * Time::Delta();
+	}
+	else {
+		BattleManager::Get()->SetBattleEnd();
+	}
+}
 void Npc::FindPokemon()
 {
 	if (bCurPokemonDead) {
@@ -21,6 +30,23 @@ void Npc::FindPokemon()
 
 		}
 		IsDefeat = bDefeat;
+	}
+}
+
+void Npc::SwapPokemon()
+{
+	if (bCurPokemonDead) {
+	
+		for (size_t i = 0; i < m_vecPokemon.size(); ++i) {
+			if (m_vecPokemon[i]->GetHp() <= 0) continue;
+			else
+			{
+				swap(m_vecPokemon[m_curPokemon], m_vecPokemon[i]);
+				break;
+			}
+
+		}
+		
 	}
 }
 
@@ -246,18 +272,23 @@ void Npc::Init()
 
 void Npc::Update()
 {
-	FindPokemon();
-	Move();
-	Roar();
-	if (BATTLE_STATE::NONE == m_eBattleState) {
-		AnimRect->Update();
+	
+	if (!bDefeatEffect) {
+		Move();
+		Roar();
+		if (BATTLE_STATE::NONE == m_eBattleState) {
+			AnimRect->Update();
+		}
+		else {
+			BattleRect->Update();
+		}
+		if (nullptr != m_vecPokemon[m_curPokemon])
+		{
+			m_vecPokemon[m_curPokemon]->Update();
+		}
 	}
 	else {
-		BattleRect->Update();
-	}
-	if (nullptr != m_vecPokemon[m_curPokemon])
-	{
-		m_vecPokemon[m_curPokemon]->Update();
+		FDeadEffect();
 	}
 }
 

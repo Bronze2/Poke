@@ -73,6 +73,7 @@ private:
 
 	bool bFightChange = false;
 private:
+
 	void UpdateHpBar();
 	BattleManager();
 	~BattleManager();
@@ -81,7 +82,10 @@ private:
 	void DeadEffect();
 
 	bool OurChangePokemon = false;
+
+	bool bBattleEnd = false;
 public:
+	void SetBattleEnd() { bBattleEnd = true; }
 	void PhaseReset() { m_iPhase = 0; bSpeedCheck = false; bDeadCheck = false; }
 	bool GetOurChangePokemon() { return OurChangePokemon; }
 	void SetOurChangePokemon(const bool& _bChange); 

@@ -30,17 +30,26 @@ private:
 
     BATTLE_STATE m_eBattleState = BATTLE_STATE::NONE;
 
+    Vector3 m_PrevPosition;
     Vector3 m_Position;
     Vector3 m_BattlePosition;
     UINT m_curPokemon = 0;
 
     bool bCurPokemonDead = false;
+    bool bDefeatEffect = false;
 
+
+private:
+    void FDeadEffect();
 public:
     void CurPokemonDead() { bCurPokemonDead = true; }
 
+    void SetDefeatEffect(const bool& _bDefeatEffect) {
+        bDefeatEffect = true;
+    }
+    void SetPrevPosition(const Vector3& _Pos) { m_PrevPosition = _Pos; }
     void FindPokemon();
-
+    void SwapPokemon();
     void Roar();
 
     Pokemon* GetPokemons(UINT i) { return m_vecPokemon[i]; }
