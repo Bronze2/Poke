@@ -10,7 +10,7 @@ private:
 
 	vector<Pokemon*> m_vecPokemon;
 
-
+	DIR m_eDir;
 	Vector3 m_PrevPos;
 
 	BATTLE_STATE m_eBattleState = BATTLE_STATE::NONE;
@@ -27,12 +27,14 @@ private:
 	
 public:
 
-	void SetPrevPos(Vector3 _Pos) { m_Position = _Pos; }
+	DIR  GetDir() { return m_eDir; }
+	Vector3 GetPrevPos() { return m_PrevPos; }
+	void SetPrevPos(Vector3 _Pos) { m_PrevPos = _Pos; }
 	void Setbehavior(const bool& _be) { bbehavior = _be; }
 	const bool& GetDobehavior() { return bbehavior; }
 	vector<Pokemon*> GetPokemons() { return m_vecPokemon; }
 	Pokemon* GetCurPokemons() { return m_vecPokemon[m_curPokemon]; }
-
+	Vector3 GetPos() { return m_Position; }
 
 	void Roar();
 	void Roar_BattleCir();

@@ -90,6 +90,7 @@ private:
 
 	bool bBattleEnd = false;
 public:
+	void Reset();
 	void SetBattleEnd() { bBattleEnd = true; }
 	void PhaseReset() { m_iPhase = 0; bSpeedCheck = false; bDeadCheck = false; }
 	bool GetOurChangePokemon() { return OurChangePokemon; }

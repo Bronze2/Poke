@@ -32,9 +32,9 @@ void FieldScene::Init()
 	npc->SetPlayer(player);
 	AddObj(npc, OBJ_TYPE::NPC);
 	BattleManager::Get()->PushNPC(npc);
-	npcs = new Npc(L"Npc00");
+	npcs = new Npc(L"Npc01");
 	npcs->Init();
-	npcs->SetPosition(Vector3(WinMaxWidth / 2, WinMaxHeight / 2 + 50, 0.f));
+	npcs->SetPosition(Vector3(WinMaxWidth / 2, WinMaxHeight / 2 + 100, 0.f));
 	npcs->SetSize(Vector3(npcs->GetAnimRect()->GetWidth(), npcs->GetAnimRect()->GetHeight(), 0.f));
 
 	npcs->AddPokemon(L"Floatzel", 100, 100, 100, 10, 30, 50);
@@ -51,6 +51,18 @@ void FieldScene::Init()
 
 void FieldScene::BattleInit()
 {
+	AddObj(BattleManager::Get()->GetNpc(), OBJ_TYPE::NPC);
+	AddObj(BattleManager::Get()->GetPlayer(), OBJ_TYPE::PLAYER);
+
+	
+	for (size_t i = 0; i < BattleManager::Get()->GetNpcs().size(); ++i) {
+		AddObj(BattleManager::Get()->GetNpcs()[i], OBJ_TYPE::NPC);
+	}
+	BattleManager::Get()->GetNpcs().clear();
+	for (size_t i = 0; i < GetObj(OBJ_TYPE::NPC).size(); ++i) {
+		BattleManager::Get()->GetNpcs().push_back((Npc*)GetObj(OBJ_TYPE::NPC)[i]);
+	}
+
 }
 
 void FieldScene::Destroy()
@@ -63,6 +75,8 @@ void FieldScene::Update()
 	Scene::Update();
 
 	if (PRESS('A')) {
+		if (npc->GetDefeat())
+			return;
 		player->SetPrevPos(player->GetPos());
 		npc->SetPrevPos(npc->GetPos());
 		BattleManager::Get()->BattleStart(player, npc);

@@ -19,6 +19,7 @@ public:
 	virtual void GUI() ;	// 외부 라이브러리
 
 
+	vector<CObject*> GetObj(OBJ_TYPE  _eType) { return m_vecObj[(int) _eType]; }
 	void DeleteAllObj();
 	void DeleteGroup(OBJ_TYPE _Type);
 	Scene();

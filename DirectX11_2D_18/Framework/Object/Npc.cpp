@@ -17,7 +17,7 @@ void Npc::FDeadEffect()
 }
 void Npc::FindPokemon()
 {
-	if (bCurPokemonDead) {
+
 		bool bDefeat = true;
 		for (size_t i = 0; i < m_vecPokemon.size(); ++i) {
 			if (m_vecPokemon[i]->GetHp() <= 0) continue;
@@ -30,7 +30,7 @@ void Npc::FindPokemon()
 
 		}
 		IsDefeat = bDefeat;
-	}
+	
 }
 
 void Npc::SwapPokemon()
@@ -208,6 +208,7 @@ Npc::Npc(const Npc& _Other)
 	this->Init();
 	this->IsNpc = true;
 	this->m_PrevPos = _Other.m_PrevPos;
+	this->m_eDir = _Other.m_eDir;
 }
 
 void Npc::AddPokemon(const wstring& Name, UINT maxhp, int hp, int att, int def, UINT level, UINT Speed)

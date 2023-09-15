@@ -37,13 +37,14 @@ private:
 
     bool bCurPokemonDead = false;
     bool bDefeatEffect = false;
+    DIR m_eDir;
 
 
 private:
     void FDeadEffect();
 public:
     void CurPokemonDead() { bCurPokemonDead = true; }
-    void SetPrevPos(Vector3 _Pos) { m_Position = _Pos; }
+    void SetPrevPos(Vector3 _Pos) { m_PrevPosition = _Pos; }
     void SetDefeatEffect(const bool& _bDefeatEffect) {
         bDefeatEffect = true;
     }
@@ -60,7 +61,7 @@ public:
     void SetBattlePosition(const Vector3& _Position);
     void SetSize(const Vector3& _Size);
     void SetBattleSize(const Vector3& _Size);
-
+    Vector3 GetPos() { return m_Position; }
     void DoBehavior();
     void Move();
 

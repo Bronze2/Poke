@@ -6,6 +6,7 @@
 #include "Pokemon.h"
 #include "PokeBall.h"
 #include "CSkill.h"
+#include "Npc.h"
 void Player::Roar()
 {
 	if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::P_READY) {
@@ -301,9 +302,9 @@ void Player::BattlePhase()
 								if (m_iSelect == 2) {
 									BattleManager::Get()->RenderChangeButton(false);
 									m_iSelect = 0;
-							
+								
 									bChangePokemon = false;
-									
+									BattleManager::Get()->SetCircumStance(BATTLE_CIR::N_DEAD);
 								}
 								if (1 == m_iSelect) {
 									//포켓몬 변경
@@ -314,6 +315,7 @@ void Player::BattlePhase()
 									BattleManager::Get()->NotRenderPokemonSelect();
 									swap(m_vecPokemon[m_curPokemon], m_vecPokemon[m_iChangePokemon - 1]);
 									BattleManager::Get()->NPCCurDead();
+									
 									BattleManager::Get()->SetOurChangePokemon(true);
 									BattleManager::Get()->SetCircumStance(BATTLE_CIR::N_DEAD);
 									bChangePokemon = false;
@@ -355,11 +357,14 @@ void Player::BattlePhase()
 
 			}
 			else if (m_iSelect == 2) {
+
 				BattleManager::Get()->SetOurChangePokemon(false);
 				BattleManager::Get()->ChangeButtonRender(false);
 				BattleManager::Get()->CancelSelectorRender(false);
 				BattleManager::Get()->SetOurChangePokemon(false);
 				BattleManager::Get()->NPCCurDead();
+
+				BattleManager::Get()->GetNpc()->FindPokemon();
 				m_iSelect = 0;
 			}
 		}
@@ -496,6 +501,7 @@ Player::Player(const Player& _Other)
 	m_BattlePosition = _Other.m_BattlePosition;
 	this->Init();
 	this->m_PrevPos = _Other.m_PrevPos;
+	this->m_eDir = _Other.m_eDir;
 }
 Player::~Player() {
 

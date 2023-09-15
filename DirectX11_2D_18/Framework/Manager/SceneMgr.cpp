@@ -13,11 +13,12 @@ void SceneMgr::ChangeScene(SCENE_TYPE _NextScene)
 	{
 		return;
 	}
-
+	
+	m_pCurScene->Destroy();
 	if (m_pCurScene == m_arrScene[(UINT)SCENE_TYPE::BATTLE])
 	{
 		m_pCurScene = m_arrScene[(UINT)_NextScene];
-		
+		m_pCurScene->BattleInit();
 	}
 	else {
 		m_pCurScene = m_arrScene[(UINT)_NextScene];

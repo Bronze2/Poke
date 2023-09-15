@@ -497,7 +497,7 @@ void BattleManager::SelectorUpdate()
 
 void BattleManager::DeadEffect()
 {
-	if (5 == DeadCount) { m_Npc->FindPokemon(); }return;
+	if (5 == DeadCount) { m_Npc->FindPokemon(); return;}
 	switch (m_eCir)
 	{
 	case BATTLE_CIR::P_PHASE:
@@ -1009,21 +1009,26 @@ void BattleManager::BattleStart(Player* _player, Npc* _npc)
 		}
 	m_Npc = new Npc(*_npc);
 	m_Npc->SetBattleMode();
-
+	vector<Npc*>::iterator iter = m_vecNpcs.begin();
+	bool bFind = false;
 	for (size_t i = 0; i < m_vecNpcs.size(); ++i) {
 		if (_npc != m_vecNpcs[i]) {
 			Npc* npc = new Npc(*m_vecNpcs[i]);
 			m_vecNpcs[i] = npc;
 		}
+		else {
+			bFind = true;
+		}
+		if (!bFind)iter++;
+
 	}
+	m_vecNpcs.erase(iter);
 }
+
 
 void BattleManager::BattleEnd(Player* _player, Npc* _npc)
 {
-	if (nullptr != m_Player)
-		SAFE_DELETE(m_Player);
-	if (nullptr != m_Npc)
-		SAFE_DELETE(m_Npc);
+
 
 	m_Player = new Player(*_player);
 	m_Player->Init();
@@ -1032,6 +1037,10 @@ void BattleManager::BattleEnd(Player* _player, Npc* _npc)
 	m_Npc = new Npc(*_npc);
 	m_Npc->Init();
 	m_Npc->SetIdleMode();
+
+
+
+
 }
 void BattleManager::Render()
 {
@@ -1091,6 +1100,8 @@ void BattleManager::Render()
 	CancelSelector->Render();
 
 }
+
+
 
 void BattleManager::Init()
 {
@@ -1259,6 +1270,25 @@ void BattleManager::Init()
 
 }
 
+
+void BattleManager::Reset() {
+	BattleChangeButton->SetRender(false);
+	ChangeOrNotButton->SetRender(false);
+	BattlePhase->SetRender(false);
+	BackButton->SetRender(false);
+	BattleItemBar->SetRender(false);
+	BackGround->SetRender(false);
+	CancelSelector->SetRender(false);
+	FightSelector->SetRender(false);
+	OpponentHpBar->SetRender(false);
+	bHitted = false;
+	OpponentHpPoint->SetRender(false);
+	MediumSelector->SetRender(false);
+	SmallSelector->SetRender(false);
+	for (int i = 0; i < MAXPOKEMONCOUNT; ++i) {
+		ourvecPokemon[i]->SetRender(false);
+	}
+}
 void BattleManager::GUI()
 {
 
@@ -1269,6 +1299,18 @@ void BattleManager::Update()
 {
 	if (bBattleEnd) {
 		BattleEnd(m_Player, m_Npc);
+		ChangeScene(SCENE_TYPE::FIELD);
+		Reset();
+		bDeadCheck = false;
+		bCast = false;
+		bPlayerBehavior = false; bHitEffectCheck = false;
+		m_iHitEffectCount = 0; m_iTempValue = 0;
+		 bUpdateHpBar = 0;
+		PhaseReset();
+		OurChangePokemon = false;
+		 bFightChange = false;
+		bBattleEnd = false;
+		m_eCir = BATTLE_CIR::NONE;
 		return;
 	}
 
