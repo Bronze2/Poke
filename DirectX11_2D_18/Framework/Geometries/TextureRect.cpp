@@ -129,6 +129,11 @@ void TextureRect::Move()
 {
 }
 
+void TextureRect::SetSize(const Vector3& _size)
+{
+    size = _size;
+}
+
 void TextureRect::SetVertices()
 {
     vertices.assign(4, VertexTexture());

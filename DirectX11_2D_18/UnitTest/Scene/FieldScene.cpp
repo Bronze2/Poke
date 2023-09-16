@@ -67,9 +67,6 @@ void FieldScene::BattleInit()
 	for (size_t i = 0; i < BattleManager::Get()->GetNpcs().size(); ++i) {
 		BattleManager::Get()->GetNpcs()[i]->SetPosition(BattleManager::Get()->GetNpcs()[i]->GetPrevPos());
 		BattleManager::Get()->GetNpcs()[i]->SetSize(Vector3(BattleManager::Get()->GetNpcs()[i]->GetAnimRect()->GetWidth(), BattleManager::Get()->GetNpcs()[i]->GetAnimRect()->GetHeight(), 0.f));
-
-
-
 		AddObj(BattleManager::Get()->GetNpcs()[i], OBJ_TYPE::NPC);
 	}
 	BattleManager::Get()->GetNpcs().clear();

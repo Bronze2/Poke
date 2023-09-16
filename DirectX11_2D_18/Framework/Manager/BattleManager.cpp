@@ -523,12 +523,13 @@ void BattleManager::DeadEffect()
 		switch (m_eCir)
 		{
 		case BATTLE_CIR::P_PHASE:
-		{m_Npc->GetCurPokemons()->SetSize(Vector3(0, 0, 0));
-			
+		{
+		m_Npc->GetCurPokemons()->SetRender(false);
 		}
 		break;
 		case BATTLE_CIR::N_PHASE: {
-			m_Player->GetCurPokemons()->SetSize(Vector3(0, 0, 0));
+			m_Player->GetCurPokemons()->SetRender(false);
+
 		}
 								break;
 		}
@@ -1053,7 +1054,7 @@ void BattleManager::BattleStart(Player* _player, Npc* _npc)
 void BattleManager::BattleEnd(Player* _player, Npc* _npc)
 {
 
-
+	int a = 0;
 	m_Player = new Player(*_player);
 	m_Player->Init();
 	m_Player->SetIdleMode();
