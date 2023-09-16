@@ -24,7 +24,7 @@ private:
     wstring Name;
     class AnimationRect* AnimRect;
     class AnimationRect* BattleRect;
-    Vector3 m_PrevPos;
+ 
     vector<Pokemon*> m_vecPokemon;
     Player* player = nullptr;
 
@@ -38,17 +38,20 @@ private:
     bool bCurPokemonDead = false;
     bool bDefeatEffect = false;
     DIR m_eDir;
-
+    Vector3 m_PrevBattlePosition;
 
 private:
     void FDeadEffect();
 public:
     void CurPokemonDead() { bCurPokemonDead = true; }
     void SetPrevPos(Vector3 _Pos) { m_PrevPosition = _Pos; }
+    void SetBattlePrevPos(Vector3 _Pos) { m_PrevBattlePosition = _Pos; }
+    Vector3 GetPrevPos() { return m_PrevPosition; }
     void SetDefeatEffect(const bool& _bDefeatEffect) {
-        bDefeatEffect = true;
+        bDefeatEffect = _bDefeatEffect;
     }
-    void SetPrevPosition(const Vector3& _Pos) { m_PrevPosition = _Pos; }
+    int GetDeadEffect() { return bDefeatEffect; }
+
     void FindPokemon();
     void SwapPokemon();
     void Roar();

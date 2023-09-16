@@ -8,8 +8,9 @@
 #include "CSkill.h"
 void Npc::FDeadEffect()
 {
-	if (m_PrevPosition.x <= m_BattlePosition.x) {
+	if (m_PrevBattlePosition.x <= m_BattlePosition.x) {
 		m_BattlePosition.x -= 200 * Time::Delta();
+		BattleRect->SetPosition(m_BattlePosition);
 	}
 	else {
 		BattleManager::Get()->SetBattleEnd();
@@ -54,6 +55,7 @@ void Npc::Roar()
 {
 	if (bCurPokemonDead) {
 		if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::N_DEAD) {
+			
 			if (m_BattlePosition.x - (BattleRect->GetWidth() / 2) > WinMaxWidth)
 			{
 				m_vecPokemon[m_curPokemon]->GetPokeBall()->SetRender(true);
@@ -67,6 +69,7 @@ void Npc::Roar()
 			}
 		}
 		if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::N_ROAR) {
+			float a = m_vecPokemon[m_curPokemon]->GetAnimRect()->GetWidth();
 			if (m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->GetEnd() && !m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->GetEnd()) {
 				m_vecPokemon[m_curPokemon]->GetPokeBall()->SetRender(false);
 				m_vecPokemon[m_curPokemon]->SetPos(Vector3(WinMaxWidth / 2 + 130, WinMaxHeight / 2 + (215 + 60), 0.f));
@@ -207,7 +210,7 @@ Npc::Npc(const Npc& _Other)
 	this->IsDefeat = _Other.IsDefeat;
 	this->Init();
 	this->IsNpc = true;
-	this->m_PrevPos = _Other.m_PrevPos;
+	this->m_PrevPosition = _Other.m_PrevPosition;
 	this->m_eDir = _Other.m_eDir;
 }
 
@@ -278,12 +281,7 @@ void Npc::Update()
 	if (!bDefeatEffect) {
 		Move();
 		Roar();
-		if (BATTLE_STATE::NONE == m_eBattleState) {
-			AnimRect->Update();
-		}
-		else {
-			BattleRect->Update();
-		}
+		
 		if (nullptr != m_vecPokemon[m_curPokemon])
 		{
 			m_vecPokemon[m_curPokemon]->Update();
@@ -291,6 +289,13 @@ void Npc::Update()
 	}
 	else {
 		FDeadEffect();
+	}
+
+	if (BATTLE_STATE::NONE == m_eBattleState) {
+		AnimRect->Update();
+	}
+	else {
+		BattleRect->Update();
 	}
 }
 

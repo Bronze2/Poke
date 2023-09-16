@@ -497,13 +497,16 @@ void BattleManager::SelectorUpdate()
 
 void BattleManager::DeadEffect()
 {
-	if (5 == DeadCount) { m_Npc->FindPokemon(); return;}
+	if (5 == DeadCount) { 
+		m_Npc->FindPokemon();
+		return;}
 	switch (m_eCir)
 	{
 	case BATTLE_CIR::P_PHASE:
 	{
 		Vector3 vSize = DeadSize / 5;
 		vSize = m_Npc->GetCurPokemons()->GetAnimationSize() - vSize;
+	
 		m_Npc->GetCurPokemons()->GetAnimRect()->SetSize(vSize);
 	}
 	break;
@@ -516,6 +519,22 @@ void BattleManager::DeadEffect()
 	break;
 	}
 	DeadCount += 1;
+	if (5 == DeadCount) {
+		switch (m_eCir)
+		{
+		case BATTLE_CIR::P_PHASE:
+		{m_Npc->GetCurPokemons()->SetSize(Vector3(0, 0, 0));
+			
+		}
+		break;
+		case BATTLE_CIR::N_PHASE: {
+			m_Player->GetCurPokemons()->SetSize(Vector3(0, 0, 0));
+		}
+								break;
+		}
+		
+	
+	}
 }
 
 void BattleManager::SetOurChangePokemon(const bool& _bChange)
@@ -687,7 +706,7 @@ void BattleManager::DoBattlePhase()
 									m_eCir = BATTLE_CIR::N_DEAD;
 
 									ChangeOrNotButton->SetRender(false);
-									m_Npc->SetDefeatEffect(true);
+									m_Npc->SetDefeatEffect(1);
 								//	m_Player->SetSelectPhase(SELECT_PHASE::CHANGEORNOT);
 									bUpdateHpBar = 0;
 									bHitted = false;
@@ -987,7 +1006,10 @@ void BattleManager::HitEffect()
 
 void BattleManager::BattleStart(Player* _player, Npc* _npc)
 {
-	
+	Vector3 vPos = _player->GetPos();
+	vPos = _npc->GetPos();
+	_player->SetPrevPos(_player->GetPos());
+	_npc->SetPrevPos(_npc->GetPos());
 	SAFE_DELETE(m_Player);
 	SAFE_DELETE(m_Npc);
 	m_Player = new Player(*_player);
@@ -1013,6 +1035,8 @@ void BattleManager::BattleStart(Player* _player, Npc* _npc)
 	bool bFind = false;
 	for (size_t i = 0; i < m_vecNpcs.size(); ++i) {
 		if (_npc != m_vecNpcs[i]) {
+			vPos = m_vecNpcs[i]->GetPos();
+			m_vecNpcs[i]->SetPrevPos(m_vecNpcs[i]->GetPos());
 			Npc* npc = new Npc(*m_vecNpcs[i]);
 			m_vecNpcs[i] = npc;
 		}

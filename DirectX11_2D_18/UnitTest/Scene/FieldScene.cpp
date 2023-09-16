@@ -26,9 +26,7 @@ void FieldScene::Init()
 	npc->GetPokemons(0)->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 30);
 	npc->GetPokemons(0)->GetSkills()[0]->SetSkillMVRIGHType();
 
-	npc->AddPokemon(L"Garchomp", 100, 100, 100, 10, 30, 50);
-	npc->GetPokemons(1)->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 30);
-	npc->GetPokemons(1)->GetSkills()[0]->SetSkillMVRIGHType();
+
 	npc->SetPlayer(player);
 	AddObj(npc, OBJ_TYPE::NPC);
 	BattleManager::Get()->PushNPC(npc);
@@ -51,11 +49,27 @@ void FieldScene::Init()
 
 void FieldScene::BattleInit()
 {
+	Npc* npc = BattleManager::Get()->GetNpc();
+	Player* player = BattleManager::Get()->GetPlayer();
+	Vector3 vPos = BattleManager::Get()->GetNpc()->GetPos();
+	BattleManager::Get()->GetNpc()->SetPosition(BattleManager::Get()->GetNpc()->GetPrevPos());
+	BattleManager::Get()->GetNpc()->SetSize(Vector3(BattleManager::Get()->GetNpc()->GetAnimRect()->GetWidth(), BattleManager::Get()->GetNpc()->GetAnimRect()->GetHeight(), 0.f));
+
+	
 	AddObj(BattleManager::Get()->GetNpc(), OBJ_TYPE::NPC);
+
+	BattleManager::Get()->GetPlayer()->SetPosition(BattleManager::Get()->GetPlayer()->GetPrevPos());
+	BattleManager::Get()->GetPlayer()->SetSize(Vector3(BattleManager::Get()->GetPlayer()->GetAnimRect()->GetWidth(), BattleManager::Get()->GetPlayer()->GetAnimRect()->GetHeight(), 0.f));
+
 	AddObj(BattleManager::Get()->GetPlayer(), OBJ_TYPE::PLAYER);
 
 	
 	for (size_t i = 0; i < BattleManager::Get()->GetNpcs().size(); ++i) {
+		BattleManager::Get()->GetNpcs()[i]->SetPosition(BattleManager::Get()->GetNpcs()[i]->GetPrevPos());
+		BattleManager::Get()->GetNpcs()[i]->SetSize(Vector3(BattleManager::Get()->GetNpcs()[i]->GetAnimRect()->GetWidth(), BattleManager::Get()->GetNpcs()[i]->GetAnimRect()->GetHeight(), 0.f));
+
+
+
 		AddObj(BattleManager::Get()->GetNpcs()[i], OBJ_TYPE::NPC);
 	}
 	BattleManager::Get()->GetNpcs().clear();
@@ -81,6 +95,10 @@ void FieldScene::Update()
 		npc->SetPrevPos(npc->GetPos());
 		BattleManager::Get()->BattleStart(player, npc);
 		ChangeScene(SCENE_TYPE::BATTLE);
+	}
+	if (PRESS('B')) {
+	
+		ChangeScene(SCENE_TYPE::TITLE);
 	}
 }
 

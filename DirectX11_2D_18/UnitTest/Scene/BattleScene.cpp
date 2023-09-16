@@ -15,7 +15,8 @@ void BattleScene::Init()
 		Vector3(BattleManager::Get()->GetPlayer()->GetBattleRect()->GetWidth(), BattleManager::Get()->GetPlayer()->GetBattleRect()->GetHeight(), 0.f));
 	BattleManager::Get()->GetPlayer()->GetBattleRect()->GetAnimator()->SetPause(true);
 	BattleManager::Get()->GetNpc()->SetBattlePosition(Vector3(WinMaxWidth / 2+150, WinMaxHeight / 2+(215+64), 0.f));
-	
+	BattleManager::Get()->GetNpc()->SetBattlePrevPos(Vector3(WinMaxWidth / 2 + 150, WinMaxHeight / 2 + (215 + 64), 0.f));
+
 	BattleManager::Get()->GetNpc()->SetBattleSize(
 		Vector3(BattleManager::Get()->GetNpc()->GetBattleRect()->GetWidth(), BattleManager::Get()->GetNpc()->GetBattleRect()->GetHeight(), 0.f));
 
