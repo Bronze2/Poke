@@ -224,7 +224,13 @@ void Player::BattlePhase()
 	}
 		break;
 	case SELECT_PHASE::ITEM:
-		
+	{
+		if (KEYUP(VK_SPACE)) {
+
+		}
+	}
+
+
 		break;
 	case SELECT_PHASE::POKEMON:
 	{
@@ -475,8 +481,10 @@ Player::Player() {
 	Pokemon* pokemon = new Pokemon(L"Infernape", 100, 100, 100, 10, 30,100);
 	pokemon->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 100);
 	pokemon->GetSkills()[0]->SetSkillMVRIGHType();
+	pokemon->AddSkill(L"BURN", SKILL_TYPE::FIRE, 30, 30, 30,true);
 
-	pokemon->AddSkill(L"BURN", SKILL_TYPE::FIRE, 30, 30, 30);
+
+
 	m_vecPokemon.push_back(pokemon);
 	pokemon = new Pokemon(L"Bibarel", 100, 100, 100, 10, 30,70);
 	pokemon->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 30);

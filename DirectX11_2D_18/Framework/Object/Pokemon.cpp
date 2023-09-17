@@ -258,12 +258,14 @@ void Pokemon::PostRender()
 	IconRect->Render();
 }
 
-void Pokemon::AddSkill(const wstring& _Name, const SKILL_TYPE& _type, const UINT& _maxPP, const UINT& _curPP, const UINT& _dmg)
+void Pokemon::AddSkill(const wstring& _Name, const SKILL_TYPE& _type, const UINT& _maxPP, const UINT& _curPP, const UINT& _dmg, bool _bAnim)
 {
 	if (m_vecSkill.size() >= MAXSKILLCOUNT)return;
 	CSkill* pSkill = new CSkill(
 		_Name, _type, _maxPP, _curPP, _dmg);
 	pSkill->SetPokemon(this);
+	pSkill->DoAnimation(_bAnim);
+
 	m_vecSkill.push_back(pSkill);
 
 }

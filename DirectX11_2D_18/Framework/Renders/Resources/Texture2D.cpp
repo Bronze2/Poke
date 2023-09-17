@@ -10,6 +10,8 @@ Texture2D::Texture2D(wstring filePath)
     Textures::Load(this);
 }
 
+
+
 void Texture2D::ReadPixel(vector<Color>* pixels)
 {
     ID3D11Texture2D* texture;

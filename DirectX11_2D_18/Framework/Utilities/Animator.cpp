@@ -33,6 +33,7 @@ AnimationClip::AnimationClip(wstring clipName, Texture2D* srcTex, UINT frameCoun
     }
 }
 
+
 Animator::Animator()
 {
 }

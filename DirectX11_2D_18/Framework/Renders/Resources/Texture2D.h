@@ -22,6 +22,7 @@ class Texture2D
 {
 public:
     Texture2D(wstring filePath);
+ 
 
     void ReadPixel(vector<Color>* pixels);
     static void ReadPixel(ID3D11Texture2D* texture, vector<Color>* pixels);

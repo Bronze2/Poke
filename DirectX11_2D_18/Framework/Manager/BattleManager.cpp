@@ -160,6 +160,10 @@ void BattleManager::BattleAnimationChangeButton(UINT _prev, UINT _now)
 }
 void BattleManager::RenderBattleItemBar()
 {
+	BattlePhase->SetRender(false);
+	BattleItemBar->SetRender(true);
+
+
 }
 void BattleManager::RenderPokemonSelect()
 {
@@ -484,6 +488,20 @@ void BattleManager::SelectorUpdate()
 			CancelSelector->SetRender(true);
 		break;
 	case SELECT_PHASE::ITEM:
+	{
+		BattleItemBar->Update();
+		if (!m_Player->GetSelect()) {
+			SmallSelector->SetRender(false);
+		}
+		else
+		{
+			SmallSelector->SetRender(true);
+			MediumSelector->SetRender(true);
+		}
+
+
+	}
+
 
 		break;
 	default:
@@ -531,7 +549,7 @@ void BattleManager::DeadEffect()
 			m_Player->GetCurPokemons()->SetRender(false);
 
 		}
-								break;
+		break;
 		}
 		
 	
@@ -597,6 +615,13 @@ void BattleManager::DoBattlePhase()
 					CSkill* pSkill = ((CSkill*)playerbehavior.wParam);
 
 					pSkill->Cast();
+
+					if (pSkill->GetAnim()) {
+						pSkill->GetAnimRect()->GetAnimator()->SetPause(false);
+						pSkill->GetAnimRect()->SetSize(Vector3(pSkill->GetAnimRect()->GetWidth(), pSkill->GetAnimRect()->GetHeight(), 0.f));
+						pSkill->GetAnimRect()->SetPosition(m_Npc->GetCurPokemons()->GetAnimRect()->GetPosition());
+					}
+
 					ptr = playerbehavior.wParam;
 					m_eCir = BATTLE_CIR::P_PHASE;
 
@@ -604,6 +629,10 @@ void BattleManager::DoBattlePhase()
 				else {
 					CSkill* pSkill = ((CSkill*)npcbehavior.wParam);
 					pSkill->Cast();
+					if (pSkill->GetAnim()) {
+						pSkill->GetAnimRect()->SetPosition(m_Player->GetCurPokemons()->GetAnimRect()->GetPosition());
+						pSkill->GetAnimRect()->GetAnimator()->SetPause(false);
+					}
 					ptr = npcbehavior.wParam;
 					m_eCir = BATTLE_CIR::N_PHASE;
 				}
@@ -743,6 +772,11 @@ void BattleManager::DoBattlePhase()
 
 							pSkill = ((CSkill*)npcbehavior.wParam);
 							pSkill->Cast();
+						
+							if (pSkill->GetAnim()) {
+								pSkill->GetAnimRect()->SetPosition(m_Npc->GetCurPokemons()->GetAnimRect()->GetPosition());
+								pSkill->GetAnimRect()->GetAnimator()->SetPause(false);
+							}
 						}
 						else if (BATTLE_TYPE::SKILL == npcbehavior.eBattle) {
 
@@ -758,6 +792,11 @@ void BattleManager::DoBattlePhase()
 					case BATTLE_CIR::N_PHASE: {
 						CSkill* pSkill = ((CSkill*)playerbehavior.wParam);
 						pSkill->Cast();
+					
+						if (pSkill->GetAnim()) {
+							pSkill->GetAnimRect()->SetPosition(m_Player->GetCurPokemons()->GetAnimRect()->GetPosition());
+							pSkill->GetAnimRect()->GetAnimator()->SetPause(false);
+						}
 						ptr = playerbehavior.wParam;
 						m_eCir = BATTLE_CIR::P_PHASE;
 						bHitted = false;
@@ -1123,6 +1162,12 @@ void BattleManager::Render()
 	BattleChangeButton->Render();
 	ChangeOrNotButton->Render();
 	CancelSelector->Render();
+	for (size_t i = 0; i < m_Player->GetCurPokemons()->GetSkills().size(); ++i) {
+		m_Player->GetCurPokemons()->GetSkills()[i]->SkillRender();
+	}
+	for (size_t i = 0; i < m_Npc->GetCurPokemons()->GetSkills().size(); ++i) {
+		m_Npc->GetCurPokemons()->GetSkills()[i]->SkillRender();
+	}
 
 }
 
@@ -1219,7 +1264,7 @@ void BattleManager::Init()
 
 
 	BattleItemBar = new TextureObject;
-	BattleItemBar->Init(L"Pokemon/Battle/Battle_Back.png");
+	BattleItemBar->Init(L"Pokemon/Battle/Battle_ItemBar.png");
 
 
 	BattleItemBar->GetTex()->SetWidth(512); BattleItemBar->GetTex()->SetHeight(384);
@@ -1316,7 +1361,36 @@ void BattleManager::Reset() {
 }
 void BattleManager::GUI()
 {
+	using namespace ImGui;
+	Begin("Po small");
 
+	Vector3 position = SmallSelector->GetTex()->GetPosition();
+	Vector3 size = SmallSelector->GetTex()->GetSize();
+	{
+		InputFloat3("Pos", position, 2);
+		InputFloat3("Size", size, 2);
+
+
+
+	}
+	End();
+	SmallSelector->GetTex()->SetPosition(position);
+	SmallSelector->GetTex()->SetSize(size);
+	Begin("Po medium");
+
+	position = MediumSelector->GetTex()->GetPosition();
+	 size = MediumSelector->GetTex()->GetSize();
+	{
+		InputFloat3("Pos", position, 2);
+		InputFloat3("Size", size, 2);
+
+
+
+	}
+	End();
+	MediumSelector->GetTex()->SetPosition(position);
+	MediumSelector->GetTex()->SetSize(size);
+	
 
 }
 

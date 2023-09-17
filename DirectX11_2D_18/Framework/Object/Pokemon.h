@@ -67,9 +67,9 @@ public:
 
     void Render();
     Pokemon(const Pokemon& _Other);
-
+   
     void PostRender();
-    void AddSkill(const wstring& _Name, const SKILL_TYPE& _type, const UINT& _maxPP, const UINT& _curPP, const UINT& _dmg);
+    void AddSkill(const wstring& _Name, const SKILL_TYPE& _type, const UINT& _maxPP, const UINT& _curPP, const UINT& _dmg, bool _bAnim = false);
 
     const wstring& GetName() { return Name; }
     void Attack();

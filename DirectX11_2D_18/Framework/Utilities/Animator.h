@@ -7,6 +7,7 @@ public:
     AnimationClip(wstring clipName, Texture2D* srcTex, UINT frameCount,
                   Vector2 startPos, Vector2 endPos, float playRate,
                   bool bReversed = false);
+ 
     void SetRepeat(const bool& _bRepeat) { bRepeat = _bRepeat; }
     void SetPause(const bool& _bPause) { bPause = _bPause; }
     const wstring& GetName() { return clipName; }
