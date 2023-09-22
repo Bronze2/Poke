@@ -112,6 +112,9 @@ struct sItem {
 
 enum class ITEM_SELECT {
 	NONE,
-	LIST,
-	DETAIL
+	LIST,//ITEM
+	DETAIL,
+	BALL,
+	BATTLE,
+	FRUIT,
 };

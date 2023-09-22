@@ -284,9 +284,11 @@ void Player::BattlePhase()
 
 				else {
 					if (5 == m_iSelect)return;// 최근 아이템 목록
-
-					BattleManager::Get()->NotRenderBattleItemBar();
+					if (2 == m_iSelect) {
+						BattleManager::Get()->NotRenderBattleItemBar();
+					}
 					bDetailItemSelect = ITEM_SELECT::LIST;
+					m_iSelect = 0;
 				}
 			}
 			else if (bDetailItemSelect == ITEM_SELECT::LIST) {
@@ -565,7 +567,7 @@ Player::Player() {
 
 	Item* item = new Item();
 	sItem sitem = {};
-	sitem.Name=L"Potion";
+	sitem.Name=L"Max Potion";
 	sitem.m_iCount = 1;
 	sitem.m_iValue = 9950;
 	sitem.m_eType = ITEM_TYPE::HEAL;
@@ -580,8 +582,73 @@ Player::Player() {
 	sitem.m_iValue = 0;
 	sitem.m_eType = ITEM_TYPE::BALL;
 	item->SetItem(sitem);
-	item->AnimInit(2, 10);
+	item->AnimInit(2, 9);
 	AddItem(item);
+
+	item = new Item();
+	sitem = {};
+	sitem.Name = L"Full Restore";
+	sitem.m_iCount = 1;
+	sitem.m_iValue =9949;
+	sitem.m_eType = ITEM_TYPE::HEAL;
+	item->SetItem(sitem);
+	item->AnimInit(2, 4);
+	AddItem(item);
+	item = new Item();
+	sitem = {};
+	sitem.Name = L"Hyper Potion";
+	sitem.m_iCount = 1;
+	sitem.m_iValue = 120;
+	sitem.m_eType = ITEM_TYPE::HEAL;
+	item->SetItem(sitem);
+	item->AnimInit(5, 4);
+	AddItem(item);
+	item = new Item();
+	sitem = {};
+	sitem.Name = L"Super Potion";
+	sitem.m_iCount = 1;
+	sitem.m_iValue = 60;
+	sitem.m_eType = ITEM_TYPE::HEAL;
+	item->SetItem(sitem);
+	item->AnimInit(4, 4);
+	AddItem(item);
+	item = new Item();
+	sitem = {};
+	sitem.Name = L"Potion";
+	sitem.m_iCount = 1;
+	sitem.m_iValue = 20;
+	sitem.m_eType = ITEM_TYPE::HEAL;
+	item->SetItem(sitem);
+	item->AnimInit(3, 4);
+	AddItem(item);
+	item = new Item();
+	sitem = {};
+	sitem.Name = L"Ether";
+	sitem.m_iCount = 1;
+	sitem.m_iValue = 10;
+	sitem.m_eType = ITEM_TYPE::HEAL;
+	item->SetItem(sitem);
+	item->AnimInit(2, 5	);
+	AddItem(item);
+	item = new Item();
+	sitem = {};
+	sitem.Name = L"Max Ether";
+	sitem.m_iCount = 1;
+	sitem.m_iValue = 5;
+	sitem.m_eType = ITEM_TYPE::HEAL;
+	item->SetItem(sitem);
+	item->AnimInit(3, 5);
+	AddItem(item);
+	item = new Item();
+	sitem = {};
+	sitem.Name = L"Elixir";
+	sitem.m_iCount = 1;
+	sitem.m_iValue = 9910;// 전체 기술회복
+	sitem.m_eType = ITEM_TYPE::HEAL;
+	item->SetItem(sitem);
+	item->AnimInit(3, 5);
+	AddItem(item);
+
 }
 
 Player::Player(const Player& _Other)

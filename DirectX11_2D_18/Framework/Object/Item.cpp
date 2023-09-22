@@ -19,6 +19,17 @@ Item::Item(const Item& _Other)
 
 }
 
+void Item::SetPos(const Vector3& pos)
+{
+	SetPosition(pos);
+	AnimRect->SetPosition(pos);
+}
+
+void Item::SetSize(const Vector3& size)
+{
+	AnimRect->SetSize(size); this->SetSz(size);
+}
+
 void Item::AnimInit(UINT _Width, UINT _Height)
 {
 	Width = _Width;
@@ -28,10 +39,12 @@ void Item::AnimInit(UINT _Width, UINT _Height)
 	AnimRect->SetWidth(srcTex->GetWidth() / 10);
 	AnimRect->SetHeight(srcTex->GetHeight() /28);
 	Animator* animator = new Animator;
+	float j=AnimRect->GetWidth()* (Width );
+	float k = AnimRect->GetHeight() * (Height );
 	AnimationClip* clip = new AnimationClip(
 		m_sItem.Name, srcTex, 1, Vector2(AnimRect->GetWidth() *(Width-1), AnimRect->GetHeight()*(Height-1)),
-		Vector2(AnimRect->GetWidth(),
-			AnimRect->GetHeight()), 1.f
+		Vector2(AnimRect->GetWidth()*Width,
+			AnimRect->GetHeight()*Height), 1.f
 	);
 	animator->AddAnimClip(clip);
 	animator->SetCurrentAnimClip(m_sItem.Name);
@@ -43,11 +56,13 @@ void Item::AnimInit(UINT _Width, UINT _Height)
 
 void Item::Update()
 {
+	if(bRender)
 	AnimRect->Update();
 
 }
 
 void Item::Render()
 {
+	if(bRender)
 	AnimRect->Render();
 }

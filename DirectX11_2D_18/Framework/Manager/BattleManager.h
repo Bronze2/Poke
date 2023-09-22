@@ -151,7 +151,7 @@ public:
 	void ItemSelectInit();
 	
 	void AddCurItemSelect() { m_iCuritemSelect++; }
-	void AddCurItemSelect() { m_iCuritemSelect--; }
+	void SubCsurItemSelect() { m_iCuritemSelect--; }
 
 	void GUI();
 public:
@@ -159,6 +159,9 @@ public:
 
 private:
 	vector<UI*> m_vecItemSelect;
+
+	vector<Item*> m_vecHealItem;
+	vector<Item*> m_BallItem;
 	UI* PrevButton;
 	UI* NextButton;
 	UINT m_iCuritemSelect = 0;
