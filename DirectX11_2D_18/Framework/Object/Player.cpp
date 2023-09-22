@@ -571,7 +571,8 @@ Player::Player() {
 	sitem.m_eType = ITEM_TYPE::HEAL;
 	item->SetItem(sitem);
 	item->AnimInit(1, 4);
-	m_vecItem.push_back(item);
+	AddItem(item);
+
 	item = new Item();
 	sitem = {};
 	sitem.Name = L"Pokeball";
@@ -580,7 +581,7 @@ Player::Player() {
 	sitem.m_eType = ITEM_TYPE::BALL;
 	item->SetItem(sitem);
 	item->AnimInit(2, 10);
-	m_vecItem.push_back(item);
+	AddItem(item);
 }
 
 Player::Player(const Player& _Other)
@@ -589,6 +590,12 @@ Player::Player(const Player& _Other)
 		Pokemon* pokemon = new Pokemon(*_Other.m_vecPokemon[i]);
 		m_vecPokemon.push_back(pokemon);
 	}
+	for (size_t i = 0; i < _Other.m_vecItem.size(); ++i) {
+		Item* citem = new Item(*_Other.m_vecItem[i]);
+		m_vecItem.push_back(citem);
+
+	}
+
 	m_Position = _Other.m_Position;
 	m_BattlePosition = _Other.m_BattlePosition;
 	this->Init();

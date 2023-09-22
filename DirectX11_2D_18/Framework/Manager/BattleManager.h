@@ -148,16 +148,19 @@ public:
 	void Render();
 	void Init();
 	float m_fDelta;
-
+	void ItemSelectInit();
+	
+	void AddCurItemSelect() { m_iCuritemSelect++; }
+	void AddCurItemSelect() { m_iCuritemSelect--; }
 
 	void GUI();
 public:
 	friend class SingletonBase<BattleManager>;
 
 private:
-	UI* ItemSelect[4];
+	vector<UI*> m_vecItemSelect;
 	UI* PrevButton;
 	UI* NextButton;
-
+	UINT m_iCuritemSelect = 0;
 };
 

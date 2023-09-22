@@ -142,19 +142,19 @@ void BattleManager::ItemAnimationButton(UINT _prev, UINT _now)
 	switch (_prev)
 	{
 	case 1:
-		ItemSelect[0]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurButton");
+		m_vecItemSelect[0]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurButton");
 		break;
 	case 2:
-		ItemSelect[1]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurButton");
+		m_vecItemSelect[1]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurButton");
 		
 		break;
 	case 3:
-		ItemSelect[2]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurButton");
+		m_vecItemSelect[2]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurButton");
 
 
 		break;
 	case 4:
-		ItemSelect[3]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurButton");
+		m_vecItemSelect[3]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurButton");
 
 		break;
 	case 5:
@@ -171,19 +171,19 @@ void BattleManager::ItemAnimationButton(UINT _prev, UINT _now)
 	switch (_now)
 	{
 	case 1:
-		ItemSelect[0]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectButton");
+		m_vecItemSelect[0]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectButton");
 		break;
 	case 2:
-		ItemSelect[1]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectButton");
+		m_vecItemSelect[1]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectButton");
 
 		break;
 	case 3:
-		ItemSelect[2]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectButton");
+		m_vecItemSelect[2]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectButton");
 
 
 		break;
 	case 4:
-		ItemSelect[3]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectButton");
+		m_vecItemSelect[3]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectButton");
 
 		break;
 	case 5:
@@ -240,9 +240,9 @@ void BattleManager::NotRenderBattleItemBar()
 	BackGround->SetRender(true);
 	BackButton->SetRender(true);
 	ItemSelector->SetRender(false);
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < m_Player->GetvecItem().size(); ++i)
 	{
-		ItemSelect[i]->SetRender(true);
+		m_vecItemSelect[i]->SetRender(true);
 	}
 	PrevButton->SetRender(true);
 	NextButton->SetRender(true);
@@ -504,8 +504,8 @@ BattleManager::~BattleManager()
 	for (size_t i = 0; i < m_vecNpcs.size(); ++i)
 		SAFE_DELETE(m_vecNpcs[i]);
 	SAFE_DELETE(ItemSelector);
-	for (int i = 0; i < 4; ++i)
-		SAFE_DELETE(ItemSelect[i]);
+	for (int i = 0; i < m_Player->GetvecItem().size(); ++i)
+		SAFE_DELETE(m_vecItemSelect[i]);
 	SAFE_DELETE(PrevButton);
 	SAFE_DELETE(NextButton);
 }
@@ -630,7 +630,7 @@ void BattleManager::SelectorUpdate()
 	SmallSelector->Update();
 	MediumSelector->Update();
 	for (int i = 0; i < 4; ++i)
-		ItemSelect[i]->Update();
+		m_vecItemSelect[i]->Update();
 
 
 }
@@ -1177,7 +1177,7 @@ void BattleManager::BattleStart(Player* _player, Npc* _npc)
 	m_Player = new Player(*_player);
 
 	m_Player->SetBattleMode();
-
+	ItemSelectInit();
 	for (size_t j = 0; j < m_Player->GetPokemons().size(); ++j)
 		for (size_t i = 0; i < m_Player->GetPokemons()[j]->GetSkills().size(); ++i) {
 			if (i == 0)
@@ -1287,7 +1287,7 @@ void BattleManager::Render()
 	ItemSelector->Render();
 
 	for (int i = 0; i < 4; ++i)
-		ItemSelect[i]->Render();
+		m_vecItemSelect[i]->Render();
 	NextButton->Render();
 	PrevButton->Render();
 	for (size_t i = 0; i < m_Player->GetCurPokemons()->GetSkills().size(); ++i) {
@@ -1474,34 +1474,7 @@ void BattleManager::Init()
 	ChangeOrNotButton->GetTex()->SetPosition(Vector3(WinMaxWidth / 2, WinMaxHeight/4, 1.0f)); ChangeOrNotButton->GetTex()->SetSize(Vector3(512, 256, 0));
 	ChangeOrNotButton->SetRender(false);
 	}
-	{
-		for (int i = 0; i < 4; ++i) {
-			ItemSelect[i] = new UI;
-			ItemSelect[i]->Init(L"Battle/BattleUI/Battleselectitembutton", 4, 4, 1);
-			Animator* animator = new Animator;
-			AnimationClip* animation = new AnimationClip(L"CurButton", ItemSelect[i]->GetTexture(), 1, Vector2(0.f, 0.f),
-				Vector2(ItemSelect[i]->GetTex()->GetWidth(), ItemSelect[i]->GetTex()->GetHeight()), 1.0f / 15.0f);
-			animator->AddAnimClip(animation);
 
-			animation = new AnimationClip(L"SelectButton", ItemSelect[i]->GetTexture(), 1, Vector2(ItemSelect[i]->GetTex()->GetWidth(), 0.f),
-				Vector2(ItemSelect[i]->GetTex()->GetWidth() * 2, ItemSelect[i]->GetTex()->GetHeight()), 1.0f / 15.0f);
-			animator->AddAnimClip(animation);
-			animator->SetCurrentAnimClip(L"CurButton");
-			ItemSelect[i]->DeleteTexture();
-			ItemSelect[i]->GetTex()->SetAnimation(animator);
-			if(i==0)
-				ItemSelect[i]->GetTex()->SetPosition(Vector3(WinMaxWidth / 4, 300, 1.0f));
-			if (i == 1)
-				ItemSelect[i]->GetTex()->SetPosition(Vector3(382, 300, 1.0f));
-			if (i == 2)
-				ItemSelect[i]->GetTex()->SetPosition(Vector3(WinMaxWidth / 4, 150, 1.0f));
-			if (i == 3)
-				ItemSelect[i]->GetTex()->SetPosition(Vector3(382, 150, 1.0f));
-
-			ItemSelect[i]->GetTex()->SetSize(Vector3(ItemSelect[i]->GetTex()->GetWidth()*2, ItemSelect[i]->GetTex()->GetHeight()*2, 0));
-			ItemSelect[i]->SetRender(false);
-		}
-	}
 	PrevButton = new UI;
 	PrevButton->Init(L"Battle/BattleUI/BattleNextPrev", 4, 4, 2);
 	Animator* animator = new Animator;
@@ -1544,6 +1517,41 @@ void BattleManager::Init()
 	NextButton->GetTex()->SetSize(Vector3(NextButton->GetTex()->GetWidth(), NextButton->GetTex()->GetHeight(), 0));
 	NextButton->SetRender(false);
 
+}
+
+void BattleManager::ItemSelectInit()
+{
+	{
+		for (int i = 0; i < m_Player->GetvecItem().size(); ++i) {
+			UI* ItemSelect = new UI;
+			ItemSelect->Init(L"Battle/BattleUI/Battleselectitembutton", 4, 4, 1);
+			Animator* animator = new Animator;
+			AnimationClip* animation = new AnimationClip(L"CurButton", ItemSelect->GetTexture(), 1, Vector2(0.f, 0.f),
+				Vector2(ItemSelect->GetTex()->GetWidth(), ItemSelect->GetTex()->GetHeight()), 1.0f / 15.0f);
+			animator->AddAnimClip(animation);
+
+			animation = new AnimationClip(L"SelectButton", ItemSelect->GetTexture(), 1, Vector2(ItemSelect->GetTex()->GetWidth(), 0.f),
+				Vector2(ItemSelect->GetTex()->GetWidth() * 2, ItemSelect->GetTex()->GetHeight()), 1.0f / 15.0f);
+			animator->AddAnimClip(animation);
+			animator->SetCurrentAnimClip(L"CurButton");
+			ItemSelect->DeleteTexture();
+			ItemSelect->GetTex()->SetAnimation(animator);
+
+			ItemSelect->GetTex()->SetPosition(Vector3(0.f,0.f, 1.0f));
+		//	if (i == 0)
+		//		ItemSelect[i]->GetTex()->SetPosition(Vector3(WinMaxWidth / 4, 300, 1.0f));
+		//	if (i == 1)
+		//		ItemSelect[i]->GetTex()->SetPosition(Vector3(382, 300, 1.0f));
+		//	if (i == 2)
+		//		ItemSelect[i]->GetTex()->SetPosition(Vector3(WinMaxWidth / 4, 150, 1.0f));
+		//	if (i == 3)
+		//		ItemSelect[i]->GetTex()->SetPosition(Vector3(382, 150, 1.0f));
+
+			ItemSelect->GetTex()->SetSize(Vector3(ItemSelect->GetTex()->GetWidth() * 2, ItemSelect->GetTex()->GetHeight() * 2, 0));
+			ItemSelect->SetRender(false);
+			m_vecItemSelect.push_back(ItemSelect);
+		}
+	}
 }
 
 
@@ -1642,7 +1650,7 @@ void BattleManager::Update()
 		BattleItemBar->Update();
 		ItemSelector->Update();
 		for (int i = 0; i < 4; ++i)
-			ItemSelect[i]->Update();
+			m_vecItemSelect[i]->Update();
 		NextButton->Update();
 		PrevButton->Update();
 	}
