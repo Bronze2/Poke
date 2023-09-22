@@ -51,6 +51,8 @@ void CSkill::Cast()
 	m_bCast = true;
 	start = std::chrono::steady_clock::now();
 
+	if (nullptr != AnimRect)
+		AnimRect->GetAnimator()->ResetCurrentFrameCount();
 }
 
 void CSkill::SetPos(const Vector3& _Pos)

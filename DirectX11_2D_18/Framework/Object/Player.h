@@ -1,6 +1,7 @@
 #pragma once
 #include "CObject.h"
 class Pokemon;
+class Item;
 class Player :
 	public CObject
 {
@@ -24,8 +25,16 @@ private:
 	SELECT_PHASE m_eSelect = SELECT_PHASE::NONE;
 	bool bbehavior = false;
 	UINT m_iChangePokemon;
+	ITEM_SELECT bDetailItemSelect = ITEM_SELECT::NONE;
 	
+	vector<Item*> m_vecItem;
 public:
+	ITEM_SELECT GetDetailItemSelect() { return bDetailItemSelect; }
+
+	vector<Item*> GetvecItem() { return m_vecItem; }
+
+
+	void AddItem( Item* _Item);
 
 	DIR  GetDir() { return m_eDir; }
 	Vector3 GetPrevPos() { return m_PrevPos; }

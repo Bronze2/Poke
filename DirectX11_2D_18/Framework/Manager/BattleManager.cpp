@@ -28,6 +28,10 @@ void BattleManager::OurHpBarRender(const bool& _bRender)
 		OurHpPoint->UpdateProgressBar(percent);
 	}
 }
+void BattleManager::BackButtonAnimation()
+{
+	BackButton->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurButton");
+}
 void BattleManager::OpponentHpBarRender(const bool& _bRender)
 {
 	OpponentHpBar->SetRender(_bRender);
@@ -132,6 +136,70 @@ void BattleManager::BattleAnimationButton(UINT _prev, UINT _now)
 		break;
 	}
 }
+
+void BattleManager::ItemAnimationButton(UINT _prev, UINT _now)
+{
+	switch (_prev)
+	{
+	case 1:
+		ItemSelect[0]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurButton");
+		break;
+	case 2:
+		ItemSelect[1]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurButton");
+		
+		break;
+	case 3:
+		ItemSelect[2]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurButton");
+
+
+		break;
+	case 4:
+		ItemSelect[3]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurButton");
+
+		break;
+	case 5:
+		PrevButton->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurButton");
+		break;
+	case 6:
+		NextButton->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurButton");
+		break;
+	case 7:
+		BackButton->GetTex()->GetAnimator()->SetCurrentAnimClip(L"CurButton");
+		break;
+	
+	}
+	switch (_now)
+	{
+	case 1:
+		ItemSelect[0]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectButton");
+		break;
+	case 2:
+		ItemSelect[1]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectButton");
+
+		break;
+	case 3:
+		ItemSelect[2]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectButton");
+
+
+		break;
+	case 4:
+		ItemSelect[3]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectButton");
+
+		break;
+	case 5:
+		PrevButton->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectButton");
+		break;
+	case 6:
+		NextButton->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectButton");
+		break;
+	case 7:
+		BackButton->GetTex()->GetAnimator()->SetCurrentAnimClip(L"SelectButton");
+		break;
+
+	}
+}
+
+
 void BattleManager::BattleAnimationChangeButton(UINT _prev, UINT _now)
 {
 	switch (_prev)
@@ -158,12 +226,26 @@ void BattleManager::BattleAnimationChangeButton(UINT _prev, UINT _now)
 		break;
 	}
 }
-void BattleManager::RenderBattleItemBar()
+
+void BattleManager::RenderBattleItemBar(const bool& _bTrue)
 {
-	BattlePhase->SetRender(false);
-	BattleItemBar->SetRender(true);
 
-
+	BattleItemBar->SetRender(_bTrue);
+	BattlePhase->SetRender(!_bTrue);
+	ItemSelector->SetRender(false);
+}
+void BattleManager::NotRenderBattleItemBar()
+{
+	BattleItemBar->SetRender(false);
+	BackGround->SetRender(true);
+	BackButton->SetRender(true);
+	ItemSelector->SetRender(false);
+	for (int i = 0; i < 4; ++i)
+	{
+		ItemSelect[i]->SetRender(true);
+	}
+	PrevButton->SetRender(true);
+	NextButton->SetRender(true);
 }
 void BattleManager::RenderPokemonSelect()
 {
@@ -419,6 +501,13 @@ BattleManager::~BattleManager()
 	SAFE_DELETE(BackButton);
 	SAFE_DELETE(BattleChangeButton);
 	SAFE_DELETE(ChangeOrNotButton);
+	for (size_t i = 0; i < m_vecNpcs.size(); ++i)
+		SAFE_DELETE(m_vecNpcs[i]);
+	SAFE_DELETE(ItemSelector);
+	for (int i = 0; i < 4; ++i)
+		SAFE_DELETE(ItemSelect[i]);
+	SAFE_DELETE(PrevButton);
+	SAFE_DELETE(NextButton);
 }
 
 void BattleManager::SelectorUpdate()
@@ -491,12 +580,42 @@ void BattleManager::SelectorUpdate()
 	{
 		BattleItemBar->Update();
 		if (!m_Player->GetSelect()) {
-			SmallSelector->SetRender(false);
+			ItemSelector->SetRender(false);
 		}
 		else
 		{
-			SmallSelector->SetRender(true);
-			MediumSelector->SetRender(true);
+			if (m_Player->GetDetailItemSelect() == ITEM_SELECT::NONE) {
+				ItemSelector->SetRender(true);
+				switch (m_Player->GetSelect())
+				{
+				case 1:
+					ItemSelector->GetTex()->SetPosition(Vector3(128, 295, 0.f)); ItemSelector->GetTex()->SetSize(Vector3(248, 130, 0.f));
+					break;
+				case 2:
+					ItemSelector->GetTex()->SetPosition(Vector3(383, 295, 0.f)); ItemSelector->GetTex()->SetSize(Vector3(248, 130, 0.f));
+
+					break;
+				case 3:
+					ItemSelector->GetTex()->SetPosition(Vector3(128, 150, 0.f)); ItemSelector->GetTex()->SetSize(Vector3(248, 130, 0.f));
+
+					break;
+				case 4:
+					ItemSelector->GetTex()->SetPosition(Vector3(383, 295, 0.f)); ItemSelector->GetTex()->SetSize(Vector3(248, 130, 0.f));
+
+					break;
+				case 5:
+					ItemSelector->GetTex()->SetPosition(Vector3(205, 37, 0.f)); ItemSelector->GetTex()->SetSize(Vector3(415, 66, 0.f));
+
+					break;
+				case 6:
+					ItemSelector->GetTex()->SetPosition(Vector3(471, 37, 0.f)); ItemSelector->GetTex()->SetSize(Vector3(70, 66, 0.f));
+
+					break;
+				default:
+					break;
+				}
+			}
+
 		}
 
 
@@ -510,6 +629,9 @@ void BattleManager::SelectorUpdate()
 	FightSelector->Update();
 	SmallSelector->Update();
 	MediumSelector->Update();
+	for (int i = 0; i < 4; ++i)
+		ItemSelect[i]->Update();
+
 
 }
 
@@ -1143,18 +1265,18 @@ void BattleManager::Render()
 	{
 	case SELECT_PHASE::POKEMON:
 	{
-		BackGround->Render();
 		for (size_t i = 0; i < ourvecPokemon.size(); ++i) {
 			ourvecPokemon[i]->Render();
 		}
 
-		BackButton->Render();
 	}
 	break;
 	default:
 		break;
 	}
 
+	BackGround->Render();
+	BackButton->Render();
 	OpponentHpBar->Render();
 	OurHpBar->Render();
 	OpponentHpPoint->Render();
@@ -1162,6 +1284,12 @@ void BattleManager::Render()
 	BattleChangeButton->Render();
 	ChangeOrNotButton->Render();
 	CancelSelector->Render();
+	ItemSelector->Render();
+
+	for (int i = 0; i < 4; ++i)
+		ItemSelect[i]->Render();
+	NextButton->Render();
+	PrevButton->Render();
 	for (size_t i = 0; i < m_Player->GetCurPokemons()->GetSkills().size(); ++i) {
 		m_Player->GetCurPokemons()->GetSkills()[i]->SkillRender();
 	}
@@ -1207,6 +1335,15 @@ void BattleManager::Init()
 	MediumSelector->GetTex()->SetPosition(Vector3(WinMaxWidth / 4, 290, 1.0f));
 	MediumSelector->GetTex()->SetSize(Vector3(248, 110, 0));
 	MediumSelector->SetRender(false);
+
+	ItemSelector = new TextureObject;
+	ItemSelector->Init(L"Pokemon/Battle/BattleUI/MediumSelector.png");
+	ItemSelector->GetTex()->SetWidth(248); ItemSelector->GetTex()->SetHeight(110);
+	ItemSelector->GetTex()->SetPosition(Vector3(WinMaxWidth / 4, 290, 1.0f));
+	ItemSelector->GetTex()->SetSize(Vector3(248, 110, 0));
+	ItemSelector->SetRender(false);
+
+
 	SmallSelector = new TextureObject;
 	SmallSelector->Init(L"Pokemon/Battle/BattleUI/SmallSelector.png");
 	SmallSelector->GetTex()->SetWidth(78); SmallSelector->GetTex()->SetHeight(44);
@@ -1225,6 +1362,8 @@ void BattleManager::Init()
 	OpponentHpBar->GetTex()->SetPosition(Vector3(126, 700, 1.0f));
 	OpponentHpBar->GetTex()->SetSize(Vector3(252, 78, 0));
 	OpponentHpBar->SetRender(false);
+
+
 
 
 	OurHpPoint = new ProgressBar(Vector3(405, 535, 1.0f), Vector3(96, 5, 0), 0.f, Color(0, 1, 0, 1), GI::LEFT_TO_RIGHT);
@@ -1257,7 +1396,7 @@ void BattleManager::Init()
 	animator->SetCurrentAnimClip(L"CurButton");
 	BackButton->DeleteTexture();
 	BackButton->GetTex()->SetAnimation(animator);
-	BackButton->GetTex()->SetPosition(Vector3(450, 50, 1.0f));
+	BackButton->GetTex()->SetPosition(Vector3(450, 40, 1.0f));
 	BackButton->GetTex()->SetSize(Vector3(BackButton->GetTex()->GetWidth(), BackButton->GetTex()->GetHeight(), 0));
 	BackButton->SetRender(false);
 
@@ -1335,8 +1474,75 @@ void BattleManager::Init()
 	ChangeOrNotButton->GetTex()->SetPosition(Vector3(WinMaxWidth / 2, WinMaxHeight/4, 1.0f)); ChangeOrNotButton->GetTex()->SetSize(Vector3(512, 256, 0));
 	ChangeOrNotButton->SetRender(false);
 	}
+	{
+		for (int i = 0; i < 4; ++i) {
+			ItemSelect[i] = new UI;
+			ItemSelect[i]->Init(L"Battle/BattleUI/Battleselectitembutton", 4, 4, 1);
+			Animator* animator = new Animator;
+			AnimationClip* animation = new AnimationClip(L"CurButton", ItemSelect[i]->GetTexture(), 1, Vector2(0.f, 0.f),
+				Vector2(ItemSelect[i]->GetTex()->GetWidth(), ItemSelect[i]->GetTex()->GetHeight()), 1.0f / 15.0f);
+			animator->AddAnimClip(animation);
 
+			animation = new AnimationClip(L"SelectButton", ItemSelect[i]->GetTexture(), 1, Vector2(ItemSelect[i]->GetTex()->GetWidth(), 0.f),
+				Vector2(ItemSelect[i]->GetTex()->GetWidth() * 2, ItemSelect[i]->GetTex()->GetHeight()), 1.0f / 15.0f);
+			animator->AddAnimClip(animation);
+			animator->SetCurrentAnimClip(L"CurButton");
+			ItemSelect[i]->DeleteTexture();
+			ItemSelect[i]->GetTex()->SetAnimation(animator);
+			if(i==0)
+				ItemSelect[i]->GetTex()->SetPosition(Vector3(WinMaxWidth / 4, 300, 1.0f));
+			if (i == 1)
+				ItemSelect[i]->GetTex()->SetPosition(Vector3(382, 300, 1.0f));
+			if (i == 2)
+				ItemSelect[i]->GetTex()->SetPosition(Vector3(WinMaxWidth / 4, 150, 1.0f));
+			if (i == 3)
+				ItemSelect[i]->GetTex()->SetPosition(Vector3(382, 150, 1.0f));
 
+			ItemSelect[i]->GetTex()->SetSize(Vector3(ItemSelect[i]->GetTex()->GetWidth()*2, ItemSelect[i]->GetTex()->GetHeight()*2, 0));
+			ItemSelect[i]->SetRender(false);
+		}
+	}
+	PrevButton = new UI;
+	PrevButton->Init(L"Battle/BattleUI/BattleNextPrev", 4, 4, 2);
+	Animator* animator = new Animator;
+	AnimationClip* animation = new AnimationClip(L"CurButton", PrevButton->GetTexture(), 1, Vector2(0.f, 0.f),
+		Vector2(PrevButton->GetTex()->GetWidth(), PrevButton->GetTex()->GetHeight()), 1.0f / 15.0f);
+	animator->AddAnimClip(animation);
+
+	animation = new AnimationClip(L"SelectButton", PrevButton->GetTexture(), 1, Vector2(PrevButton->GetTex()->GetWidth(), 0.f),
+		Vector2(PrevButton->GetTex()->GetWidth() * 2, PrevButton->GetTex()->GetHeight()), 1.0f / 15.0f);
+	animator->AddAnimClip(animation);
+	animation = new AnimationClip(L"Nope", PrevButton->GetTexture(), 1, Vector2(PrevButton->GetTex()->GetWidth() * 3, 0.f),
+		Vector2(PrevButton->GetTex()->GetWidth(), PrevButton->GetTex()->GetHeight() ), 1.0f / 15.0f);
+	animator->AddAnimClip(animation);
+	animator->SetCurrentAnimClip(L"CurButton");
+	PrevButton->DeleteTexture();
+	PrevButton->GetTex()->SetAnimation(animator);
+	PrevButton->GetTex()->SetPosition(Vector3(175, 40, 1.0f));
+
+	PrevButton->GetTex()->SetSize(Vector3(PrevButton->GetTex()->GetWidth(), PrevButton->GetTex()->GetHeight(), 0));
+	PrevButton->SetRender(false);
+
+	NextButton = new UI;
+	NextButton->Init(L"Battle/BattleUI/BattleNextPrev", 4, 4, 2);
+	 animator = new Animator;
+	 animation = new AnimationClip(L"CurButton", NextButton->GetTexture(), 1, Vector2(0.f, NextButton->GetTex()->GetHeight()),
+		Vector2(NextButton->GetTex()->GetWidth(), NextButton->GetTex()->GetHeight()*2), 1.0f / 15.0f);
+	animator->AddAnimClip(animation);
+
+	animation = new AnimationClip(L"SelectButton", NextButton->GetTexture(), 1, Vector2(NextButton->GetTex()->GetWidth(), NextButton->GetTex()->GetHeight()),
+		Vector2(NextButton->GetTex()->GetWidth() * 2, NextButton->GetTex()->GetHeight()*2), 1.0f / 15.0f);
+	animator->AddAnimClip(animation);
+	animation = new AnimationClip(L"Nope", NextButton->GetTexture(), 1, Vector2(NextButton->GetTex()->GetWidth()*3, NextButton->GetTex()->GetHeight()),
+		Vector2(NextButton->GetTex()->GetWidth() , NextButton->GetTex()->GetHeight() * 2), 1.0f / 15.0f);
+	animator->AddAnimClip(animation);
+	animator->SetCurrentAnimClip(L"CurButton");
+	NextButton->DeleteTexture();
+	NextButton->GetTex()->SetAnimation(animator);
+	NextButton->GetTex()->SetPosition(Vector3(325, 40, 1.0f));
+
+	NextButton->GetTex()->SetSize(Vector3(NextButton->GetTex()->GetWidth(), NextButton->GetTex()->GetHeight(), 0));
+	NextButton->SetRender(false);
 
 }
 
@@ -1358,39 +1564,35 @@ void BattleManager::Reset() {
 	for (int i = 0; i < MAXPOKEMONCOUNT; ++i) {
 		ourvecPokemon[i]->SetRender(false);
 	}
+	ItemSelector->SetRender(false);
 }
 void BattleManager::GUI()
 {
 	using namespace ImGui;
-	Begin("Po small");
+	Begin("Prev");
+	Vector3 position=PrevButton->GetTex()->GetPosition();
+	Vector3 size = PrevButton->GetTex()->GetSize();
 
-	Vector3 position = SmallSelector->GetTex()->GetPosition();
-	Vector3 size = SmallSelector->GetTex()->GetSize();
+	{
+		InputFloat3("Pos", position, 2);
+		InputFloat3("Size", size, 2);
+		
+	}
+	End();
+	PrevButton->GetTex()->SetPosition(position);
+	PrevButton->GetTex()->SetSize(size);
+	Begin("Next");
+	position = NextButton->GetTex()->GetPosition();
+	 size = NextButton->GetTex()->GetSize();
+
 	{
 		InputFloat3("Pos", position, 2);
 		InputFloat3("Size", size, 2);
 
-
-
 	}
 	End();
-	SmallSelector->GetTex()->SetPosition(position);
-	SmallSelector->GetTex()->SetSize(size);
-	Begin("Po medium");
-
-	position = MediumSelector->GetTex()->GetPosition();
-	 size = MediumSelector->GetTex()->GetSize();
-	{
-		InputFloat3("Pos", position, 2);
-		InputFloat3("Size", size, 2);
-
-
-
-	}
-	End();
-	MediumSelector->GetTex()->SetPosition(position);
-	MediumSelector->GetTex()->SetSize(size);
-	
+	NextButton->GetTex()->SetPosition(position);
+	NextButton->GetTex()->SetSize(size);
 
 }
 
@@ -1435,6 +1637,16 @@ void BattleManager::Update()
 			}
 		}
 		break;
+	case SELECT_PHASE::ITEM:
+	{
+		BattleItemBar->Update();
+		ItemSelector->Update();
+		for (int i = 0; i < 4; ++i)
+			ItemSelect[i]->Update();
+		NextButton->Update();
+		PrevButton->Update();
+	}
+	break;
 
 	}
 	

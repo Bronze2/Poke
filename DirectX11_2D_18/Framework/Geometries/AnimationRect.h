@@ -9,6 +9,8 @@ public:
     AnimationRect(Vector3 position, Vector3 size);
     ~AnimationRect();
 
+
+
     void Update();
     void Render();
     void Init(wstring _Name);

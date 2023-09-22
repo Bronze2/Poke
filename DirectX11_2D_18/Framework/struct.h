@@ -93,3 +93,25 @@ enum class BATTLE_PRIORITY {
 	SECOND_N,
 	END,
 };
+
+
+
+enum class ITEM_TYPE {
+	BALL,
+	HEAL,
+	UP
+};
+
+
+struct sItem {
+	wstring Name;
+	ITEM_TYPE m_eType;
+	UINT m_iValue;
+	UINT m_iCount;
+};
+
+enum class ITEM_SELECT {
+	NONE,
+	LIST,
+	DETAIL
+};

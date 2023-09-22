@@ -46,6 +46,7 @@ Animator::~Animator()
 
 void Animator::Update()
 {
+    bEnd = false;
     if (currentClip->bPause)
     {
         return;
@@ -65,6 +66,7 @@ void Animator::Update()
                 else {
                     currentFrameIndex = currentClip->frameCount;
                     bEnd = true;
+                    deltaTime = 0.0f;
                     return;
                 }
             }

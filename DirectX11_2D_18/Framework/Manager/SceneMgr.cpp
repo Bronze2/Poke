@@ -40,6 +40,7 @@ SceneMgr::~SceneMgr()
 			delete m_arrScene[i];
 		}
 	}
+	BattleManager::Get()->GetNpcs().clear();
 }
 
 void SceneMgr::Init()

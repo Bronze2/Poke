@@ -7,6 +7,23 @@
 #include "PokeBall.h"
 #include "CSkill.h"
 #include "Npc.h"
+#include "Item.h"
+void Player::AddItem( Item* _Item)
+{
+	bool bFind = false;
+	for (int i = 0; i < m_vecItem.size(); ++i) {
+		if (m_vecItem[i]->GetName() == _Item->GetName())
+		{
+			m_vecItem[i]->AddItem(_Item->GetCount());
+			bFind = true;
+		}
+	}
+	if (!bFind)
+	{
+		m_vecItem.push_back(_Item);
+	}
+
+}
 void Player::Roar()
 {
 	if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::P_READY) {
@@ -103,10 +120,29 @@ void Player::BattlePhase()
 				case SELECT_PHASE::SKILL:
 					if (m_iSelect > 5)
 					m_iSelect = 1;
+				
 					break;
 				case SELECT_PHASE::ITEM:
-					if (m_iSelect > 6)
-					m_iSelect = 1;
+				
+						if (bDetailItemSelect == ITEM_SELECT::NONE)
+						{
+							if (m_iSelect > 6)
+							{
+								m_iSelect = 0;
+							}
+						}
+
+						else if (bDetailItemSelect == ITEM_SELECT::LIST)
+						{
+						
+							if (m_iSelect > 7)
+							{
+								m_iSelect = 0;
+							}
+							BattleManager::Get()->ItemAnimationButton(m_prevselect, m_iSelect);
+
+						}
+				
 					break;
 				case SELECT_PHASE::POKEMON:
 					if (m_iSelect > 7)
@@ -141,7 +177,17 @@ void Player::BattlePhase()
 				break;
 			case SELECT_PHASE::ITEM:
 				if (m_iSelect < 0)
-				m_iSelect = 6;
+					if (bDetailItemSelect == ITEM_SELECT::NONE)
+					{
+						m_iSelect = 6;
+
+					}
+					else if (bDetailItemSelect == ITEM_SELECT::LIST)
+					{
+						m_iSelect = 7;
+						BattleManager::Get()->ItemAnimationButton(m_prevselect, m_iSelect);
+
+					}
 				break;
 			case SELECT_PHASE::POKEMON:
 				if (m_iSelect < 0)
@@ -177,11 +223,11 @@ void Player::BattlePhase()
 		}
 		else if (m_iSelect == 2) {
 			if (KEYUP(VK_SPACE)) {
-				if (KEYUP(VK_SPACE)) {
-					m_eSelect = SELECT_PHASE::ITEM;
-					BattleManager::Get()->RenderBattleItemBar();
-					m_iSelect = 0;
-				}
+			
+				m_eSelect = SELECT_PHASE::ITEM;
+				BattleManager::Get()->RenderBattleItemBar(true);
+				m_iSelect = 0;
+				
 			}
 		}
 		else if (m_iSelect == 3) {
@@ -226,6 +272,26 @@ void Player::BattlePhase()
 	case SELECT_PHASE::ITEM:
 	{
 		if (KEYUP(VK_SPACE)) {
+			if (!m_iSelect)
+				return;
+			
+			if (bDetailItemSelect == ITEM_SELECT::NONE) {
+				if (6 == m_iSelect) {
+					m_eSelect = SELECT_PHASE::COMPREHENSIVE;
+					BattleManager::Get()->RenderBattleItemBar(false);
+					m_iSelect = 0;
+				}
+
+				else {
+					if (5 == m_iSelect)return;// 최근 아이템 목록
+
+					BattleManager::Get()->NotRenderBattleItemBar();
+					bDetailItemSelect = ITEM_SELECT::LIST;
+				}
+			}
+			else if (bDetailItemSelect == ITEM_SELECT::LIST) {
+
+			}
 
 		}
 	}
@@ -497,6 +563,24 @@ Player::Player() {
 	AnimRect = nullptr;
 	BattleRect = nullptr;
 
+	Item* item = new Item();
+	sItem sitem = {};
+	sitem.Name=L"Potion";
+	sitem.m_iCount = 1;
+	sitem.m_iValue = 9950;
+	sitem.m_eType = ITEM_TYPE::HEAL;
+	item->SetItem(sitem);
+	item->AnimInit(1, 4);
+	m_vecItem.push_back(item);
+	item = new Item();
+	sitem = {};
+	sitem.Name = L"Pokeball";
+	sitem.m_iCount = 1;
+	sitem.m_iValue = 0;
+	sitem.m_eType = ITEM_TYPE::BALL;
+	item->SetItem(sitem);
+	item->AnimInit(2, 10);
+	m_vecItem.push_back(item);
 }
 
 Player::Player(const Player& _Other)
@@ -519,7 +603,9 @@ Player::~Player() {
 	for (size_t i = 0; i < m_vecPokemon.size(); ++i) {
 		SAFE_DELETE(m_vecPokemon[i]);
 	}
-
+	for (size_t i = 0; i < m_vecItem.size(); ++i) {
+		SAFE_DELETE(m_vecItem[i]);
+	}
 }
 
 

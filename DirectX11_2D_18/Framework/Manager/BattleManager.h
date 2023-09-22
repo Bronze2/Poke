@@ -37,10 +37,12 @@ private:
 	TextureObject* BackGround;
 
 	TextureObject* BattleItemBar;
+	TextureObject* ItemSelector;
 	UI* BackButton;
-	UI* ItemSelect;
 
 	UI* BattleChangeButton;
+
+
 
 
 	bool bPlayerBehavior = false;
@@ -86,10 +88,13 @@ private:
 	void SelectorUpdate();
 	void DeadEffect();
 
+
 	bool OurChangePokemon = false;
 
 	bool bBattleEnd = false;
 public:
+
+
 	void Reset();
 	void SetBattleEnd() { bBattleEnd = true; }
 	void PhaseReset() { m_iPhase = 0; bSpeedCheck = false; bDeadCheck = false; }
@@ -103,10 +108,13 @@ public:
 
 	void OurHpBarRender(const bool& _bRender);
 
+	void BackButtonAnimation();
 	void OpponentHpBarRender(const bool& _bRender);
 	void BattleAnimationButton(UINT _prev,UINT _now);
 	void BattleAnimationChangeButton(UINT _prev, UINT _now);
-	void RenderBattleItemBar();
+	void ItemAnimationButton(UINT _prev, UINT _now);
+	void RenderBattleItemBar(const bool& _bTrue);
+	void NotRenderBattleItemBar();
 	void RenderPokemonSelect();
 	void NotRenderPokemonSelect();
 	void RenderChangeButton(bool _bRender,bool _bRend=true);
@@ -145,6 +153,11 @@ public:
 	void GUI();
 public:
 	friend class SingletonBase<BattleManager>;
+
+private:
+	UI* ItemSelect[4];
+	UI* PrevButton;
+	UI* NextButton;
 
 };
 
