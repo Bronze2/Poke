@@ -2,7 +2,7 @@
 
 class Player;
 class Npc;
-
+class Item;
 class UI;
 class TextureObject;
 class ProgressBar;
@@ -161,7 +161,7 @@ private:
 	vector<UI*> m_vecItemSelect;
 
 	vector<Item*> m_vecHealItem;
-	vector<Item*> m_BallItem;
+	vector<Item*> m_vecBallItem;
 	UI* PrevButton;
 	UI* NextButton;
 	UINT m_iCuritemSelect = 0;

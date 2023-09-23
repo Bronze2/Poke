@@ -8,6 +8,7 @@
 #include "Geometries/AnimationRect.h"
 #include "Object/Pokemon.h"
 #include "Utilities/Animator.h"
+#include "Object/Item.h"
 #include "Object/CSkill.h"
 #include "Object/UI/ProgressBar.h"
 void BattleManager::OurHpBarRender(const bool& _bRender)
@@ -240,10 +241,28 @@ void BattleManager::NotRenderBattleItemBar()
 	BackGround->SetRender(true);
 	BackButton->SetRender(true);
 	ItemSelector->SetRender(false);
-	for (int i = 0; i < m_Player->GetvecItem().size(); ++i)
+	for (size_t i = 0; i <m_vecItemSelect.size(); ++i)
 	{
 		m_vecItemSelect[i]->SetRender(true);
 	}
+	for (size_t i = 0; i < 4; ++i) {
+		if (i >= m_vecHealItem.size())continue;
+		m_vecHealItem[i]->SetRender(true);
+		if (i == 0) {
+			m_vecHealItem[i]->SetPos(Vector3(128.f, 345.f, 0.f));
+		}
+		if (i == 1) {
+			m_vecHealItem[i]->SetPos(Vector3(384.f, 345.f, 0.f));
+		}
+		if (i == 2) {
+			m_vecHealItem[i]->SetPos(Vector3(128.f, 190.f, 0.f));
+		}
+		if (i == 3) {
+			m_vecHealItem[i]->SetPos(Vector3(384.f, 190.f, 0.f));
+		}
+	}
+
+
 	PrevButton->SetRender(true);
 	NextButton->SetRender(true);
 }
@@ -508,6 +527,9 @@ BattleManager::~BattleManager()
 		SAFE_DELETE(m_vecItemSelect[i]);
 	SAFE_DELETE(PrevButton);
 	SAFE_DELETE(NextButton);
+
+	m_vecBallItem.clear();
+	m_vecHealItem.clear();
 }
 
 void BattleManager::SelectorUpdate()
@@ -1225,6 +1247,8 @@ void BattleManager::BattleEnd(Player* _player, Npc* _npc)
 	m_Npc->SetIdleMode();
 
 
+	m_vecBallItem.clear();
+	m_vecHealItem.clear();
 
 
 }
@@ -1516,13 +1540,8 @@ void BattleManager::Init()
 
 	NextButton->GetTex()->SetSize(Vector3(NextButton->GetTex()->GetWidth(), NextButton->GetTex()->GetHeight(), 0));
 	NextButton->SetRender(false);
-
-}
-
-void BattleManager::ItemSelectInit()
-{
 	{
-		for (int i = 0; i < m_Player->GetvecItem().size(); ++i) {
+		for (int i = 0; i < 4; ++i) {
 			UI* ItemSelect = new UI;
 			ItemSelect->Init(L"Battle/BattleUI/Battleselectitembutton", 4, 4, 1);
 			Animator* animator = new Animator;
@@ -1537,21 +1556,39 @@ void BattleManager::ItemSelectInit()
 			ItemSelect->DeleteTexture();
 			ItemSelect->GetTex()->SetAnimation(animator);
 
-			ItemSelect->GetTex()->SetPosition(Vector3(0.f,0.f, 1.0f));
-		//	if (i == 0)
-		//		ItemSelect[i]->GetTex()->SetPosition(Vector3(WinMaxWidth / 4, 300, 1.0f));
-		//	if (i == 1)
-		//		ItemSelect[i]->GetTex()->SetPosition(Vector3(382, 300, 1.0f));
-		//	if (i == 2)
-		//		ItemSelect[i]->GetTex()->SetPosition(Vector3(WinMaxWidth / 4, 150, 1.0f));
-		//	if (i == 3)
-		//		ItemSelect[i]->GetTex()->SetPosition(Vector3(382, 150, 1.0f));
+			ItemSelect->GetTex()->SetPosition(Vector3(0.f, 0.f, 1.0f));
+				if (i == 0)
+					ItemSelect->GetTex()->SetPosition(Vector3(WinMaxWidth / 4, 300, 1.0f));
+				if (i == 1)
+					ItemSelect->GetTex()->SetPosition(Vector3(382, 300, 1.0f));
+				if (i == 2)
+					ItemSelect->GetTex()->SetPosition(Vector3(WinMaxWidth / 4, 150, 1.0f));
+				if (i == 3)
+					ItemSelect->GetTex()->SetPosition(Vector3(382, 150, 1.0f));
 
 			ItemSelect->GetTex()->SetSize(Vector3(ItemSelect->GetTex()->GetWidth() * 2, ItemSelect->GetTex()->GetHeight() * 2, 0));
 			ItemSelect->SetRender(false);
 			m_vecItemSelect.push_back(ItemSelect);
 		}
 	}
+}
+
+void BattleManager::ItemSelectInit()
+{
+	for (size_t i = 0; i < m_Player->GetvecItem().size(); ++i) {
+		if (ITEM_TYPE::HEAL != m_Player->GetvecItem()[i]->GetItemType())continue;
+		Item* citem = m_Player->GetvecItem()[i];
+		m_vecHealItem.push_back(citem);
+	}
+
+
+
+	for (size_t i = 0; i < m_Player->GetvecItem().size(); ++i) {
+		if (ITEM_TYPE::BALL != m_Player->GetvecItem()[i]->GetItemType())continue;
+		Item* citem = m_Player->GetvecItem()[i];
+		m_vecBallItem.push_back(citem);
+	}
+
 }
 
 
@@ -1576,31 +1613,7 @@ void BattleManager::Reset() {
 }
 void BattleManager::GUI()
 {
-	using namespace ImGui;
-	Begin("Prev");
-	Vector3 position=PrevButton->GetTex()->GetPosition();
-	Vector3 size = PrevButton->GetTex()->GetSize();
 
-	{
-		InputFloat3("Pos", position, 2);
-		InputFloat3("Size", size, 2);
-		
-	}
-	End();
-	PrevButton->GetTex()->SetPosition(position);
-	PrevButton->GetTex()->SetSize(size);
-	Begin("Next");
-	position = NextButton->GetTex()->GetPosition();
-	 size = NextButton->GetTex()->GetSize();
-
-	{
-		InputFloat3("Pos", position, 2);
-		InputFloat3("Size", size, 2);
-
-	}
-	End();
-	NextButton->GetTex()->SetPosition(position);
-	NextButton->GetTex()->SetSize(size);
 
 }
 
