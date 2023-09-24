@@ -176,27 +176,32 @@ void Player::BattlePhase()
 				m_iSelect = 5;
 				break;
 			case SELECT_PHASE::ITEM:
-				if (m_iSelect < 0)
+				if (m_iSelect < 0) {
 					if (bDetailItemSelect == ITEM_SELECT::NONE)
 					{
 						m_iSelect = 6;
 
 					}
-					else if (bDetailItemSelect == ITEM_SELECT::LIST)
+				}
+					if (bDetailItemSelect == ITEM_SELECT::LIST)
 					{
-						m_iSelect = 7;
+						if(m_iSelect<0)
+							m_iSelect = 7;
 						BattleManager::Get()->ItemAnimationButton(m_prevselect, m_iSelect);
 
+			
 					}
 				break;
 			case SELECT_PHASE::POKEMON:
-				if (m_iSelect < 0)
+				
 				
 				if (!bChangePokemon) {
+					if(m_iSelect<0)
 					m_iSelect = 7;
 					BattleManager::Get()->BattleAnimationButton(m_prevselect, m_iSelect);
 				}
 				else {
+					if (m_iSelect < 0)
 					m_iSelect = 2;
 					BattleManager::Get()->BattleAnimationChangeButton(m_prevselect, m_iSelect);
 				}
@@ -289,12 +294,46 @@ void Player::BattlePhase()
 					if (5 == m_iSelect)return;// 최근 아이템 목록
 					if (2 == m_iSelect) {
 						BattleManager::Get()->NotRenderBattleItemBar();
+						bDetailItemSelect = ITEM_SELECT::LIST;
 					}
-					bDetailItemSelect = ITEM_SELECT::LIST;
+					if (1 == m_iSelect) {
+						BattleManager::Get()->NotRenderBattleItemBarBall();
+						bDetailItemSelect = ITEM_SELECT::BALL;
+					}
 					m_iSelect = 0;
 				}
 			}
 			else if (bDetailItemSelect == ITEM_SELECT::LIST) {
+				if (m_iSelect == 5) {
+					BattleManager::Get()->NextButtonUpdate(BattleManager::Get()->GetvecHealItem());
+				}
+				else if (m_iSelect == 6) {
+					BattleManager::Get()->PrevButtonUpdate(BattleManager::Get()->GetvecHealItem());
+				}
+				else if (m_iSelect == 7) {
+					bDetailItemSelect = ITEM_SELECT::NONE;
+					m_iSelect = 0;
+					BattleManager::Get()->NotRenderBattleItemBar(false);
+				}
+				else {
+					if (m_iSelect + (4 * BattleManager::Get()->GetCurItemSelect()) > BattleManager::Get()->GetvecHealItem().size()) return;
+					BATTLE_BEHAVIOR behavior;
+					behavior.eBattle = BATTLE_TYPE::ITEM;
+					behavior.wParam = BattleManager::Get()->GetvecHealItem()[m_iSelect-1+(4*BattleManager::Get()->GetCurItemSelect())];
+					BattleManager::Get()->DoBehavior();
+					BattleManager::Get()->PlayerBehavior(behavior);
+				//	BattleManager::Get()->OurHpBarRender(false);
+					bDetailItemSelect = ITEM_SELECT::NONE;
+					m_iSelect = 0;
+					BattleManager::Get()->NotRenderBattleItemBar(false);
+					m_eSelect = SELECT_PHASE::COMPREHENSIVE;
+					BattleManager::Get()->RenderBattleItemBar(false);
+					bbehavior = true;
+					
+				}
+
+			}
+			else if (bDetailItemSelect == ITEM_SELECT::BALL) {
 
 			}
 
@@ -349,13 +388,13 @@ void Player::BattlePhase()
 
 									if (BattleManager::Get()->GetCircumStance() != BATTLE_CIR::N_DEAD ||
 										BattleManager::Get()->GetCircumStance() != BATTLE_CIR::P_DEAD) {
-										BATTLE_BEHAVIOR behavior;
-										behavior.eBattle = BATTLE_TYPE::CHANGE;
-										behavior.wParam = m_iChangePokemon;
-										BattleManager::Get()->DoBehavior();
-										BattleManager::Get()->PlayerBehavior(behavior);
-										BattleManager::Get()->OurHpBarRender(false);
-										bbehavior = true;
+											BATTLE_BEHAVIOR behavior;
+											behavior.eBattle = BATTLE_TYPE::CHANGE;
+											behavior.wParam = m_iChangePokemon;
+											BattleManager::Get()->DoBehavior();
+											BattleManager::Get()->PlayerBehavior(behavior);
+											BattleManager::Get()->OurHpBarRender(false);
+											bbehavior = true;
 
 									}
 									else {

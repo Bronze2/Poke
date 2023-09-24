@@ -260,11 +260,136 @@ void BattleManager::NotRenderBattleItemBar()
 		if (i == 3) {
 			m_vecHealItem[i]->SetPos(Vector3(384.f, 190.f, 0.f));
 		}
+		m_vecHealItem[i]->SetSize(Vector3(64, 64, 0));
 	}
 
 
 	PrevButton->SetRender(true);
 	NextButton->SetRender(true);
+}
+void BattleManager::NotRenderBattleItemBar(const bool& _bTrue)
+{
+
+	BattleItemBar->SetRender(!_bTrue);
+	BackGround->SetRender(_bTrue);
+	BackButton->SetRender(_bTrue);
+	ItemSelector->SetRender(!_bTrue);
+	for (size_t i = 0; i < m_vecItemSelect.size(); ++i)
+	{
+		m_vecItemSelect[i]->SetRender(_bTrue);
+	}
+	for (size_t i = 0; i < 4; ++i) {
+		if (i >= m_vecHealItem.size())continue;
+		m_vecHealItem[i]->SetRender(_bTrue);
+		if (i == 0) {
+			m_vecHealItem[i]->SetPos(Vector3(128.f, 345.f, 0.f));
+		}
+		if (i == 1) {
+			m_vecHealItem[i]->SetPos(Vector3(384.f, 345.f, 0.f));
+		}
+		if (i == 2) {
+			m_vecHealItem[i]->SetPos(Vector3(128.f, 190.f, 0.f));
+		}
+		if (i == 3) {
+			m_vecHealItem[i]->SetPos(Vector3(384.f, 190.f, 0.f));
+		}
+		m_vecHealItem[i]->SetSize(Vector3(64, 64, 0));
+	}
+
+
+	PrevButton->SetRender(_bTrue);
+	NextButton->SetRender(_bTrue);
+}
+void BattleManager::NextButtonUpdate(vector<Item*> _item)
+{
+	UINT Size = _item.size();
+	int Value = Size / 4;
+	int Value2 = Size % 4;
+
+	if ((m_iCuritemSelect + 1 <= Value)) {
+		if ((Value2 > 0)&&(m_iCuritemSelect+1==Value)) {
+			for (int i = (4 * (m_iCuritemSelect)); i < (4 * (m_iCuritemSelect + 1)); ++i) {
+				_item[i]->SetRender(false);
+			}
+			m_iCuritemSelect += 1;
+			for (int i = (4 * (m_iCuritemSelect)); i < (4 * (m_iCuritemSelect + 1)); ++i) {
+				_item[i]->SetRender(true);
+				_item[i]->SetSize(Vector3(64, 64, 0));
+			}
+		}
+		else {
+			if (m_iCuritemSelect + 1 < Value) {
+				for (int i = (4 * (m_iCuritemSelect)); i < (4 * (m_iCuritemSelect + 1)); ++i) {
+					_item[i]->SetRender(false);
+				}
+				m_iCuritemSelect += 1;
+				for (int i = (4 * (m_iCuritemSelect)); i < (4 * (m_iCuritemSelect + 1)); ++i) {
+					UINT j = i % 4;
+					if (j== 0) {
+						m_vecHealItem[i]->SetPos(Vector3(128.f, 345.f, 0.f));
+					}
+					if (j == 1) {
+						m_vecHealItem[i]->SetPos(Vector3(384.f, 345.f, 0.f));
+					}
+					if (j == 2) {
+						m_vecHealItem[i]->SetPos(Vector3(128.f, 190.f, 0.f));
+					}
+					if (j == 3) {
+						m_vecHealItem[i]->SetPos(Vector3(384.f, 190.f, 0.f));
+					}
+					_item[i]->SetRender(true);
+					_item[i]->SetSize(Vector3(64, 64, 0));
+				}
+			}
+		}
+	}
+}
+void BattleManager::PrevButtonUpdate(vector<Item*> _item)
+{
+	if (m_iCuritemSelect == 0)return;
+	for (int i = (4 * (m_iCuritemSelect)); i < (4 * (m_iCuritemSelect + 1)); ++i) {
+		_item[i]->SetRender(false);
+	}
+	m_iCuritemSelect -= 1;
+	for (int i = (4 * (m_iCuritemSelect)); i < (4 * (m_iCuritemSelect + 1)); ++i) {
+		_item[i]->SetRender(true);
+		_item[i]->SetSize(Vector3(64, 64, 0));
+	}
+}
+void BattleManager::NotRenderBattleItemBarBall()
+{
+	BattleItemBar->SetRender(false);
+	BackGround->SetRender(true);
+	BackButton->SetRender(true);
+	ItemSelector->SetRender(false);
+	for (size_t i = 0; i < m_vecItemSelect.size(); ++i)
+	{
+		m_vecItemSelect[i]->SetRender(true);
+	}
+	for (size_t i = 0; i < 4; ++i) {
+		if (i >= m_vecBallItem.size())continue;
+		m_vecBallItem[i]->SetRender(true);
+		if (i == 0) {
+			m_vecBallItem[i]->SetPos(Vector3(128.f, 345.f, 0.f));
+		}
+		if (i == 1) {
+			m_vecBallItem[i]->SetPos(Vector3(384.f, 345.f, 0.f));
+		}
+		if (i == 2) {
+			m_vecBallItem[i]->SetPos(Vector3(128.f, 190.f, 0.f));
+		}
+		if (i == 3) {
+			m_vecBallItem[i]->SetPos(Vector3(384.f, 190.f, 0.f));
+		}
+		m_vecBallItem[i]->SetSize(Vector3(64, 64, 0));
+	}
+
+
+	PrevButton->SetRender(true);
+	NextButton->SetRender(true);
+}
+void BattleManager::NotRenderBattleItemBarBall(const bool& _bTrue)
+{
 }
 void BattleManager::RenderPokemonSelect()
 {
@@ -523,7 +648,7 @@ BattleManager::~BattleManager()
 	for (size_t i = 0; i < m_vecNpcs.size(); ++i)
 		SAFE_DELETE(m_vecNpcs[i]);
 	SAFE_DELETE(ItemSelector);
-	for (int i = 0; i < m_Player->GetvecItem().size(); ++i)
+	for (int i = 0; i < 4; ++i)
 		SAFE_DELETE(m_vecItemSelect[i]);
 	SAFE_DELETE(PrevButton);
 	SAFE_DELETE(NextButton);
@@ -790,6 +915,11 @@ void BattleManager::DoBattlePhase()
 				m_eCir = BATTLE_CIR::P_PHASE;
 				bSpeedCheck = true;
 				m_iChangePokemon = (UINT) BATTLE_CIR::P_READY;
+			}
+			else if (BATTLE_TYPE::ITEM == playerbehavior.eBattle) {
+				//아이템처리
+
+				
 			}
 		
 		}
@@ -1312,6 +1442,9 @@ void BattleManager::Render()
 
 	for (int i = 0; i < 4; ++i)
 		m_vecItemSelect[i]->Render();
+	for (size_t i = 0; i < m_vecHealItem.size(); ++i)
+		m_vecHealItem[i]->Render();
+
 	NextButton->Render();
 	PrevButton->Render();
 	for (size_t i = 0; i < m_Player->GetCurPokemons()->GetSkills().size(); ++i) {
@@ -1664,6 +1797,8 @@ void BattleManager::Update()
 		ItemSelector->Update();
 		for (int i = 0; i < 4; ++i)
 			m_vecItemSelect[i]->Update();
+		for (size_t i = 0; i < m_vecHealItem.size(); ++i)
+			m_vecHealItem[i]->Update();
 		NextButton->Update();
 		PrevButton->Update();
 	}

@@ -114,7 +114,7 @@ public:
 	void BattleAnimationChangeButton(UINT _prev, UINT _now);
 	void ItemAnimationButton(UINT _prev, UINT _now);
 	void RenderBattleItemBar(const bool& _bTrue);
-	void NotRenderBattleItemBar();
+
 	void RenderPokemonSelect();
 	void NotRenderPokemonSelect();
 	void RenderChangeButton(bool _bRender,bool _bRend=true);
@@ -165,5 +165,16 @@ private:
 	UI* PrevButton;
 	UI* NextButton;
 	UINT m_iCuritemSelect = 0;
+
+public:
+	UINT GetCurItemSelect() { return m_iCuritemSelect; }
+	vector<Item*> GetvecHealItem() { return m_vecHealItem; }
+	vector<Item*> GetvecBallItem() { return m_vecBallItem; }
+		void NotRenderBattleItemBar();// 힐아이템 목록
+		void NotRenderBattleItemBar(const bool& _bTrue);// 힐아이템 목록
+		void NextButtonUpdate(vector<Item*> _item); //아이템 다음 목록 있을 경우 활성화 
+		void PrevButtonUpdate(vector<Item*> _item);// 아이템 이전 목록 있을 경우 활성화
+		void NotRenderBattleItemBarBall(); //포켓몬볼 아이템목록
+		void NotRenderBattleItemBarBall(const bool& _bTrue); 
 };
 
