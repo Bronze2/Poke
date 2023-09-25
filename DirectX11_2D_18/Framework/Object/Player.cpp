@@ -262,8 +262,8 @@ void Player::BattlePhase()
 			if (m_iSelect == 0)
 				return;
 			if (KEYUP(VK_SPACE)) {
+				if (m_iSelect > GetCurPokemons()->GetSkills().size())return;
 				if (m_vecPokemon[m_curPokemon]->GetSkills()[m_iSelect - 1]->GetCurPP() <= 0)return;
-				if (m_iSelect >= GetCurPokemons()->GetSkills().size())return;
 
 				m_vecPokemon[m_curPokemon]->GetSkills()[m_iSelect - 1]->SubCurPP();
 				BATTLE_BEHAVIOR behavior;
@@ -292,11 +292,11 @@ void Player::BattlePhase()
 
 				else {
 					if (5 == m_iSelect)return;// 최근 아이템 목록
-					if (2 == m_iSelect) {
+					if (1 == m_iSelect) {
 						BattleManager::Get()->NotRenderBattleItemBar();
 						bDetailItemSelect = ITEM_SELECT::LIST;
 					}
-					if (1 == m_iSelect) {
+					if (2 == m_iSelect) {
 						BattleManager::Get()->NotRenderBattleItemBarBall();
 						bDetailItemSelect = ITEM_SELECT::BALL;
 					}
@@ -319,16 +319,39 @@ void Player::BattlePhase()
 					if (m_iSelect + (4 * BattleManager::Get()->GetCurItemSelect()) > BattleManager::Get()->GetvecHealItem().size()) return;
 					BATTLE_BEHAVIOR behavior;
 					behavior.eBattle = BATTLE_TYPE::ITEM;
-					behavior.wParam = BattleManager::Get()->GetvecHealItem()[m_iSelect-1+(4*BattleManager::Get()->GetCurItemSelect())];
+
+					UINT i =m_iSelect - 1 + (4 * BattleManager::Get()->GetCurItemSelect());
+					behavior.wParam = (DWORD_PTR)BattleManager::Get()->GetvecHealItem()[m_iSelect-1+(4*BattleManager::Get()->GetCurItemSelect())];
 					BattleManager::Get()->DoBehavior();
 					BattleManager::Get()->PlayerBehavior(behavior);
+					BattleManager::Get()->GetvecHealItem()[m_iSelect - 1 + (4 * BattleManager::Get()->GetCurItemSelect())]->SubItem();
 				//	BattleManager::Get()->OurHpBarRender(false);
+					if (!BattleManager::Get()->GetvecHealItem()[m_iSelect - 1 + (4 * BattleManager::Get()->GetCurItemSelect())]->GetCount()) {
+						vector<Item*>::iterator iter = m_vecItem.begin();
+						bool bFind = false;
+						for (size_t i = 0; i < m_vecItem.size(); ++i) {
+
+							if (m_vecItem[i] == BattleManager::Get()->GetvecHealItem()[m_iSelect - 1 + (4 * BattleManager::Get()->GetCurItemSelect())]) {
+
+								bFind = true;
+
+								break;
+							}
+							iter++;
+						}
+						m_vecItem.erase(iter);
+
+						BattleManager::Get()->EraseItem(BattleManager::Get()->GetvecHealItem()[m_iSelect - 1 + (4 * BattleManager::Get()->GetCurItemSelect())]);
+
+						
+					}
 					bDetailItemSelect = ITEM_SELECT::NONE;
 					m_iSelect = 0;
 					BattleManager::Get()->NotRenderBattleItemBar(false);
 					m_eSelect = SELECT_PHASE::COMPREHENSIVE;
 					BattleManager::Get()->RenderBattleItemBar(false);
 					bbehavior = true;
+			
 					
 				}
 
@@ -663,33 +686,7 @@ Player::Player() {
 	item->SetItem(sitem);
 	item->AnimInit(3, 4);
 	AddItem(item);
-	item = new Item();
-	sitem = {};
-	sitem.Name = L"Ether";
-	sitem.m_iCount = 1;
-	sitem.m_iValue = 10;
-	sitem.m_eType = ITEM_TYPE::HEAL;
-	item->SetItem(sitem);
-	item->AnimInit(2, 5	);
-	AddItem(item);
-	item = new Item();
-	sitem = {};
-	sitem.Name = L"Max Ether";
-	sitem.m_iCount = 1;
-	sitem.m_iValue = 5;
-	sitem.m_eType = ITEM_TYPE::HEAL;
-	item->SetItem(sitem);
-	item->AnimInit(3, 5);
-	AddItem(item);
-	item = new Item();
-	sitem = {};
-	sitem.Name = L"Elixir";
-	sitem.m_iCount = 1;
-	sitem.m_iValue = 9910;// 전체 기술회복
-	sitem.m_eType = ITEM_TYPE::HEAL;
-	item->SetItem(sitem);
-	item->AnimInit(3, 5);
-	AddItem(item);
+
 
 }
 

@@ -82,6 +82,7 @@ private:
 private:
 
 	void UpdateHpBar();
+	void UpdateHpBar(UINT _healValue);
 	BattleManager();
 	~BattleManager();
 
@@ -168,7 +169,8 @@ private:
 
 public:
 	UINT GetCurItemSelect() { return m_iCuritemSelect; }
-	vector<Item*> GetvecHealItem() { return m_vecHealItem; }
+	vector<Item*> GetvecHealItem();
+	void EraseItem(Item* item);
 	vector<Item*> GetvecBallItem() { return m_vecBallItem; }
 		void NotRenderBattleItemBar();// 힐아이템 목록
 		void NotRenderBattleItemBar(const bool& _bTrue);// 힐아이템 목록

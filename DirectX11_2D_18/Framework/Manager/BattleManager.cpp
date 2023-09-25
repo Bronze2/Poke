@@ -235,6 +235,31 @@ void BattleManager::RenderBattleItemBar(const bool& _bTrue)
 	BattlePhase->SetRender(!_bTrue);
 	ItemSelector->SetRender(false);
 }
+vector<Item*> BattleManager::GetvecHealItem()
+{
+	return m_vecHealItem;
+}
+
+void BattleManager::EraseItem(Item* item)
+{
+	vector<Item*>::iterator iter = m_vecHealItem.begin();
+	bool bFind = false;
+	Item* items = nullptr;
+	for (size_t i = 0; i < BattleManager::Get()->GetvecHealItem().size(); ++i) {
+
+		if (BattleManager::Get()->GetvecHealItem()[i] == item) {
+			bFind = true;
+			items = BattleManager::Get()->GetvecHealItem()[i];
+		
+			break;
+		}
+		iter++;
+	}
+	SAFE_DELETE(items);
+	m_vecHealItem.erase(iter);
+}
+
+
 void BattleManager::NotRenderBattleItemBar()
 {
 	BattleItemBar->SetRender(false);
@@ -313,6 +338,20 @@ void BattleManager::NextButtonUpdate(vector<Item*> _item)
 			}
 			m_iCuritemSelect += 1;
 			for (int i = (4 * (m_iCuritemSelect)); i < (4 * (m_iCuritemSelect + 1)); ++i) {
+				if (_item.size() <= i)break;
+				UINT j = i % 4;
+				if (j == 0) {
+					_item[i]->SetPos(Vector3(128.f, 345.f, 0.f));
+				}
+				if (j == 1) {
+					_item[i]->SetPos(Vector3(384.f, 345.f, 0.f));
+				}
+				if (j == 2) {
+					_item[i]->SetPos(Vector3(128.f, 190.f, 0.f));
+				}
+				if (j == 3) {
+					_item[i]->SetPos(Vector3(384.f, 190.f, 0.f));
+				}
 				_item[i]->SetRender(true);
 				_item[i]->SetSize(Vector3(64, 64, 0));
 			}
@@ -324,18 +363,19 @@ void BattleManager::NextButtonUpdate(vector<Item*> _item)
 				}
 				m_iCuritemSelect += 1;
 				for (int i = (4 * (m_iCuritemSelect)); i < (4 * (m_iCuritemSelect + 1)); ++i) {
+					if (_item.size() <= i)break;
 					UINT j = i % 4;
 					if (j== 0) {
-						m_vecHealItem[i]->SetPos(Vector3(128.f, 345.f, 0.f));
+						_item[i]->SetPos(Vector3(128.f, 345.f, 0.f));
 					}
 					if (j == 1) {
-						m_vecHealItem[i]->SetPos(Vector3(384.f, 345.f, 0.f));
+						_item[i]->SetPos(Vector3(384.f, 345.f, 0.f));
 					}
 					if (j == 2) {
-						m_vecHealItem[i]->SetPos(Vector3(128.f, 190.f, 0.f));
+						_item[i]->SetPos(Vector3(128.f, 190.f, 0.f));
 					}
 					if (j == 3) {
-						m_vecHealItem[i]->SetPos(Vector3(384.f, 190.f, 0.f));
+						_item[i]->SetPos(Vector3(384.f, 190.f, 0.f));
 					}
 					_item[i]->SetRender(true);
 					_item[i]->SetSize(Vector3(64, 64, 0));
@@ -348,6 +388,7 @@ void BattleManager::PrevButtonUpdate(vector<Item*> _item)
 {
 	if (m_iCuritemSelect == 0)return;
 	for (int i = (4 * (m_iCuritemSelect)); i < (4 * (m_iCuritemSelect + 1)); ++i) {
+		if (_item.size() < i)break;
 		_item[i]->SetRender(false);
 	}
 	m_iCuritemSelect -= 1;
@@ -622,6 +663,45 @@ void BattleManager::UpdateHpBar()
 		break;
 
 	}
+}
+void BattleManager::UpdateHpBar(UINT _healValue)
+{
+	switch (m_eCir)
+	{
+
+	case BATTLE_CIR::P_PHASE:
+	{
+		if (1 == bUpdateHpBar)
+		{
+			m_iTempValue = _healValue+m_Player->GetCurPokemons()->GetHp();
+			if (m_iTempValue <= 0) { m_iTempValue = 0; bDeadCheck = true; DeadSize = m_Npc->GetCurPokemons()->GetAnimationSize(); }
+			bUpdateHpBar = 2;
+		}
+		else if (2 == bUpdateHpBar) {
+			int i = m_Player->GetCurPokemons()->GetHp();
+			i += 1;
+			float percent = (float)((float)i / (float)m_Player->GetCurPokemons()->GetMaxHp());
+			if (0.2f < percent && percent <= 0.5f) {
+
+				OurHpPoint->SetColor(Color(1, 1, 0, 1));
+
+			}
+			else if (percent <= 0.2f)
+				OurHpPoint->SetColor(Color(1, 0, 0, 1));
+			OurHpPoint->UpdateProgressBar(percent);
+			m_Player->GetCurPokemons()->SetHp(i);
+			if (i == m_iTempValue)
+				bUpdateHpBar = 3;
+		}
+	}
+	break;
+
+
+	default:
+		break;
+
+	}
+
 }
 BattleManager::BattleManager()
 {
@@ -918,6 +998,10 @@ void BattleManager::DoBattlePhase()
 			}
 			else if (BATTLE_TYPE::ITEM == playerbehavior.eBattle) {
 				//아이템처리
+				m_iPhase = 1;
+				m_eCir = BATTLE_CIR::P_PHASE;
+				bSpeedCheck = true;
+				
 
 				
 			}
@@ -947,6 +1031,39 @@ void BattleManager::DoBattlePhase()
 
 							if (5 != m_iChangePokemon)
 								return;
+
+						}
+						else if (BATTLE_TYPE::ITEM == playerbehavior.eBattle) {
+							Item* item = (Item*)playerbehavior.wParam;
+							if (nullptr == m_Npc) {
+								//몬스터볼 처리
+
+							}
+							else {
+								//
+								int Code = (float)(item->GetValue()) / 100.f;
+								int Value=0;
+								if (99 == Code) {
+									//풀회복약 ,회복약
+									Value = m_Player->GetCurPokemons()->GetMaxHp() - m_Player->GetCurPokemons()->GetHp();
+									bUpdateHpBar = 1;
+
+								}
+		
+								else {
+									Value = item->GetValue();
+								}
+
+								if (0 != Value) {
+									UpdateHpBar(Value);
+									if (3 != bUpdateHpBar)
+										return;
+
+								}
+								
+							}
+
+
 
 						}
 					}
