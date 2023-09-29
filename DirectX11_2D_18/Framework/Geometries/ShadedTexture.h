@@ -8,14 +8,16 @@ public:
     ShadedBuffer() : ShaderBuffer(&data, sizeof(Data))
     {
         data.Selection = 1;
+  
     }
 
     int* GetSelectionPtr() { return &data.Selection; }
-
+  //  void SubAlpha(const float& _alpha) { data.alpha -= _alpha; }
     // 16byte
     struct Data
     {
         int Selection;  //  4byte
+       
         Vector3 dummy;  // 12byte
     };
 
@@ -33,6 +35,7 @@ public:
     void GUI();
 
 private:
+
     ShadedBuffer* sb = nullptr;
 
 };

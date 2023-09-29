@@ -11,10 +11,19 @@
 #include "Object/Item.h"
 #include "Object/CSkill.h"
 #include "Object/UI/ProgressBar.h"
+#include "Object/UI/CFont.h"
+
 void BattleManager::OurHpBarRender(const bool& _bRender)
 {
 	OurHpBar->SetRender(_bRender);
 	OurHpPoint->SetRender(_bRender);
+	m_Player->GetCurPokemons()->GetNameFont()->SetRender(_bRender);
+	m_Player->GetCurPokemons()->GetHpFont()->SetRender(_bRender);
+	m_Player->GetCurPokemons()->GetMaxHpFont()->SetRender(_bRender);
+	m_Player->GetCurPokemons()->GetLevelFont()->SetRender(_bRender);
+	m_Player->GetCurPokemons()->GetNameFont()->SetPosition(Vector3(350, 555, 0.f), true);
+	m_Player->GetCurPokemons()->GetMaxHpFont()->SetPosition(Vector3(460, 523, 0.f), true);
+	m_Player->GetCurPokemons()->GetHpFont()->SetPosition(Vector3(410, 523, 0.f), true);
 	if (_bRender) {
 		float percent = (float)m_Player->GetCurPokemons()->GetHp() / (float)m_Player->GetCurPokemons()->GetMaxHp();
 		if (0.2f < percent && percent <= 0.5f) {
@@ -37,6 +46,10 @@ void BattleManager::OpponentHpBarRender(const bool& _bRender)
 {
 	OpponentHpBar->SetRender(_bRender);
 	OpponentHpPoint->SetRender(_bRender);
+	m_Npc->GetCurPokemons()->GetNameFont()->SetRender(_bRender);
+	m_Npc->GetCurPokemons()->GetHpFont()->SetRender(_bRender);
+	m_Npc->GetCurPokemons()->GetMaxHpFont()->SetRender(_bRender);
+	m_Npc->GetCurPokemons()->GetLevelFont()->SetRender(_bRender);
 	if (_bRender) {
 		float percent = (float)m_Npc->GetCurPokemons()->GetHp() / (float)m_Npc->GetCurPokemons()->GetMaxHp();
 		if (0.2f < percent && percent <= 0.5f) {
@@ -255,7 +268,7 @@ void BattleManager::EraseItem(Item* item)
 		}
 		iter++;
 	}
-	SAFE_DELETE(items);
+	DeleteItem.push_back( items);
 	m_vecHealItem.erase(iter);
 }
 
@@ -442,21 +455,22 @@ void BattleManager::RenderPokemonSelect()
 			if (i == 0) {
 				m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(Vector3(55, 330, 0));
 				m_Player->GetPokemons()[i]->GetBar()->SetPosition(Vector3(127, 324, 0));
+				m_Player->GetPokemons()[i]->GetIconNameFont()->SetPosition(Vector3(140,345,0), true);
 			}
 			else if (i == 1) {
 				m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(Vector3(310, 330, 0));
 
-			
+				m_Player->GetPokemons()[i]->GetIconNameFont()->SetPosition(Vector3(385, 345, 0), true);
 				m_Player->GetPokemons()[i]->GetBar()->SetPosition(Vector3(383, 324, 0));
 			}
 			else if (i == 2) {
 				m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(Vector3(55, 240, 0));
-				
+				m_Player->GetPokemons()[i]->GetIconNameFont()->SetPosition(Vector3(140, 255, 0), true);
 				m_Player->GetPokemons()[i]->GetBar()->SetPosition(Vector3(127, 234, 0));
 			}
 			else if (i == 3) {
 				m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(Vector3(310, 240, 0));
-
+				m_Player->GetPokemons()[i]->GetIconNameFont()->SetPosition(Vector3(385, 255, 0), true);
 				m_Player->GetPokemons()[i]->GetIconRect()->SetSize(
 					Vector3(m_Player->GetPokemons()[i]->GetIconRect()->GetWidth(), m_Player->GetPokemons()[i]->GetIconRect()->GetHeight(), 0)
 				);
@@ -464,18 +478,19 @@ void BattleManager::RenderPokemonSelect()
 			}
 			else if (i ==4) {
 				m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(Vector3(55, 150, 0));
-				
+				m_Player->GetPokemons()[i]->GetIconNameFont()->SetPosition(Vector3(140, 165, 0), true);
 				m_Player->GetPokemons()[i]->GetBar()->SetPosition(Vector3(127, 144, 0));
 			}
 			else if (i == 5) {
 				m_Player->GetPokemons()[i]->GetIconRect()->SetPosition(Vector3(310, 150, 0));
-				
+				m_Player->GetPokemons()[i]->GetIconNameFont()->SetPosition(Vector3(385, 165, 0), true);
 				m_Player->GetPokemons()[i]->GetBar()->SetPosition(Vector3(383, 144, 0));
 			}
 			m_Player->GetPokemons()[i]->GetIconRect()->SetSize(
 				Vector3(m_Player->GetPokemons()[i]->GetIconRect()->GetWidth(), m_Player->GetPokemons()[i]->GetIconRect()->GetHeight(), 0)
 			);
 			m_Player->GetPokemons()[i]->GetBar()->SetRender(true);
+			m_Player->GetPokemons()[i]->GetIconNameFont()->SetRender(true);
 		}
 		else {
 			ourvecPokemon[i]->GetTex()->GetAnimator()->SetCurrentAnimClip(L"Nope");
@@ -494,6 +509,7 @@ void BattleManager::NotRenderPokemonSelect()
 	for (size_t i = 0; i < m_Player->GetPokemons().size(); ++i) {
 		m_Player->GetPokemons()[i]->SetIconSize(Vector3(0.f, 0.f, 0));
 		m_Player->GetPokemons()[i]->GetBar()->SetRender(false);
+		m_Player->GetPokemons()[i]->GetIconNameFont()->SetRender(false);
 	}
 	BackGround->SetRender(false);
 	for (size_t i = 0; i < ourvecPokemon.size(); ++i) {
@@ -517,6 +533,7 @@ void BattleManager::RenderChangeButton(bool _bRender,bool _bRend)
 					m_Player->GetPokemons()[i]->SetIconPos(Vector3(WinMaxWidth / 2, 225, 0));
 				}
 				m_Player->GetPokemons()[i]->GetBar()->SetRender(false);
+				m_Player->GetPokemons()[i]->GetIconNameFont()->SetRender(false);
 			}
 			ourvecPokemon[i]->SetRender(false);
 			
@@ -559,6 +576,7 @@ void BattleManager::RenderChangeButton(bool _bRender,bool _bRend)
 				m_Player->GetPokemons()[i]->GetIconRect()->SetSize(
 					Vector3(m_Player->GetPokemons()[i]->GetIconRect()->GetWidth(), m_Player->GetPokemons()[i]->GetIconRect()->GetHeight(), 0)
 				);
+				m_Player->GetPokemons()[i]->GetIconNameFont()->SetRender(true);
 			}
 			ourvecPokemon[i]->SetRender(true);
 
@@ -594,7 +612,30 @@ void BattleManager::StartHpBar()
 	else
 		OurHpPoint->SetColor(Color(0, 1, 0, 1));
 	OurHpPoint->UpdateProgressBar(percent);
+	m_Player->GetCurPokemons()->GetNameFont()->SetRender(true);
+	m_Player->GetCurPokemons()->GetNameFont()->SetPosition(Vector3(350,555,0.f), true);
+	m_Player->GetCurPokemons()->GetMaxHpFont()->SetRender(true);
+	m_Player->GetCurPokemons()->GetMaxHpFont()->SetPosition(Vector3(460, 523, 0.f), true);
+	m_Player->GetCurPokemons()->GetHpFont()->SetRender(true);
+	m_Player->GetCurPokemons()->GetHpFont()->SetPosition(Vector3(410, 523, 0.f), true);
 
+	m_Player->GetCurPokemons()->GetLevelFont()->SetRender(true);
+	m_Player->GetCurPokemons()->GetLevelFont()->SetPosition(Vector3(480, 555, 0.f), true);
+
+	m_Npc->GetCurPokemons()->GetNameFont()->SetRender(true);
+	m_Npc->GetCurPokemons()->GetNameFont()->SetPosition(Vector3(40, 705, 0.f), true);
+
+	m_Npc->GetCurPokemons()->GetLevelFont()->SetRender(true);
+	m_Npc->GetCurPokemons()->GetLevelFont()->SetPosition(Vector3(180, 705, 0.f), true);
+
+}
+vector<Npc*> BattleManager::GetNpcs()
+{
+	return m_vecNpcs;
+}
+void BattleManager::NpcClear()
+{
+	m_vecNpcs.clear();
 }
 void BattleManager::UpdateHpBar()
 {
@@ -653,6 +694,7 @@ void BattleManager::UpdateHpBar()
 
 			OurHpPoint->UpdateProgressBar(percent);
 			m_Player->GetCurPokemons()->SetHp(i);
+			m_Player->GetCurPokemons()->GetHpFont()->SetName(to_wstring(i));
 			if (i == m_iTempValue)
 				bUpdateHpBar = 3;
 		}
@@ -673,14 +715,15 @@ void BattleManager::UpdateHpBar(UINT _healValue)
 	{
 		if (1 == bUpdateHpBar)
 		{
-			m_iTempValue = _healValue+m_Player->GetCurPokemons()->GetHp();
+			m_iTempValue = _healValue;
 			if (m_iTempValue <= 0) { m_iTempValue = 0; bDeadCheck = true; DeadSize = m_Npc->GetCurPokemons()->GetAnimationSize(); }
 			bUpdateHpBar = 2;
 		}
 		else if (2 == bUpdateHpBar) {
-			int i = m_Player->GetCurPokemons()->GetHp();
-			i += 1;
-			float percent = (float)((float)i / (float)m_Player->GetCurPokemons()->GetMaxHp());
+			
+			HealHp += 1;
+			float k= HealHp + m_Player->GetCurPokemons()->GetHp();
+			float percent = (float)((float)(HealHp +HealValue) / (float)m_Player->GetCurPokemons()->GetMaxHp());
 			if (0.2f < percent && percent <= 0.5f) {
 
 				OurHpPoint->SetColor(Color(1, 1, 0, 1));
@@ -688,9 +731,20 @@ void BattleManager::UpdateHpBar(UINT _healValue)
 			}
 			else if (percent <= 0.2f)
 				OurHpPoint->SetColor(Color(1, 0, 0, 1));
+			else
+				OurHpPoint->SetColor(Color(0,1,0,1));
 			OurHpPoint->UpdateProgressBar(percent);
-			m_Player->GetCurPokemons()->SetHp(i);
-			if (i == m_iTempValue)
+			m_Player->GetCurPokemons()->SetHp(HealHp + HealValue);
+			m_Player->GetCurPokemons()->GetHpFont()->SetName(to_wstring(HealHp + HealValue));
+			UINT value2 =m_Player->GetCurPokemons()->GetHp();
+			UINT value3= m_Player->GetCurPokemons()->GetMaxHp();
+			if (value2 == value3)
+			{
+				bUpdateHpBar = 3;
+				return;
+			}
+
+			if (HealHp == m_iTempValue)
 				bUpdateHpBar = 3;
 		}
 	}
@@ -732,7 +786,8 @@ BattleManager::~BattleManager()
 		SAFE_DELETE(m_vecItemSelect[i]);
 	SAFE_DELETE(PrevButton);
 	SAFE_DELETE(NextButton);
-
+	for (size_t i = 0; i < DeleteItem.size(); ++i)
+		SAFE_DELETE(DeleteItem[i]);
 	m_vecBallItem.clear();
 	m_vecHealItem.clear();
 }
@@ -928,6 +983,10 @@ void BattleManager::NPCCurDead()
 	m_Npc->CurPokemonDead();
 	OpponentHpBar->SetRender(false);
 	OpponentHpPoint->SetRender(false);
+	m_Npc->GetCurPokemons()->GetHpFont()->SetRender(false);
+	m_Npc->GetCurPokemons()->GetMaxHpFont()->SetRender(false);
+	m_Npc->GetCurPokemons()->GetLevelFont()->SetRender(false);
+
 }
 
 void BattleManager::DoBattlePhase()
@@ -939,13 +998,23 @@ void BattleManager::DoBattlePhase()
 	OpponentHpPoint->Update();
 	OurHpBar->Update();
 	OurHpPoint->Update();
+	m_Player->GetCurPokemons()->GetNameFont()->Update();
+	m_Player->GetCurPokemons()->GetHpFont()->Update();
+	m_Player->GetCurPokemons()->GetMaxHpFont()->Update();
+	m_Player->GetCurPokemons()->GetLevelFont()->Update();
+	m_Npc->GetCurPokemons()->GetNameFont()->Update();
+
+	m_Npc->GetCurPokemons()->GetLevelFont()->Update();
 	switch (m_Player->GetSelectPhase())
 	{
 	case SELECT_PHASE::SKILL:
 	{
 		for (size_t i = 0; i < m_Player->GetCurPokemons()->GetSkills().size(); ++i) {
+		
 			m_Player->GetCurPokemons()->GetSkills()[i]->Update();
+			
 		}
+		
 
 	}
 	break;
@@ -1043,23 +1112,30 @@ void BattleManager::DoBattlePhase()
 								//
 								int Code = (float)(item->GetValue()) / 100.f;
 								int Value=0;
+								if (!bCodeCheck)
+								{
+									bUpdateHpBar = 1;
+									bCodeCheck = 1;
+									HealValue = m_Player->GetCurPokemons()->GetHp();
+								}
 								if (99 == Code) {
 									//풀회복약 ,회복약
 									Value = m_Player->GetCurPokemons()->GetMaxHp() - m_Player->GetCurPokemons()->GetHp();
-									bUpdateHpBar = 1;
-
+									
 								}
 		
 								else {
 									Value = item->GetValue();
+									
 								}
+							
 
-								if (0 != Value) {
-									UpdateHpBar(Value);
-									if (3 != bUpdateHpBar)
-										return;
+								
+								UpdateHpBar(Value);
+								if (3 != bUpdateHpBar)
+									return;
 
-								}
+								
 								
 							}
 
@@ -1105,6 +1181,9 @@ void BattleManager::DoBattlePhase()
 								bHitted = false;
 								m_iChangePokemon = 0;
 								DeadCount = 0;
+								bCodeCheck = false;
+								HealValue = 0;
+								HealHp = 0;
 							}
 							break;
 							case BATTLE_CIR::N_PHASE: {
@@ -1114,7 +1193,9 @@ void BattleManager::DoBattlePhase()
 								bUpdateHpBar = 0;
 								bHitted = false;
 								m_iChangePokemon = 0;
-								DeadCount = 0;
+								DeadCount = 0;		bCodeCheck = false;
+								HealValue = 0;
+								HealHp = 0;
 							}
 													break;
 							}
@@ -1132,7 +1213,9 @@ void BattleManager::DoBattlePhase()
 									bUpdateHpBar = 0;
 									bHitted = false;
 									m_iChangePokemon = 0;
-									DeadCount = 0;
+									DeadCount = 0;		bCodeCheck = false;
+									HealValue = 0;
+									HealHp = 0;
 								}
 								break;
 								case BATTLE_CIR::N_PHASE: {
@@ -1142,7 +1225,9 @@ void BattleManager::DoBattlePhase()
 									bUpdateHpBar = 0;
 									bHitted = false;
 									m_iChangePokemon = 0;
-									DeadCount = 0;
+									DeadCount = 0;		bCodeCheck = false;
+									HealValue = 0;
+									HealHp = 0;
 								}
 														break;
 								}
@@ -1177,7 +1262,9 @@ void BattleManager::DoBattlePhase()
 					m_eCir = BATTLE_CIR::N_PHASE; 
 					bHitted = false;
 					m_iChangePokemon = 0;
-					bUpdateHpBar = 0;
+					bUpdateHpBar = 0;		bCodeCheck = false;
+					HealValue = 0;
+					HealHp = 0;
 					}
 						break;
 					case BATTLE_CIR::N_PHASE: {
@@ -1449,14 +1536,32 @@ void BattleManager::BattleStart(Player* _player, Npc* _npc)
 	ItemSelectInit();
 	for (size_t j = 0; j < m_Player->GetPokemons().size(); ++j)
 		for (size_t i = 0; i < m_Player->GetPokemons()[j]->GetSkills().size(); ++i) {
-			if (i == 0)
+			if (i == 0) {
 				m_Player->GetPokemons()[j]->GetSkills()[i]->GetTypeTex()->SetPosition(Vector3(WinMaxWidth / 4, 290, 1.0f));
-			if (i == 1)
+				m_Player->GetPokemons()[j]->GetSkills()[i]->GetNameFont()->SetPosition(Vector3(90,310,0));
+				m_Player->GetPokemons()[j]->GetSkills()[i]->GetCurPPFont()->SetPosition(Vector3(150, 276, 0));
+				m_Player->GetPokemons()[j]->GetSkills()[i]->GetMaxPPFont()->SetPosition(Vector3(195, 276, 0));
+
+			}
+			if (i == 1) {
 				m_Player->GetPokemons()[j]->GetSkills()[i]->GetTypeTex()->SetPosition(Vector3(WinMaxWidth * 0.75f, 290, 1.0f));
-			if (i == 2)
+				m_Player->GetPokemons()[j]->GetSkills()[i]->GetNameFont()->SetPosition(Vector3(368, 310, 0));
+				m_Player->GetPokemons()[j]->GetSkills()[i]->GetCurPPFont()->SetPosition(Vector3(405, 276, 0));
+				m_Player->GetPokemons()[j]->GetSkills()[i]->GetMaxPPFont()->SetPosition(Vector3(455, 276, 0));
+			}
+			if (i == 2) {
 				m_Player->GetPokemons()[j]->GetSkills()[i]->GetTypeTex()->SetPosition(Vector3(WinMaxWidth / 4, 165, 1.0f));
-			if (i == 3)
+				m_Player->GetPokemons()[j]->GetSkills()[i]->GetNameFont()->SetPosition(Vector3(90, 190, 0));
+				m_Player->GetPokemons()[j]->GetSkills()[i]->GetCurPPFont()->SetPosition(Vector3(150, 156, 0));
+				m_Player->GetPokemons()[j]->GetSkills()[i]->GetMaxPPFont()->SetPosition(Vector3(195, 156, 0));
+
+			}
+			if (i == 3) {
 				m_Player->GetPokemons()[j]->GetSkills()[i]->GetTypeTex()->SetPosition(Vector3(WinMaxWidth * 0.75f, 165, 1.0f));
+				m_Player->GetPokemons()[j]->GetSkills()[i]->GetNameFont()->SetPosition(Vector3(368, 190, 0));
+				m_Player->GetPokemons()[j]->GetSkills()[i]->GetCurPPFont()->SetPosition(Vector3(405, 156, 0));
+				m_Player->GetPokemons()[j]->GetSkills()[i]->GetMaxPPFont()->SetPosition(Vector3(455, 156, 0));
+			}
 			m_Player->GetPokemons()[j]->GetSkills()[i]->GetTypeTex()->SetSize(Vector3((float)m_Player->GetPokemons()[j]->GetSkills()[i]->GetTypeTex()->GetWidth(), (float)m_Player->GetPokemons()[j]->GetSkills()[i]->GetTypeTex()->GetHeight(), (float)0.0f));
 
 		}
@@ -1501,18 +1606,27 @@ void BattleManager::BattleEnd(Player* _player, Npc* _npc)
 }
 void BattleManager::Render()
 {
+
+	BackGround->Render();
+	BackButton->Render();
 	if (m_eCir == BATTLE_CIR::ALL_READY) {
 		if (!bPlayerBehavior)
 		{
-			BattlePhase->Render();
-			FightSelector->Render();
-		
-			SmallSelector->Render();
-			MediumSelector->Render();
+
 
 			switch (m_Player->GetSelectPhase())
 			{
+			case SELECT_PHASE::COMPREHENSIVE:
 			case SELECT_PHASE::SKILL:
+		
+				BattlePhase->Render();
+				FightSelector->Render();
+
+				SmallSelector->Render();
+				MediumSelector->Render();
+				
+
+			if(m_Player->GetSelectPhase()==SELECT_PHASE::SKILL)
 			{
 				for (size_t i = 0; i < m_Player->GetCurPokemons()->GetSkills().size(); ++i) {
 					m_Player->GetCurPokemons()->GetSkills()[i]->Render();
@@ -1539,6 +1653,7 @@ void BattleManager::Render()
 		for (size_t i = 0; i < ourvecPokemon.size(); ++i) {
 			ourvecPokemon[i]->Render();
 		}
+		
 
 	}
 	break;
@@ -1546,8 +1661,7 @@ void BattleManager::Render()
 		break;
 	}
 
-	BackGround->Render();
-	BackButton->Render();
+
 	OpponentHpBar->Render();
 	OurHpBar->Render();
 	OpponentHpPoint->Render();
@@ -1556,6 +1670,12 @@ void BattleManager::Render()
 	ChangeOrNotButton->Render();
 	CancelSelector->Render();
 	ItemSelector->Render();
+	m_Player->GetCurPokemons()->GetNameFont()->Render();
+	m_Player->GetCurPokemons()->GetHpFont()->Render();
+	m_Player->GetCurPokemons()->GetMaxHpFont()->Render();
+	m_Player->GetCurPokemons()->GetLevelFont()->Render();
+	m_Npc->GetCurPokemons()->GetNameFont()->Render();
+	m_Npc->GetCurPokemons()->GetLevelFont()->Render();
 
 	for (int i = 0; i < 4; ++i)
 		m_vecItemSelect[i]->Render();
@@ -1863,7 +1983,20 @@ void BattleManager::Reset() {
 }
 void BattleManager::GUI()
 {
-
+	return;
+	using namespace ImGui;
+	
+	for (size_t i = 0; i < m_Player->GetPokemons().size(); ++i) {
+		string str = "Pokemon Font";
+		str += to_string(i);
+		Begin(str.c_str());
+		 Vector3 position = m_Player->GetPokemons()[i]->GetIconNameFont()->GetPosition();
+		{
+			InputFloat3("Pos", position, 2);
+		}
+		m_Player->GetPokemons()[i]->GetIconNameFont()->SetPosition(position,true);
+		End();
+	}
 
 }
 

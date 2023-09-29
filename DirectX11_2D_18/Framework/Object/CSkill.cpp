@@ -2,7 +2,7 @@
 #include "CSkill.h"
 #include "Pokemon.h"
 #include "Geometries/AnimationRect.h"
-
+#include "UI/CFont.h"
 
 
 void CSkill::AnimationInit()
@@ -103,8 +103,9 @@ CSkill::CSkill(const CSkill& _Other)
 	this->bAnim = _Other.bAnim;
 	this->AnimationInit();
 
-	
-
+	this->NameFont = new CFont(*_Other.NameFont);
+	this->CurPPFont = new CFont(*_Other.CurPPFont);
+	this->MaxPPFont = new CFont(*_Other.MaxPPFont);
 }
 
 CSkill::CSkill(const wstring& _Name, const SKILL_TYPE& _type, const UINT& _maxPP, const UINT& _curPP, const UINT& _dmg)
@@ -144,12 +145,30 @@ CSkill::CSkill(const wstring& _Name, const SKILL_TYPE& _type, const UINT& _maxPP
 	m_Skill.curPP = _curPP;
 	m_Skill.Dmg = _dmg;
 	SAFE_DELETE(srcTex);
+	NameFont = new CFont;
+	NameFont->Init(m_Skill.Name);
+	
+	
+	CurPPFont = new CFont;
+	wstring wstr = to_wstring(m_Skill.curPP);
+	CurPPFont->Init(wstr);
+
+	MaxPPFont = new CFont;
+	wstr = to_wstring(m_Skill.maxPP);
+	MaxPPFont->Init(wstr);
+
 }
 
 CSkill::~CSkill()
 {
 	SAFE_DELETE(TypeRect);
 	SAFE_DELETE(AnimRect);
+
+	SAFE_DELETE(NameFont);
+
+	SAFE_DELETE(CurPPFont);
+	SAFE_DELETE(MaxPPFont);
+
 }
 
 void CSkill::Update()
@@ -220,7 +239,11 @@ void CSkill::Update()
 
 		}
 	}
+	NameFont->Update();
+	CurPPFont->Update();
+	MaxPPFont->Update();
 	
+
 
 }
 
@@ -229,6 +252,9 @@ void CSkill::Render()
 	
 	if (nullptr != TypeRect)
 		TypeRect->Render();
+	NameFont-> Render();
+	CurPPFont->Render();
+	MaxPPFont->Render();
 	
 
 }

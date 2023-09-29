@@ -1,5 +1,8 @@
 #include "Framework.h"
 #include "Camera.h"
+#include "Object/Player.h"
+#include "Geometries/AnimationRect.h"
+
 
 void Camera::Update()
 {
@@ -14,17 +17,12 @@ void Camera::Render()
 
 void Camera::Move()
 {
-	if (Keyboard::Get()->Press(VK_LSHIFT))
-	{
-		if (Keyboard::Get()->Press('W'))
-			position.y += cameraSpeed * Time::Delta();
-		else if (Keyboard::Get()->Press('S'))
-			position.y -= cameraSpeed * Time::Delta();
-
-		if (Keyboard::Get()->Press('D'))
-			position.x += cameraSpeed * Time::Delta();
-		else if (Keyboard::Get()->Press('A'))
-			position.x -= cameraSpeed * Time::Delta();
+	if (nullptr != m_Player) {
+		if (BATTLE_STATE::NONE == m_Player->GetBattleState()) {
+			position = m_Player->GetAnimRect()->GetPosition();
+			position.x -= WinMaxWidth / 2;
+			position.y -= WinMaxHeight / 2;
+		}
 	}
 	UpdateView();
 }

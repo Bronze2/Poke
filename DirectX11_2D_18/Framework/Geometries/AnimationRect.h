@@ -9,6 +9,7 @@ public:
     AnimationRect(Vector3 position, Vector3 size);
     ~AnimationRect();
 
+    AnimationRect(const AnimationRect& _rect);
 
 
     void Update();

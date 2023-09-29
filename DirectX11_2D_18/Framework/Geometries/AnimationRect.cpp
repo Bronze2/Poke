@@ -51,11 +51,36 @@ AnimationRect::AnimationRect(Vector3 position, Vector3 size)
     }
 
 }
+AnimationRect::AnimationRect(const AnimationRect& _rect) :TextureRect(_rect.position, _rect.size, 0.f)
+{
+    {
+        D3D11_SAMPLER_DESC desc;
+        States::GetSamplerDesc(&desc);
+        States::CreateSampler(&desc, &point[0]);
 
+        desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+        States::CreateSampler(&desc, &point[1]);
+    }
+
+    // Blend
+    {
+        D3D11_BLEND_DESC desc;
+        States::GetBlendDesc(&desc);
+        States::CreateBlend(&desc, &bPoint[0]);
+
+        desc.RenderTarget[0].BlendEnable = true;
+        States::CreateBlend(&desc, &bPoint[1]);
+    }
+    if (nullptr != animator) {
+        this->animator = _rect.animator;
+    }
+}
 AnimationRect::~AnimationRect()
 {
     SAFE_DELETE(animator);
 }
+
+
 
 void AnimationRect::Update()
 {

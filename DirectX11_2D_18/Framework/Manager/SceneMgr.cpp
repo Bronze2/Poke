@@ -33,14 +33,17 @@ SceneMgr::SceneMgr() :m_arrScene{}
 
 SceneMgr::~SceneMgr()
 {
+	
 	for (int i = 0; i < (UINT)SCENE_TYPE::END; i++)
 	{
+		
 		if (nullptr != m_arrScene[i])
 		{
 			delete m_arrScene[i];
 		}
 	}
-	BattleManager::Get()->GetNpcs().clear();
+	BattleManager::Get()->NpcClear();
+
 }
 
 void SceneMgr::Init()

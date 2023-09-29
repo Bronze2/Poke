@@ -1,5 +1,6 @@
 #pragma once
 class Scene;
+class TMap;
 class SceneMgr: public SingletonBase<SceneMgr>
 {
 private:
@@ -7,6 +8,7 @@ private:
 	Scene* m_pCurScene;
 	Matrix view, proj;
 
+	
 private:
 	void ChangeScene(SCENE_TYPE _NextScene);
 

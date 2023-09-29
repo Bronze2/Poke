@@ -6,7 +6,9 @@ class FieldScene
 private:
 	class Player* player;
 	class Npc* npc;
-	class Npc* npcs;
+	class Npc* npcs; 
+private:
+	class TMap* tm = nullptr;
 public:
 	virtual void Init();
 	virtual void BattleInit();

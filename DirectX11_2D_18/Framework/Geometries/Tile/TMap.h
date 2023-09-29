@@ -10,7 +10,7 @@ enum ColorChoice
 {
 	Default
 };
-
+class Player;
 class IndexNumBuffer : public ShaderBuffer
 {
 public:
@@ -49,8 +49,9 @@ public:
 	void Load(string path);
 
 	class Tile* GetTile(Vector3 mPos);
-
+	void SetPlayer(Player* _player) { Player = _player; }
 private:
+	Player* Player;
 
 	bool bColTile = false;
 	bool bAppearTile = false;

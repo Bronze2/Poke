@@ -3,31 +3,7 @@
 
 void TileSet::GUI()
 {
-	ImGui::Begin("TileSet");
-	{
-		int count = 0;
-		for (uint y = 0; y < tileYCount; y++)
-		{
-			for (uint x = 0; x < tileXCount; x++)
-			{
-				float startX = texelTileSize.x * x;
-				float startY = texelTileSize.y * y;
-
-				ImGui::PushID(count);
-				if (ImGui::ImageButton(tileSRV, ImVec2(40, 40), ImVec2(startX, startY), ImVec2(startX + texelTileSize.x, startY + texelTileSize.y)))
-				{
-					selectedStartUV = Vector2(startX, startY);
-				}
-
-				count++;
-				ImGui::PopID();
-
-				if (count % 3 != 0)
-					ImGui::SameLine();
-			}
-		}
-	}
-	ImGui::End();
+	
 
 
 }

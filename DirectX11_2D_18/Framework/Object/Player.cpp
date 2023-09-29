@@ -8,6 +8,13 @@
 #include "CSkill.h"
 #include "Npc.h"
 #include "Item.h"
+#include "Geometries/Tile/TMap.h"
+#include "Geometries/Tile/Tile.h"
+#include "UI/CFont.h"
+void Player::MapCheck(Vector3 _Position)
+{
+	bMove =m_TMap->GetTile(_Position)->GetCol();
+}
 void Player::AddItem( Item* _Item)
 {
 	bool bFind = false;
@@ -266,6 +273,8 @@ void Player::BattlePhase()
 				if (m_vecPokemon[m_curPokemon]->GetSkills()[m_iSelect - 1]->GetCurPP() <= 0)return;
 
 				m_vecPokemon[m_curPokemon]->GetSkills()[m_iSelect - 1]->SubCurPP();
+				wstring str = to_wstring(m_vecPokemon[m_curPokemon]->GetSkills()[m_iSelect - 1]->GetCurPP());
+				m_vecPokemon[m_curPokemon]->GetSkills()[m_iSelect - 1]->GetCurPPFont()->SetName(str);
 				BATTLE_BEHAVIOR behavior;
 				behavior.eBattle = BATTLE_TYPE::SKILL;
 				behavior.wParam = (DWORD_PTR)m_vecPokemon[m_curPokemon]->GetSkills()[m_iSelect-1];
@@ -321,6 +330,7 @@ void Player::BattlePhase()
 					behavior.eBattle = BATTLE_TYPE::ITEM;
 
 					UINT i =m_iSelect - 1 + (4 * BattleManager::Get()->GetCurItemSelect());
+					Item* itesm =BattleManager::Get()->GetvecHealItem()[m_iSelect - 1 + (4 * BattleManager::Get()->GetCurItemSelect())];
 					behavior.wParam = (DWORD_PTR)BattleManager::Get()->GetvecHealItem()[m_iSelect-1+(4*BattleManager::Get()->GetCurItemSelect())];
 					BattleManager::Get()->DoBehavior();
 					BattleManager::Get()->PlayerBehavior(behavior);
@@ -524,7 +534,10 @@ void Player::BattlePhase()
 void Player::SetPosition(const Vector3& _Position)
 {
 	m_Position = _Position;
-	AnimRect->SetPosition(_Position);
+	Vector3 pos = _Position;
+	pos.x -= 24;
+	pos.y -= 24;
+	AnimRect->SetPosition(pos);
 }
 void Player::SetBattlePosition(const Vector3& _Position)
 {
@@ -541,10 +554,40 @@ void Player::SetBattleSize(const Vector3& _Size)
 }
 void Player::Move()
 {
-
-
-
-
+	if (m_eBattleState == BATTLE_STATE::NONE) {
+		//m_TMap->GetTile()
+		if (PRESS('W'))
+		{
+			MapCheck(Vector3(m_Position.x, m_Position.y + 48, 0));
+			if (!bMove)
+			m_Position.y += 200 * DELTA;
+			AnimRect->GetAnimator()->SetCurrentAnimClip(L"WALK_U");
+		}
+		if (PRESS('D'))
+		{
+			MapCheck(Vector3(m_Position.x + 48, m_Position.y , 0));
+			if (!bMove)
+			m_Position.x += 200 * DELTA;
+			AnimRect->GetAnimator()->SetCurrentAnimClip(L"WALK_R");
+		}
+		if (PRESS('A'))
+		{
+			MapCheck(Vector3(m_Position.x-48, m_Position.y , 0));
+			if (!bMove)
+			m_Position.x -= 200 * DELTA;
+			AnimRect->GetAnimator()->SetCurrentAnimClip(L"WALK_L");
+		}
+		if (PRESS('S'))
+		{
+			MapCheck(Vector3(m_Position.x, m_Position.y - 48, 0));
+			if(!bMove)
+			m_Position.y -= 200 * DELTA;
+			AnimRect->GetAnimator()->SetCurrentAnimClip(L"WALK_D");
+		}
+		SetPosition(m_Position);
+		bMove = false;
+		
+	}
 }
 void Player::Init()
 {

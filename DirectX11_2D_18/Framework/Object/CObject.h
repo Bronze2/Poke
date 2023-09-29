@@ -14,6 +14,7 @@ private:
 protected:
 	bool IsNpc = false;
 public:
+	bool GetDead() { return m_bDead; }
 	void SetIsNpc() { IsNpc = true; }
 	bool GetIsNpc() { return IsNpc; }
 	void SetPosition(Vector3 _pos) { m_Position = _pos; }

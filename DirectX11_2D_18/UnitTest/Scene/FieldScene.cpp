@@ -8,20 +8,32 @@
 #include "Object/Npc.h"
 #include "Manager/BattleManager.h"
 #include "Object/CSkill.h"
+#include "Geometries/Tile/TMap.h"
+#include "Geometries/Tile/Tile.h"
 void FieldScene::Init()
 {
+	uint spacing = 48;
+	uint width = WinMaxWidth / spacing;
+	uint height = WinMaxHeight / spacing;
+	tm = new TMap(width, height, spacing);
+	tm->Load(TilePath + "Map");
 	player = new Player;
+	Camera::Get()->SetPlayer(player);
+	tm->SetPlayer(player);
 	player->Init();
 
-	player->SetPosition(Vector3(WinMaxWidth / 2, WinMaxHeight / 2, 0.f));
-	player->SetSize(Vector3(player->GetAnimRect()->GetWidth(), player->GetAnimRect()->GetHeight(), 0.f));
+	player->SetPosition(Vector3(48*2, 48*2, 0.f));
+	player->SetTMap(tm);
+	tm->GetTile(Vector3(48 * 2, 48 * 2, 0))->SetPlayer(player);
+
+	player->SetSize(Vector3(player->GetAnimRect()->GetWidth()/2, player->GetAnimRect()->GetHeight()/2, 0.f));
 	AddObj(player, OBJ_TYPE::PLAYER);
 
 	npc = new Npc(L"Npc00");
 	npc->Init();
-	npc->SetPosition(Vector3(WinMaxWidth / 2, WinMaxHeight / 2+50, 0.f));
-	npc->SetSize(Vector3(npc->GetAnimRect()->GetWidth(), npc->GetAnimRect()->GetHeight(), 0.f));
-
+	npc->SetPosition(Vector3(48*4, 48*4, 0.f));
+	npc->SetSize(Vector3(npc->GetAnimRect()->GetWidth()/2, npc->GetAnimRect()->GetHeight()/2, 0.f));
+	tm->GetTile(Vector3(48 * 4, 48 * 4, 0))->SetNpc(npc);
 	npc->AddPokemon(L"Floatzel", 100, 100, 100, 10, 30,50);
 	npc->GetPokemons(0)->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 30);
 	npc->GetPokemons(0)->GetSkills()[0]->SetSkillMVRIGHType();
@@ -32,8 +44,9 @@ void FieldScene::Init()
 	BattleManager::Get()->PushNPC(npc);
 	npcs = new Npc(L"Npc01");
 	npcs->Init();
-	npcs->SetPosition(Vector3(WinMaxWidth / 2, WinMaxHeight / 2 + 100, 0.f));
-	npcs->SetSize(Vector3(npcs->GetAnimRect()->GetWidth(), npcs->GetAnimRect()->GetHeight(), 0.f));
+	npcs->SetPosition(Vector3(48 * 6, 48 * 6, 0.f));
+	tm->GetTile(Vector3(TILESIZE * 6, TILESIZE *6, 0))->SetNpc(npcs);
+	npcs->SetSize(Vector3(npcs->GetAnimRect()->GetWidth()/2, npcs->GetAnimRect()->GetHeight()/2, 0.f));
 
 	npcs->AddPokemon(L"Floatzel", 100, 100, 100, 10, 30, 50);
 	npcs->GetPokemons(0)->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 30);
@@ -49,8 +62,15 @@ void FieldScene::Init()
 
 void FieldScene::BattleInit()
 {
+	uint spacing = 48;
+	uint width = WinMaxWidth / spacing;
+	uint height = WinMaxHeight / spacing;
+	tm = new TMap(width, height, spacing);
+	tm->Load(TilePath + "Map");
 	Npc* npc = BattleManager::Get()->GetNpc();
 	Player* player = BattleManager::Get()->GetPlayer();
+	tm->SetPlayer(player);
+	player->SetTMap(tm);
 	Vector3 vPos = BattleManager::Get()->GetNpc()->GetPos();
 	BattleManager::Get()->GetNpc()->SetPosition(BattleManager::Get()->GetNpc()->GetPrevPos());
 	BattleManager::Get()->GetNpc()->SetSize(Vector3(BattleManager::Get()->GetNpc()->GetAnimRect()->GetWidth(), BattleManager::Get()->GetNpc()->GetAnimRect()->GetHeight(), 0.f));
@@ -78,14 +98,16 @@ void FieldScene::BattleInit()
 
 void FieldScene::Destroy()
 {
+	SAFE_DELETE(tm);
 	DeleteAllObj();
 }
 
 void FieldScene::Update()
 {
+	tm->Update();
 	Scene::Update();
 
-	if (PRESS('A')) {
+	if (PRESS('O')) {
 		if (npc->GetDefeat())
 			return;
 		player->SetPrevPos(player->GetPos());
@@ -101,6 +123,7 @@ void FieldScene::Update()
 
 void FieldScene::Render()
 {
+	tm->Render();
 	Scene::Render();
 }
 

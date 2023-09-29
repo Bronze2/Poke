@@ -78,12 +78,14 @@ typedef UINT		uint;
 #define PRESS(p) Keyboard::Get()->Press(p)
 #define KEYUP(p) Keyboard::Get()->Up(p)
 #define KEYDOWN(p) Keyboard::Get()->Down(p)
+#define DELTA Time::Get()->Delta()
 
 #define WinMaxWidth 512
 #define WinMaxHeight 768
 #define CLONE(type) type* Clone(){return new type(*this);}
 #define MAXPOKEMONCOUNT 6
 #define MAXSKILLCOUNT 4
+#define TILESIZE 48
 
 const wstring ShaderPath = L"../_Shaders/";
 const wstring TexturePath = L"../_Resources/Textures/";

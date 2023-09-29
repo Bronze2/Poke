@@ -1,4 +1,5 @@
 #pragma once
+class Player;
 class Camera : public SingletonBase<Camera>
 {
 public:
@@ -16,8 +17,10 @@ public:
 	void SetPosition(Vector3 position) { this->position = position; }
 
 	void UnProjection(Vector3* out, Vector3 source, Matrix world);
-
+	void SetPlayer(Player* _Player) { m_Player = _Player; }
 private:
+
+	Player* m_Player;
 	Camera();
 	~Camera();
 

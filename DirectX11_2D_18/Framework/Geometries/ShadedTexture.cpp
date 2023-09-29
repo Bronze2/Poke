@@ -6,8 +6,8 @@ ShadedTexture::ShadedTexture(Vector3 position, Vector3 size, float rotation, wst
 {
     sb = new ShadedBuffer();
 
-    ps->Clear();
-    ps->Create(ShaderPath + L"TextureFilter.hlsl", "PS");
+   ps->Clear();
+   ps->Create(ShaderPath + L"TextureFilter.hlsl", "PS");
 }
 
 ShadedTexture::~ShadedTexture()
@@ -23,14 +23,5 @@ void ShadedTexture::Render()
 
 void ShadedTexture::GUI()
 {
-    using namespace ImGui;
-    Begin("Shaded");
-    {
-        RadioButton("Normal",    sb->GetSelectionPtr(), 1);        
-        RadioButton("AM",        sb->GetSelectionPtr(), 2);
-        RadioButton("Sepia",     sb->GetSelectionPtr(), 3);
-        RadioButton("Negative",  sb->GetSelectionPtr(), 4);
-        RadioButton("Posterize", sb->GetSelectionPtr(), 5);
-    }
-    End();
+
 }

@@ -2,10 +2,12 @@
 #include "CObject.h"
 class Pokemon;
 class Item;
+class TMap;
 class Player :
 	public CObject
 {
 private:
+	TMap* m_TMap;
 	class AnimationRect* AnimRect;
 	class AnimationRect* BattleRect;
 
@@ -26,13 +28,19 @@ private:
 	bool bbehavior = false;
 	UINT m_iChangePokemon;
 	ITEM_SELECT bDetailItemSelect = ITEM_SELECT::NONE;
-	
+	bool bMove = false;
 	vector<Item*> m_vecItem;
+private:
+	void MapCheck(Vector3 _Position);
 public:
+
+
 	ITEM_SELECT GetDetailItemSelect() { return bDetailItemSelect; }
 
 	vector<Item*> GetvecItem() { return m_vecItem; }
 
+
+	void SetTMap(TMap* _pMap) { m_TMap = _pMap; }
 
 	void AddItem( Item* _Item);
 
@@ -53,7 +61,7 @@ public:
 	class AnimationRect* GetAnimRect() { return AnimRect; }
 	  class AnimationRect* GetBattleRect() { return BattleRect; }
 	
-	  const int& GetSelect() { return m_iSelect; }
+	 const int& GetSelect() { return m_iSelect; }
 	 void BattlePhase();
 
 	void SetPosition(const Vector3& _Position);
@@ -68,7 +76,7 @@ public:
 
 	void SetBattleMode() { m_eBattleState = BATTLE_STATE::BATTLE; }
 	void SetIdleMode(){ m_eBattleState = BATTLE_STATE::NONE; }
-
+	BATTLE_STATE GetBattleState() { return m_eBattleState; }
 
 	bool bChangePokemon = false;
 	virtual void Init() ;

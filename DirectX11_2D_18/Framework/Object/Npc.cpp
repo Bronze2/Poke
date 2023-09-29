@@ -106,7 +106,10 @@ void Npc::Roar()
 void Npc::SetPosition(const Vector3& _Position)
 {
 	m_Position = _Position;
-	AnimRect->SetPosition(_Position);
+	Vector3 pos = _Position;
+	pos.x -= 24;
+	pos.y -= 24;
+	AnimRect->SetPosition(pos);
 }
 
 void Npc::SetBattlePosition(const Vector3& _Position)

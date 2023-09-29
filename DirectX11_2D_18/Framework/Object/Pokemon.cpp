@@ -4,6 +4,7 @@
 #include "Geometries/AnimationRect.h"
 #include "CSkill.h"
 #include "UI/ProgressBar.h"
+#include "UI/CFont.h"
 Vector3 Pokemon::GetAnimationSize()
 {
 	return AnimRect->GetSize();
@@ -98,7 +99,28 @@ Pokemon::Pokemon(wstring Name, UINT maxhp, int hp, int att, int def, UINT level,
 	m_Pokeball = new PokeBall();
 	SAFE_DELETE(srcTex);
 	SAFE_DELETE(IconTex);
-	
+
+	NameFont = new CFont();
+	NameFont->Init(Name);
+	NameFont->Setsize();
+	NameFont->SetRender(false);
+
+	IconNameFont = new CFont();
+	IconNameFont->Init(Name);
+	IconNameFont->Setsize();
+	IconNameFont->SetRender(false);
+	LevelFont = new CFont;
+	wstring str = to_wstring(level);
+	LevelFont->Init(str);	LevelFont->Setsize();
+	LevelFont->SetRender(false);
+	HpFont = new CFont;
+	 str = to_wstring(hp);
+	 HpFont->Init(str);	HpFont->Setsize();
+	 HpFont->SetRender(false);
+	 MaxHpFont = new CFont;
+	 str = to_wstring(maxhp);
+	 MaxHpFont->Init(str); MaxHpFont->Setsize();
+	 MaxHpFont->SetRender(false);
 }
 void Pokemon::SetPos(const Vector3& pos)
 {
@@ -132,6 +154,12 @@ Pokemon::~Pokemon()
 	for (size_t i = 0; i < m_vecSkill.size(); ++i)
 		SAFE_DELETE(m_vecSkill[i]);
 	SAFE_DELETE(HpBar);
+
+	SAFE_DELETE(NameFont);
+	SAFE_DELETE(IconNameFont);
+	SAFE_DELETE(MaxHpFont);
+	SAFE_DELETE(HpFont);
+	SAFE_DELETE(LevelFont);
 }
 void Pokemon::Init(wstring Name, UINT maxhp, int hp, int att, int def, UINT level, wstring Path)
 {
@@ -247,6 +275,15 @@ Pokemon::Pokemon(const Pokemon& _Other)
 	this->IsNpc = _Other.IsNpc;
 	HpBar = new ProgressBar(Vector3(405, 535, 1.0f), Vector3(98, 6, 0), 0.f, Color(0, 1, 0, 1), GI::LEFT_TO_RIGHT);
 	HpBar->SetRender(false);
+	
+
+	this->NameFont = new CFont(*_Other.NameFont);
+	
+	this->HpFont = new CFont(*_Other.HpFont);
+	this->MaxHpFont = new CFont(*_Other.MaxHpFont);
+	this->IconNameFont = new CFont(*_Other.IconNameFont);
+	this->LevelFont = new  CFont(*_Other.LevelFont);
+
 }
 
 void Pokemon::PostRender()
@@ -254,8 +291,10 @@ void Pokemon::PostRender()
 	IconRect->Update();
 	UpdateHpBar();
 	HpBar->Update();
+	IconNameFont->Update();
 	HpBar->Render();
 	IconRect->Render();
+	IconNameFont->Render();
 }
 
 void Pokemon::AddSkill(const wstring& _Name, const SKILL_TYPE& _type, const UINT& _maxPP, const UINT& _curPP, const UINT& _dmg, bool _bAnim)

@@ -1,5 +1,6 @@
 #pragma once
-
+class Player;
+class Npc;
 class Tile
 {
 public:
@@ -25,15 +26,19 @@ public:
 	void SetAppear(const bool& _bAppear) { bAppear = _bAppear; }
 	void SetAnimation(const bool& _btrue) {bAnimation = _btrue;}
 	void SetTeleport(const bool& _btrue) { bTeleport = _btrue; }
-	bool& GetCol() { return bCol; }
-	bool& GetAppear() { return bAppear; }
-	bool& GetAnimation() { return bAnimation; }
-	bool& GetTelePort() { return bTeleport; }
-
+	float GetCol() { return (float)bCol; }
+	float GetAppear() { return (float)bAppear; }
+	float GetAnimation() { return (float)bAnimation; }
+	float GetTelePort() { return (float)bTeleport; }
 
 	void Update();
 
+	
+	void SetPlayer(Player* _Player) { m_Player = _Player; }
+	void SetNpc(Npc* _pNpc) { m_Npc = _pNpc; }
 private:
+	Npc* m_Npc;
+	Player* m_Player;
 	Vector3 position = Values::ZeroVec3;
 	Color color = Values::Black;
 

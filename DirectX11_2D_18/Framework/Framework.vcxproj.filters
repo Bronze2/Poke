@@ -52,6 +52,7 @@
     <ClCompile Include="Object\UI\GI.cpp" />
     <ClCompile Include="Systems\SRV.cpp" />
     <ClCompile Include="Object\Item.cpp" />
+    <ClCompile Include="Object\UI\CFont.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Systems\Graphics.h" />
@@ -110,6 +111,7 @@
     <ClInclude Include="Object\UI\ProgressBar.h" />
     <ClInclude Include="Systems\SRV.h" />
     <ClInclude Include="Object\Item.h" />
+    <ClInclude Include="Object\UI\CFont.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NewFilter1">

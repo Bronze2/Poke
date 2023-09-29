@@ -1,7 +1,7 @@
 #pragma once
 #include "CObject.h"
 class Pokemon;
-
+class CFont;
 class CSkill:public CObject
 {
 private:
@@ -13,9 +13,18 @@ private:
 	SKILL_MVTYPE m_mvType=SKILL_MVTYPE::NONE;
 	bool bMove = false;
 	bool bAnim = false;
+	CFont* NameFont;
+
+	CFont* CurPPFont;
+	CFont* MaxPPFont;
+
 	bool bPosition = false;
 	std::chrono::steady_clock::time_point start;
 public:
+
+	CFont* GetNameFont() { return NameFont; }
+	CFont* GetCurPPFont() { return CurPPFont; }
+	CFont* GetMaxPPFont() { return MaxPPFont; }
 	const bool& GetAnim() { return bAnim; }
 	wstring GetName() { return m_Skill.Name; }
 	const UINT& GetDamage() { return m_Skill.Dmg; }

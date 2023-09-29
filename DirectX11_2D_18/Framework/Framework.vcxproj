@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Object\UI\CFont.cpp" />
     <ClCompile Include="Geometries\TileMap.cpp" />
     <ClCompile Include="Geometries\Tile\Tile.cpp" />
     <ClCompile Include="Geometries\Tile\TileSet.cpp" />
@@ -206,6 +207,7 @@
     <ClCompile Include="Utilities\String.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Object\UI\CFont.h" />
     <ClInclude Include="Geometries\TileMap.h" />
     <ClInclude Include="Geometries\Tile\Tile.h" />
     <ClInclude Include="Geometries\Tile\TileSet.h" />

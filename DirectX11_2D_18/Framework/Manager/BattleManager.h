@@ -68,8 +68,9 @@ public:
 	void SetChangePokemonPhase(const UINT& _phase) { m_iChangePokemon = _phase; }
 	const UINT& ChangePokemonPhase() { return m_iChangePokemon; }
 
-	vector<Npc*> GetNpcs() { return m_vecNpcs; }
+	vector<Npc*> GetNpcs();
 
+	void NpcClear();
 
 	void PushNPC(Npc* _pOther) { m_vecNpcs.push_back(_pOther); }
 
@@ -159,10 +160,13 @@ public:
 	friend class SingletonBase<BattleManager>;
 
 private:
+	vector<Item*> DeleteItem ;
 	vector<UI*> m_vecItemSelect;
-
+	UINT bCodeCheck = false;// 아이템 Value값체크
 	vector<Item*> m_vecHealItem;
 	vector<Item*> m_vecBallItem;
+	UINT HealValue = 0;
+	UINT HealHp = 0;
 	UI* PrevButton;
 	UI* NextButton;
 	UINT m_iCuritemSelect = 0;
@@ -172,11 +176,18 @@ public:
 	vector<Item*> GetvecHealItem();
 	void EraseItem(Item* item);
 	vector<Item*> GetvecBallItem() { return m_vecBallItem; }
-		void NotRenderBattleItemBar();// 힐아이템 목록
-		void NotRenderBattleItemBar(const bool& _bTrue);// 힐아이템 목록
-		void NextButtonUpdate(vector<Item*> _item); //아이템 다음 목록 있을 경우 활성화 
-		void PrevButtonUpdate(vector<Item*> _item);// 아이템 이전 목록 있을 경우 활성화
-		void NotRenderBattleItemBarBall(); //포켓몬볼 아이템목록
-		void NotRenderBattleItemBarBall(const bool& _bTrue); 
+	void NotRenderBattleItemBar();// 힐아이템 목록
+	void NotRenderBattleItemBar(const bool& _bTrue);// 힐아이템 목록
+	void NextButtonUpdate(vector<Item*> _item); //아이템 다음 목록 있을 경우 활성화 
+	void PrevButtonUpdate(vector<Item*> _item);// 아이템 이전 목록 있을 경우 활성화
+	void NotRenderBattleItemBarBall(); //포켓몬볼 아이템목록
+	void NotRenderBattleItemBarBall(const bool& _bTrue); 
+
+
+private:
+
+
+
+
 };
 

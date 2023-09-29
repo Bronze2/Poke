@@ -1,6 +1,7 @@
 #pragma once
 #include "CObject.h"
 class PokeBall;
+class CFont;
 class CSkill;
 class Pokemon :
     public CObject
@@ -22,7 +23,21 @@ private:
 
     bool IsOpponent = false;
     PokeBall* m_Pokeball;
+
+
+    CFont* NameFont;
+    CFont* IconNameFont;
+    CFont* LevelFont;
+    CFont* HpFont;
+    CFont* MaxHpFont;
 public:
+    CFont* GetNameFont() { return NameFont; }
+    CFont* GetIconNameFont() { return IconNameFont; }
+    CFont* GetLevelFont() { return LevelFont; }
+    CFont* GetHpFont() { return HpFont; }
+    CFont* GetMaxHpFont() { return MaxHpFont; }
+
+
     PokeBall* GetPokeBall() { return m_Pokeball; }
     UINT GetMaxHp() { return maxhp; }
     int GetHp() { return hp; }
