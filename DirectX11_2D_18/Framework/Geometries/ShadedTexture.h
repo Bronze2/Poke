@@ -39,3 +39,40 @@ private:
     ShadedBuffer* sb = nullptr;
 
 };
+
+class FadeBuffer :public ShaderBuffer {
+public:
+    struct Data
+    {
+        float Selection;  //  4byte
+
+        Vector3 dummy;  // 12byte
+    };
+private:
+    Data data;
+
+public:
+    FadeBuffer() : ShaderBuffer(&data, sizeof(Data))
+    {
+        data.Selection = 0;
+
+    }
+
+    float* GetSelectionPtr() { return &data.Selection; }
+   
+ 
+};
+class FadedTexture : public TextureRect
+{
+public:
+    FadedTexture(Vector3 position, Vector3 size, float rotation, wstring path);
+    ~FadedTexture();
+
+    void Render();
+    void GUI();
+
+private:
+
+    FadeBuffer* sb = nullptr;
+
+};
