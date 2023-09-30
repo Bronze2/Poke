@@ -28,10 +28,16 @@ private:
 	bool bbehavior = false;
 	UINT m_iChangePokemon;
 	ITEM_SELECT bDetailItemSelect = ITEM_SELECT::NONE;
-	bool bMove = false;
 	vector<Item*> m_vecItem;
+	Vector3 m_PrevPosition;
+	Vector3 m_ArrivePosition;
+
+	bool bMove = false; 
+	bool bMoving = false;
 private:
 	void MapCheck(Vector3 _Position);
+
+	void Moving();
 public:
 
 

@@ -26,12 +26,15 @@ private:
 
 
     CFont* NameFont;
+
+    CFont* BattleNameFont;
     CFont* IconNameFont;
     CFont* LevelFont;
     CFont* HpFont;
     CFont* MaxHpFont;
 public:
     CFont* GetNameFont() { return NameFont; }
+    CFont* GetBattleNameFont() { return BattleNameFont; }
     CFont* GetIconNameFont() { return IconNameFont; }
     CFont* GetLevelFont() { return LevelFont; }
     CFont* GetHpFont() { return HpFont; }

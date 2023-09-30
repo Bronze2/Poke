@@ -34,6 +34,7 @@ void FieldScene::Init()
 	npc->SetPosition(Vector3(48*4, 48*4, 0.f));
 	npc->SetSize(Vector3(npc->GetAnimRect()->GetWidth()/2, npc->GetAnimRect()->GetHeight()/2, 0.f));
 	tm->GetTile(Vector3(48 * 4, 48 * 4, 0))->SetNpc(npc);
+	Tile* p= tm->GetTile(Vector3(48 * 4, 48 * 4, 0));
 	npc->AddPokemon(L"Floatzel", 100, 100, 100, 10, 30,50);
 	npc->GetPokemons(0)->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 30);
 	npc->GetPokemons(0)->GetSkills()[0]->SetSkillMVRIGHType();

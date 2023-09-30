@@ -105,6 +105,12 @@ Pokemon::Pokemon(wstring Name, UINT maxhp, int hp, int att, int def, UINT level,
 	NameFont->Setsize();
 	NameFont->SetRender(false);
 
+
+	BattleNameFont = new CFont();
+	BattleNameFont->Init(Name);
+	BattleNameFont->Setsize();
+	BattleNameFont->SetRender(false);
+
 	IconNameFont = new CFont();
 	IconNameFont->Init(Name);
 	IconNameFont->Setsize();

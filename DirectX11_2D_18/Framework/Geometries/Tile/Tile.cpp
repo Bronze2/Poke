@@ -4,3 +4,8 @@
 void Tile::Update()
 {
 }
+
+Npc* Tile::GetNpc()
+{
+	return m_Npc;
+}

@@ -36,9 +36,10 @@ public:
 	
 	void SetPlayer(Player* _Player) { m_Player = _Player; }
 	void SetNpc(Npc* _pNpc) { m_Npc = _pNpc; }
+	Npc* GetNpc();
 private:
-	Npc* m_Npc;
-	Player* m_Player;
+	Npc* m_Npc=nullptr;
+	Player* m_Player=nullptr;
 	Vector3 position = Values::ZeroVec3;
 	Color color = Values::Black;
 

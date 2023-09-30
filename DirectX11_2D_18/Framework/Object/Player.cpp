@@ -14,6 +14,96 @@
 void Player::MapCheck(Vector3 _Position)
 {
 	bMove =m_TMap->GetTile(_Position)->GetCol();
+	if (nullptr != m_TMap->GetTile(_Position)->GetNpc()) {
+		bMove = true;
+	}
+}
+void Player::Moving()
+{
+	if (bMoving) {
+		switch (m_eDir)
+		{
+		case DIR::UP:
+		{
+			if (m_ArrivePosition.y > m_Position.y) {
+				m_Position.y += 200 * DELTA;
+			}
+			else {
+				m_Position.y = m_ArrivePosition.y; 
+				bMoving = false;
+				m_TMap->GetTile(m_ArrivePosition)->SetPlayer(this);
+				m_TMap->GetTile(m_PrevPosition)->SetPlayer(nullptr);
+				m_ArrivePosition = {};
+				m_PrevPosition = {};
+				bMove = false;
+				AnimRect->GetAnimator()->SetCurrentAnimClip(L"IDLE_U"); 
+			}
+
+		}
+
+
+			break;
+		case DIR::DOWN:
+		{
+			if (m_ArrivePosition.y < m_Position.y) {
+				m_Position.y -= 200 * DELTA;
+			}
+			else {
+				m_Position.y = m_ArrivePosition.y;
+				bMoving = false;
+				m_TMap->GetTile(m_ArrivePosition)->SetPlayer(this);
+				m_TMap->GetTile(m_PrevPosition)->SetPlayer(nullptr);
+				m_ArrivePosition = {};
+				m_PrevPosition = {};
+				bMove = false;
+				AnimRect->GetAnimator()->SetCurrentAnimClip(L"IDLE_D");
+			}
+
+		}
+			break;
+		case DIR::LEFT:
+		{
+			if (m_ArrivePosition.x < m_Position.x) {
+				m_Position.x -= 200 * DELTA;
+			}
+			else {
+				m_Position.x = m_ArrivePosition.x;
+				bMoving = false;
+				m_TMap->GetTile(m_ArrivePosition)->SetPlayer(this);
+				m_TMap->GetTile(m_PrevPosition)->SetPlayer(nullptr);
+				m_ArrivePosition = {};
+				m_PrevPosition = {};
+				bMove = false;
+				AnimRect->GetAnimator()->SetCurrentAnimClip(L"IDLE_L");
+			}
+
+		}
+			break;
+		case DIR::RIGHT:
+		{
+			if (m_ArrivePosition.x > m_Position.x) {
+				m_Position.x += 200 * DELTA;
+			}
+			else {
+				m_Position.x = m_ArrivePosition.x;
+				bMoving = false;
+				m_TMap->GetTile(m_ArrivePosition)->SetPlayer(this);
+				m_TMap->GetTile(m_PrevPosition)->SetPlayer(nullptr);
+				m_ArrivePosition = {};
+				m_PrevPosition = {};
+				bMove = false;
+				AnimRect->GetAnimator()->SetCurrentAnimClip(L"IDLE_R");
+			}
+
+		}
+			break;
+		case DIR::NONE:
+			break;
+		default:
+			break;
+		}
+		SetPosition(m_Position);
+	}
 }
 void Player::AddItem( Item* _Item)
 {
@@ -559,33 +649,67 @@ void Player::Move()
 		if (PRESS('W'))
 		{
 			MapCheck(Vector3(m_Position.x, m_Position.y + 48, 0));
-			if (!bMove)
-			m_Position.y += 200 * DELTA;
+			if (!bMove) {
+				if (!bMoving) {
+					m_ArrivePosition = Vector3(m_Position.x, m_Position.y + 48, 0);
+					bMoving = true;
+					m_PrevPosition = m_Position;
+				}
+				
+				
+			}
 			AnimRect->GetAnimator()->SetCurrentAnimClip(L"WALK_U");
+			m_eDir = DIR::UP;
 		}
 		if (PRESS('D'))
 		{
-			MapCheck(Vector3(m_Position.x + 48, m_Position.y , 0));
-			if (!bMove)
-			m_Position.x += 200 * DELTA;
+			MapCheck(Vector3(m_Position.x + 48, m_Position.y, 0));
+			if (!bMove) {
+				if (!bMoving) {
+					m_ArrivePosition = Vector3(m_Position.x+48, m_Position.y , 0);
+					bMoving = true;
+					m_PrevPosition = m_Position;
+				}
+
+
+			}
 			AnimRect->GetAnimator()->SetCurrentAnimClip(L"WALK_R");
+			m_eDir = DIR::RIGHT;
 		}
 		if (PRESS('A'))
 		{
-			MapCheck(Vector3(m_Position.x-48, m_Position.y , 0));
-			if (!bMove)
-			m_Position.x -= 200 * DELTA;
+			MapCheck(Vector3(m_Position.x - 48, m_Position.y , 0));
+			if (!bMove) {
+				if (!bMoving) {
+					m_ArrivePosition = Vector3(m_Position.x-48, m_Position.y + 48, 0);
+					bMoving = true;
+					m_PrevPosition = m_Position;
+				}
+
+
+			}
 			AnimRect->GetAnimator()->SetCurrentAnimClip(L"WALK_L");
+			m_eDir = DIR::LEFT;
 		}
 		if (PRESS('S'))
 		{
 			MapCheck(Vector3(m_Position.x, m_Position.y - 48, 0));
-			if(!bMove)
-			m_Position.y -= 200 * DELTA;
+			if (!bMove) {
+				if (!bMoving) {
+					m_ArrivePosition = Vector3(m_Position.x, m_Position.y - 48, 0);
+					bMoving = true;
+					m_PrevPosition = m_Position;
+				}
+
+
+			}
 			AnimRect->GetAnimator()->SetCurrentAnimClip(L"WALK_D");
+			m_eDir = DIR::DOWN;
 		}
-		SetPosition(m_Position);
 		bMove = false;
+		Moving();
+		//SetPosition(m_Position);
+	
 		
 	}
 }
@@ -614,30 +738,31 @@ void Player::Init()
 	animator->AddAnimClip(clip);
 
 	clip = new AnimationClip(L"WALK_D", srcTex, 4, Values::ZeroVec2,
-		Vector2(srcTex->GetWidth() / 3.0F, srcTex->GetHeight() * 0.2f), 1.0f / 15.0f);
+		Vector2(srcTex->GetWidth() / 3.0F, srcTex->GetHeight() * 0.2f), 0.125f); clip->SetRepeat(false);
 	animator->AddAnimClip(clip);
 	clip = new AnimationClip(L"WALK_U", srcTex, 4, Vector2(0.f, srcTex->GetHeight() * 0.2f),
-		Vector2(srcTex->GetWidth() / 3.0F, srcTex->GetHeight() * 0.4f), 1.0f / 15.0f);
+		Vector2(srcTex->GetWidth() / 3.0F, srcTex->GetHeight() * 0.4f), 0.125f); clip->SetRepeat(false);
 	animator->AddAnimClip(clip);
 	clip = new AnimationClip(L"WALK_L", srcTex, 4, Vector2(0.f, srcTex->GetHeight() * 0.4f),
-		Vector2(srcTex->GetWidth() / 3.0F, srcTex->GetHeight() * 0.6f), 1.0f / 15.0f);
+		Vector2(srcTex->GetWidth() / 3.0F, srcTex->GetHeight() * 0.6f), 0.125f); clip->SetRepeat(false);
 	animator->AddAnimClip(clip);
 	clip = new AnimationClip(L"WALK_R", srcTex, 4, Vector2(0.f, srcTex->GetHeight() * 0.6f),
-		Vector2(srcTex->GetWidth() / 3.0F, srcTex->GetHeight() * 0.8f), 1.0f / 15.0f);
+		Vector2(srcTex->GetWidth() / 3.0F, srcTex->GetHeight() * 0.8f), 0.125f); clip->SetRepeat(false);
 	animator->AddAnimClip(clip);
 
 
 	clip = new AnimationClip(L"RUN_D", srcTex, 4, Vector2(srcTex->GetWidth() / 3.0F, 0),
 		Vector2(srcTex->GetWidth() /1.5f, srcTex->GetHeight() * 0.2f), 1.0f / 15.0f);
+	clip->SetRepeat(false);
 	animator->AddAnimClip(clip);
 	clip = new AnimationClip(L"RUN_U", srcTex, 4, Vector2(0.f, srcTex->GetHeight() * 0.2f),
-		Vector2(srcTex->GetWidth() / 1.5f, srcTex->GetHeight() * 0.4f), 1.0f / 15.0f);
+		Vector2(srcTex->GetWidth() / 1.5f, srcTex->GetHeight() * 0.4f), 1.0f / 15.0f); clip->SetRepeat(false);
 	animator->AddAnimClip(clip);
 	clip = new AnimationClip(L"RUN_L", srcTex, 4, Vector2(0.f, srcTex->GetHeight() * 0.4f),
-		Vector2(srcTex->GetWidth() / 1.5f, srcTex->GetHeight() * 0.6f), 1.0f / 15.0f);
+		Vector2(srcTex->GetWidth() / 1.5f, srcTex->GetHeight() * 0.6f), 1.0f / 15.0f); clip->SetRepeat(false);
 	animator->AddAnimClip(clip);
 	clip = new AnimationClip(L"RUN_R", srcTex, 4, Vector2(0.f, srcTex->GetHeight() * 0.6f),
-		Vector2(srcTex->GetWidth() / 1.5f, srcTex->GetHeight() * 0.8f), 1.0f / 15.0f);
+		Vector2(srcTex->GetWidth() / 1.5f, srcTex->GetHeight() * 0.8f), 1.0f / 15.0f); clip->SetRepeat(false);
 	animator->AddAnimClip(clip);
 	AnimRect->SetAnimation(animator);
 	animator->SetCurrentAnimClip(L"IDLE_D");
