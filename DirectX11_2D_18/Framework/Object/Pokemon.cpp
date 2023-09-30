@@ -163,6 +163,7 @@ Pokemon::~Pokemon()
 
 	SAFE_DELETE(NameFont);
 	SAFE_DELETE(IconNameFont);
+	SAFE_DELETE(BattleNameFont);
 	SAFE_DELETE(MaxHpFont);
 	SAFE_DELETE(HpFont);
 	SAFE_DELETE(LevelFont);
@@ -284,7 +285,8 @@ Pokemon::Pokemon(const Pokemon& _Other)
 	
 
 	this->NameFont = new CFont(*_Other.NameFont);
-	
+	this->BattleNameFont = new CFont(*_Other.BattleNameFont);
+	this->BattleNameFont->SetPosition(Vector3(50, 462, 0), true);
 	this->HpFont = new CFont(*_Other.HpFont);
 	this->MaxHpFont = new CFont(*_Other.MaxHpFont);
 	this->IconNameFont = new CFont(*_Other.IconNameFont);

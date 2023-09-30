@@ -14,7 +14,7 @@ private:
 	bool bMove = false;
 	bool bAnim = false;
 	CFont* NameFont;
-
+	CFont* BattleNameFont;
 	CFont* CurPPFont;
 	CFont* MaxPPFont;
 
@@ -23,6 +23,7 @@ private:
 public:
 
 	CFont* GetNameFont() { return NameFont; }
+	CFont* GetBattleNameFont() { return BattleNameFont; }
 	CFont* GetCurPPFont() { return CurPPFont; }
 	CFont* GetMaxPPFont() { return MaxPPFont; }
 	const bool& GetAnim() { return bAnim; }

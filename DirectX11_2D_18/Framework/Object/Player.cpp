@@ -37,6 +37,7 @@ void Player::Moving()
 				m_PrevPosition = {};
 				bMove = false;
 				AnimRect->GetAnimator()->SetCurrentAnimClip(L"IDLE_U"); 
+				bColCheck = false;
 			}
 
 		}
@@ -642,8 +643,31 @@ void Player::SetBattleSize(const Vector3& _Size)
 {
 	BattleRect->SetSize(_Size); this->SetSz(_Size);
 }
+void Player::RestoreIDLE()
+{
+	if (bColCheck) {
+		if (AnimRect->GetAnimator()->GetEnd())
+		{
+			if (DIR::LEFT == m_eDir)
+				AnimRect->GetAnimator()->SetCurrentAnimClip(L"IDLE_L");
+			if (DIR::RIGHT == m_eDir)
+				AnimRect->GetAnimator()->SetCurrentAnimClip(L"IDLE_R");
+			if (DIR::UP == m_eDir)
+				AnimRect->GetAnimator()->SetCurrentAnimClip(L"IDLE_U");
+			if (DIR::DOWN == m_eDir)
+				AnimRect->GetAnimator()->SetCurrentAnimClip(L"IDLE_D");
+
+			bColCheck = false;
+		}
+
+	}
+
+
+}
 void Player::Move()
 {
+	RestoreIDLE();
+
 	if (m_eBattleState == BATTLE_STATE::NONE) {
 		//m_TMap->GetTile()
 		if (PRESS('W'))
@@ -658,6 +682,7 @@ void Player::Move()
 				
 				
 			}
+			else bColCheck = true;
 			AnimRect->GetAnimator()->SetCurrentAnimClip(L"WALK_U");
 			m_eDir = DIR::UP;
 		}
@@ -673,6 +698,7 @@ void Player::Move()
 
 
 			}
+			else bColCheck = true;
 			AnimRect->GetAnimator()->SetCurrentAnimClip(L"WALK_R");
 			m_eDir = DIR::RIGHT;
 		}
@@ -681,13 +707,14 @@ void Player::Move()
 			MapCheck(Vector3(m_Position.x - 48, m_Position.y , 0));
 			if (!bMove) {
 				if (!bMoving) {
-					m_ArrivePosition = Vector3(m_Position.x-48, m_Position.y + 48, 0);
+					m_ArrivePosition = Vector3(m_Position.x - 48, m_Position.y + 48, 0);
 					bMoving = true;
 					m_PrevPosition = m_Position;
 				}
 
 
 			}
+			else bColCheck = true;
 			AnimRect->GetAnimator()->SetCurrentAnimClip(L"WALK_L");
 			m_eDir = DIR::LEFT;
 		}
@@ -703,6 +730,7 @@ void Player::Move()
 
 
 			}
+			else bColCheck = true;
 			AnimRect->GetAnimator()->SetCurrentAnimClip(L"WALK_D");
 			m_eDir = DIR::DOWN;
 		}

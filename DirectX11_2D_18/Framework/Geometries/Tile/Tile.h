@@ -53,5 +53,6 @@ private:
 	bool bCol = false;
 	bool bAppear = false;
 	bool bAnimation = false;
+
 	bool bTeleport = false;
 };

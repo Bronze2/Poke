@@ -67,7 +67,7 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR param, int 
 {
 	srand((UINT)time(NULL));
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	_CrtSetBreakAlloc(513608);
+	//_CrtSetBreakAlloc(10537);
 	DXDesc desc;
 	desc.AppName = L"D2DGame";
 	desc.instance = instance;

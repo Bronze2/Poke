@@ -23,6 +23,9 @@ void Camera::Move()
 			position.x -= WinMaxWidth / 2;
 			position.y -= WinMaxHeight / 2;
 		}
+		else {
+			position=Vector3(0,0,0);
+		}
 	}
 	UpdateView();
 }

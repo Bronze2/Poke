@@ -33,9 +33,11 @@ private:
 	Vector3 m_ArrivePosition;
 
 	bool bMove = false; 
+	bool bColCheck = false;
 	bool bMoving = false;
 private:
 	void MapCheck(Vector3 _Position);
+	void RestoreIDLE();
 
 	void Moving();
 public:
@@ -75,6 +77,7 @@ public:
 	void SetBattlePosition(const Vector3& _Position);
 	void SetBattleSize(const Vector3& _Size);
 	
+
 	void Move();
 
 //	const UINT& GetSelect() { return m_iSelect; }
@@ -88,6 +91,8 @@ public:
 	virtual void Init() ;
 	virtual void Update();
 	virtual void Render();
+
+
 	virtual void PostRender();
 	virtual void GUI() {};
 	Player();

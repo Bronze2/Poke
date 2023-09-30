@@ -70,6 +70,8 @@ void FieldScene::BattleInit()
 	tm->Load(TilePath + "Map");
 	Npc* npc = BattleManager::Get()->GetNpc();
 	Player* player = BattleManager::Get()->GetPlayer();
+
+	Camera::Get()->SetPlayer(player);
 	tm->SetPlayer(player);
 	player->SetTMap(tm);
 	Vector3 vPos = BattleManager::Get()->GetNpc()->GetPos();

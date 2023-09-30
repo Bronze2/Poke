@@ -104,6 +104,8 @@ CSkill::CSkill(const CSkill& _Other)
 	this->AnimationInit();
 
 	this->NameFont = new CFont(*_Other.NameFont);
+	this->BattleNameFont = new CFont(*_Other.BattleNameFont);
+	this->BattleNameFont->SetPosition(Vector3(50, 435, 0), true);
 	this->CurPPFont = new CFont(*_Other.CurPPFont);
 	this->MaxPPFont = new CFont(*_Other.MaxPPFont);
 }
@@ -147,7 +149,9 @@ CSkill::CSkill(const wstring& _Name, const SKILL_TYPE& _type, const UINT& _maxPP
 	SAFE_DELETE(srcTex);
 	NameFont = new CFont;
 	NameFont->Init(m_Skill.Name);
-	
+
+	BattleNameFont = new CFont; BattleNameFont->Init(m_Skill.Name);
+	BattleNameFont->Setsize(); BattleNameFont->SetRender(false);
 	
 	CurPPFont = new CFont;
 	wstring wstr = to_wstring(m_Skill.curPP);
@@ -165,7 +169,7 @@ CSkill::~CSkill()
 	SAFE_DELETE(AnimRect);
 
 	SAFE_DELETE(NameFont);
-
+	SAFE_DELETE(BattleNameFont);
 	SAFE_DELETE(CurPPFont);
 	SAFE_DELETE(MaxPPFont);
 

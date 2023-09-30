@@ -4,6 +4,7 @@ class Player;
 class Npc;
 class Item;
 class UI;
+class CFont;
 class TextureObject;
 class ProgressBar;
 class BattleManager : public SingletonBase<BattleManager>
@@ -79,6 +80,8 @@ private:
 	Vector3 DeadSize;
 	UINT DeadCount = 0;
 
+	CFont* ChangeUse;
+	CFont* ItemUse;
 	bool bFightChange = false;
 private:
 
