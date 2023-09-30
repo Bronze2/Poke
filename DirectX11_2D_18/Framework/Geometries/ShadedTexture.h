@@ -68,6 +68,7 @@ public:
     FadedTexture(Vector3 position, Vector3 size, float rotation, wstring path);
     ~FadedTexture();
 
+    void Update();
     void Render();
     void GUI();
 

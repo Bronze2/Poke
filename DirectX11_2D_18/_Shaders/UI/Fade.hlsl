@@ -44,12 +44,11 @@ SamplerState _samp : register(s0);
 float4 PS(PixelInput input) : SV_Target
 {
     float4 color = _sourceTex.Sample(_samp, (float2) input.uv);
-    float4 resultColor = 0;
   
     color.a -= _selection;
-    resultColor = color;
+
     
-    return resultColor;
+    return color;
 }
 
 /*

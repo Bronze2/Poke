@@ -53,6 +53,7 @@
     <ClCompile Include="Systems\SRV.cpp" />
     <ClCompile Include="Object\Item.cpp" />
     <ClCompile Include="Object\UI\CFont.cpp" />
+    <ClCompile Include="Systems\Sound.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Systems\Graphics.h" />
@@ -112,6 +113,7 @@
     <ClInclude Include="Systems\SRV.h" />
     <ClInclude Include="Object\Item.h" />
     <ClInclude Include="Object\UI\CFont.h" />
+    <ClInclude Include="Systems\Sound.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NewFilter1">

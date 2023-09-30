@@ -46,6 +46,17 @@ using namespace std;
 
 //////////////////////////////////////////
 
+#include "../_Libraries/FMOD/inc/fmod.hpp"
+#ifdef _WIN64
+#pragma comment(lib,"../_Libraries/FMOD/lib/x64/fmod_vc.lib")
+#else
+#pragma comment(lib,"../_Libraries/FMOD/lib/x86/fmod_vc.lib")
+#endif
+
+
+
+
+///
 #include "Interfaces/IObject.h"
 
 #include "Utilities/SingletonBase.h"

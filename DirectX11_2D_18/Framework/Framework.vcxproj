@@ -166,6 +166,7 @@
     <ClCompile Include="Object\PokeBall.cpp" />
     <ClCompile Include="Object\UI\ProgressBar.cpp" />
     <ClCompile Include="Object\UI\GI.cpp" />
+    <ClCompile Include="Systems\Sound.cpp" />
     <ClCompile Include="Systems\Camera.cpp" />
     <ClCompile Include="func.cpp" />
     <ClCompile Include="Object\Npc.cpp" />
@@ -220,6 +221,7 @@
     <ClInclude Include="Object\PokeBall.h" />
     <ClInclude Include="Object\UI\ProgressBar.h" />
     <ClInclude Include="Object\UI\GI.h" />
+    <ClInclude Include="Systems\Sound.h" />
     <ClInclude Include="Systems\Camera.h" />
     <ClInclude Include="func.h" />
     <ClInclude Include="Object\Npc.h" />

@@ -32,9 +32,14 @@ FadedTexture::FadedTexture(Vector3 position, Vector3 size, float rotation, wstri
     sb = new FadeBuffer();
 
     ps->Clear();
-    ps->Create(ShaderPath + L"Fade.hlsl", "PS");
+    ps->Create(ShaderPath + L"UI/Fade.hlsl", "PS");
 }
-
+void FadedTexture::Update() {
+    
+    float* a= sb->GetSelectionPtr();
+    (*a) += 0.001;
+    TextureRect::Update();
+}
 FadedTexture::~FadedTexture()
 {
     SAFE_DELETE(sb);
