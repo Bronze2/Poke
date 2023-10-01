@@ -1013,7 +1013,11 @@ void BattleManager::DoBattlePhase()
 	m_Player->GetCurPokemons()->GetBattleNameFont()->Update();
 	for (size_t i = 0; i < m_Player->GetCurPokemons()->GetSkills().size(); ++i)
 		m_Player->GetCurPokemons()->GetSkills()[i]->GetBattleNameFont()->Update();
-	m_Npc->GetCurPokemons()->GetLevelFont()->Update();
+	m_Npc->GetCurPokemons()->GetBattleNameFont()->Update();
+	for (size_t i = 0; i < m_Npc->GetCurPokemons()->GetSkills().size(); ++i)
+		m_Npc->GetCurPokemons()->GetSkills()[i]->GetBattleNameFont()->Update();
+	ItemUse->Update();
+	ChangeUse->Update();
 	switch (m_Player->GetSelectPhase())
 	{
 	case SELECT_PHASE::SKILL:
@@ -1108,13 +1112,14 @@ void BattleManager::DoBattlePhase()
 						{
 							if (5 != m_iChangePokemon)
 								m_Player->Roar_BattleCir();
-
+							ChangeUse->SetRender(true);
 							if (5 != m_iChangePokemon)
 								return;
 
 						}
 						else if (BATTLE_TYPE::ITEM == playerbehavior.eBattle) {
 							Item* item = (Item*)playerbehavior.wParam;
+							ItemUse->SetRender(true);
 							if (nullptr == m_Npc) {
 								//몬스터볼 처리
 
@@ -1219,7 +1224,9 @@ void BattleManager::DoBattlePhase()
 								case BATTLE_CIR::P_PHASE:
 								{
 									m_eCir = BATTLE_CIR::N_DEAD;
-
+									CSkill* pSkill = ((CSkill*)playerbehavior.wParam);
+									pSkill->GetBattleNameFont()->SetRender(false);
+									m_Player->GetCurPokemons()->GetBattleNameFont()->SetRender(false);
 									ChangeOrNotButton->SetRender(false);
 									m_Npc->SetDefeatEffect(1);
 								//	m_Player->SetSelectPhase(SELECT_PHASE::CHANGEORNOT);
@@ -1229,6 +1236,7 @@ void BattleManager::DoBattlePhase()
 									DeadCount = 0;		bCodeCheck = false;
 									HealValue = 0;
 									HealHp = 0;
+
 								}
 								break;
 								case BATTLE_CIR::N_PHASE: {
@@ -1278,6 +1286,8 @@ void BattleManager::DoBattlePhase()
 					m_iChangePokemon = 0;
 					bUpdateHpBar = 0;		bCodeCheck = false;
 					HealValue = 0;
+					ItemUse->SetRender(false);
+					ChangeUse->SetRender(false);
 					HealHp = 0;
 				
 					}
@@ -1691,6 +1701,11 @@ void BattleManager::Render()
 	m_Player->GetCurPokemons()->GetBattleNameFont()->Render();
 	for (size_t i = 0; i < m_Player->GetCurPokemons()->GetSkills().size(); ++i)
 		m_Player->GetCurPokemons()->GetSkills()[i]->GetBattleNameFont()->Render();
+	m_Npc->GetCurPokemons()->GetBattleNameFont()->Render();
+	for (size_t i = 0; i < m_Npc->GetCurPokemons()->GetSkills().size(); ++i)
+		m_Npc->GetCurPokemons()->GetSkills()[i]->GetBattleNameFont()->Render();
+	ItemUse->Render();
+	ChangeUse->Render();
 	m_Player->GetCurPokemons()->GetHpFont()->Render();
 	m_Player->GetCurPokemons()->GetMaxHpFont()->Render();
 	m_Player->GetCurPokemons()->GetLevelFont()->Render();
@@ -1961,9 +1976,17 @@ void BattleManager::Init()
 			m_vecItemSelect.push_back(ItemSelect);
 		}
 	}
-}
+	ItemUse = new CFont;
+	ItemUse->Init(L"Player Use Item",15);
+	ItemUse->Setsize(); ItemUse->SetRender(false);
+	ItemUse->SetPosition(Vector3(50, 450, 0), true);
 
-void BattleManager::ItemSelectInit()
+	ChangeUse = new CFont;
+	ChangeUse->Init(L"ChangePokemon",13);
+	ChangeUse->Setsize(); ChangeUse->SetRender(false);
+	ChangeUse->SetPosition(Vector3(50, 450, 0), true);
+
+}void BattleManager::ItemSelectInit()
 {
 	for (size_t i = 0; i < m_Player->GetvecItem().size(); ++i) {
 		if (ITEM_TYPE::HEAL != m_Player->GetvecItem()[i]->GetItemType())continue;

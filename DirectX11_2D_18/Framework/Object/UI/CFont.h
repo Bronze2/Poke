@@ -10,6 +10,7 @@ private:
 	Vector3 Size;
 	float Width = 0;
 	float Height = 0;
+	UINT m_iCount = 0;
 public:
 	void Setsize(const Vector3& _size);
 	void Setsize();
@@ -25,6 +26,7 @@ public:
 
 	void SetName(const wstring& _Name);
 	void Init(wstring _Name);
+	void Init(wstring _Name, UINT _Count);
 	void Update();
 	void Render();
 };
