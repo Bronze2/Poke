@@ -1215,6 +1215,7 @@ void BattleManager::DoBattlePhase()
 								bUpdateHpBar = 0;
 								bHitted = false;
 								m_iChangePokemon = 0;
+								bEffectSound = false;
 								DeadCount = 0;
 								bCodeCheck = false;
 								HealValue = 0;
@@ -1310,7 +1311,7 @@ void BattleManager::DoBattlePhase()
 					ItemUse->SetRender(false);
 					ChangeUse->SetRender(false);
 					HealHp = 0;
-				
+					bHitSound = false;
 					}
 						break;
 					case BATTLE_CIR::N_PHASE: {
@@ -1326,6 +1327,7 @@ void BattleManager::DoBattlePhase()
 						m_eCir = BATTLE_CIR::P_PHASE;
 						bHitted = false;
 						bUpdateHpBar = 0;
+						bHitSound = false;
 					}
 						break;
 				
@@ -1355,12 +1357,14 @@ void BattleManager::DoBattlePhase()
 					CSkill* pSkill = (CSkill*)ptr;
 					if (!(pSkill->GetCasting()))
 					{
-						if (!bHitSound) {
-							Sounds::Get()->Play(String::ToString(pSkill->GetName()), 0.3f);
-							bHitSound = true;
+						
+						if (!bHitted) {
+							if (!bHitSound) {
+								Sounds::Get()->Play(String::ToString(pSkill->GetName()), 0.3f);
+								bHitSound = true;
+							}
+							HitEffect();
 						}
-						if (!bHitted)
-						HitEffect();
 					}
 					UpdateHpBar();
 					if (!bHitted || 3 != bUpdateHpBar)
@@ -1563,6 +1567,7 @@ void BattleManager::HitEffect()
 		{
 			start = chrono::steady_clock::now();
 			bHitEffectCheck = true;
+			Sounds::Get()->Play("Hit", 0.3f);
 		}
 		else {
 			if (TimeCheck(0.125f, start)) {

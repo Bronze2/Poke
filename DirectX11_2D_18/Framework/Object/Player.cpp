@@ -210,18 +210,19 @@ void Player::BattlePhase()
 		{
 		int	m_prevselect = m_iSelect;
 			m_iSelect += 1; 
+			Sounds::Get()->Play("Press", 0.5f);
 				switch (m_eSelect)
 				{
 
 				case SELECT_PHASE::COMPREHENSIVE:
 					if(m_iSelect>4)
 					m_iSelect = 1;
-					Sounds::Get()->Play("Press", 0.3f);
+					
 					break;
 				case SELECT_PHASE::SKILL:
 					if (m_iSelect > 5)
 					m_iSelect = 1;
-					Sounds::Get()->Play("Press", 0.3f);
+			
 					break;
 				case SELECT_PHASE::ITEM:
 				
@@ -243,7 +244,7 @@ void Player::BattlePhase()
 							BattleManager::Get()->ItemAnimationButton(m_prevselect, m_iSelect);
 
 						}
-						Sounds::Get()->Play("Press", 0.3f);
+						
 					break;
 				case SELECT_PHASE::POKEMON:
 					if (m_iSelect > 7)
@@ -252,7 +253,7 @@ void Player::BattlePhase()
 					BattleManager::Get()->BattleAnimationButton(m_prevselect, m_iSelect);
 					else
 						BattleManager::Get()->BattleAnimationChangeButton(m_prevselect, m_iSelect);
-					Sounds::Get()->Play("Press", 0.3f);
+				
 					break;
 				case SELECT_PHASE::RUN:
 					break;
@@ -350,10 +351,12 @@ void Player::BattlePhase()
 				m_iSelect = 0;
 			}
 		}
+		Sounds::Get()->Play("Press", 0.3f);
 	}
 		break;
 	case SELECT_PHASE::SKILL:
 	{
+		Sounds::Get()->Play("Press", 0.3f);
 		if (m_iSelect == 5) {
 			if (KEYUP(VK_SPACE)) {
 			BattleManager::Get()->PhaseOut();
@@ -384,6 +387,7 @@ void Player::BattlePhase()
 		break;
 	case SELECT_PHASE::ITEM:
 	{
+		Sounds::Get()->Play("Press", 0.3f);
 		if (KEYUP(VK_SPACE)) {
 			if (!m_iSelect)
 				return;
@@ -540,6 +544,7 @@ void Player::BattlePhase()
 							}
 						}
 						else {
+							Sounds::Get()->Play("Press", 0.3f);
 							if (!bChangePokemon) {
 								m_iChangePokemon = m_iSelect;
 								BattleManager::Get()->RenderChangeButton(true);

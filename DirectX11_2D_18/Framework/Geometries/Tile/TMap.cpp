@@ -75,7 +75,7 @@ void TMap::Update()
 	{
 		if (tile != nullptr)
 		{
-			tile->SetColor(Values::Red);
+			tile->SetColor(Color(0,0,0,0));
 			Vector2 startUV = TileSet::Get()->selectedStartUV;
 			Vector2 endUV = startUV + TileSet::Get()->texelTileSize;
 			tile->SetStartUV(TileSet::Get()->selectedStartUV);
