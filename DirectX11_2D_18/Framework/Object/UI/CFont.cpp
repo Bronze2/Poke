@@ -13,7 +13,7 @@ void CFont::Setsize()
 {
 	Width = Font[0]->GetWidth();
 	Height = Font[0]->GetHeight();
-	for (int i = 0; i < 10; ++i) {
+	for (int i = 0; i < m_iCount; ++i) {
 		Font[i]->SetSize(Vector3(Font[i]->GetWidth() , Font[i]->GetHeight() , 0.f));
 	}
 }
@@ -977,7 +977,7 @@ void CFont::Init(wstring _Name, UINT _Count)
 void CFont::Update()
 {
 
-	for (size_t i = 0; i < 10; ++i) {
+	for (size_t i = 0; i < m_iCount; ++i) {
 		Font[i]->Update();
 	}
 }
@@ -985,7 +985,7 @@ void CFont::Update()
 void CFont::Render()
 {
 	if (bRender) {
-		for (size_t i = 0; i < 10; ++i) {
+		for (size_t i = 0; i < m_iCount; ++i) {
 
 			Font[i]->Render();
 		}

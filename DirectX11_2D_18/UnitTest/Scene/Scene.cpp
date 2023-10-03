@@ -91,7 +91,7 @@ void Scene::DeleteGroup(OBJ_TYPE _Type)
 Scene::Scene()
 {
 }
-
+#include "FieldScene.h"
 Scene::~Scene()
 {
 	for (UINT i = 0; i < (UINT)OBJ_TYPE::END; ++i) {
@@ -101,5 +101,6 @@ Scene::~Scene()
 				delete m_vecObj[i][j];
 			}
 		}
+		
 	}
 }

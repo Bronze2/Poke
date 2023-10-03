@@ -69,11 +69,17 @@ public:
     ~FadedTexture();
 
     void Update();
+    void ReverseUpdate();
     void Render();
     void GUI();
+    FadeBuffer* GetBuffer() { return sb; }
 
 private:
 
     FadeBuffer* sb = nullptr;
 
+private:
+
+    ID3D11SamplerState* point[2];
+    ID3D11BlendState* bPoint[2];
 };

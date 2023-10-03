@@ -54,6 +54,8 @@
     <ClCompile Include="Object\Item.cpp" />
     <ClCompile Include="Object\UI\CFont.cpp" />
     <ClCompile Include="Systems\Sound.cpp" />
+    <ClCompile Include="Object\FadeObject.cpp" />
+    <ClCompile Include="Manager\FadeManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Systems\Graphics.h" />
@@ -114,6 +116,8 @@
     <ClInclude Include="Object\Item.h" />
     <ClInclude Include="Object\UI\CFont.h" />
     <ClInclude Include="Systems\Sound.h" />
+    <ClInclude Include="Object\FadeObject.h" />
+    <ClInclude Include="Manager\FadeManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="NewFilter1">

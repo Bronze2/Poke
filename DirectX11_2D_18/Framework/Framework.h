@@ -101,6 +101,8 @@ typedef UINT		uint;
 const wstring ShaderPath = L"../_Shaders/";
 const wstring TexturePath = L"../_Resources/Textures/";
 const string  TilePath = "../_Resources/_TileDatas/";
+const wstring SoundPath = L"../_Resources/_Sounds/";
+
 extern HWND handle;
 
 #include "Utilities/DirectHelper.h"
@@ -137,6 +139,7 @@ enum class OBJ_TYPE {
     PLAYER,
     NPC,
  
+    UI3=31,
     END = 32
 
 };
@@ -167,6 +170,7 @@ enum class DIR {
 #include "Utilities/String.h"
 #include "Utilities/Path.h"
 #include "Systems/Camera.h"
+#include "Systems/Sound.h"
 
 
 #include "struct.h"

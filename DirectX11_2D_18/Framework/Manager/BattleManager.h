@@ -60,7 +60,8 @@ private:
 	bool bHitEffectCheck = false;
 	UINT bUpdateHpBar = 0;
 	int m_iTempValue = 0;
-
+	bool bHitSound = false;
+	bool bEffectSound = false;
 	bool bDeadCheck = false;
 private:
 	UINT m_iChangePokemon = 0;

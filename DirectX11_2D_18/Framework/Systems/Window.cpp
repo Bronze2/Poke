@@ -4,7 +4,7 @@
 #include "Manager/EventMgr.h"
 #include "Manager/SceneMgr.h"
 #include "Manager/BattleManager.h"
-
+#include "Manager/FadeManager.h"
 //상대경로 : ./ 현재폴더, ../ 상위폴더
 //절대경로 : 
 
@@ -90,10 +90,14 @@ WPARAM Window::Run(IObject* mainObj)
 	Time::Create();
 	Gui::Create();
 	States::Create();
+	Sounds::Create();
 	SceneMgr::Create();
+	FadeManager::Create();
 	EventMgr::Create();
+	Sounds::Get()->Init();
 	SceneMgr::Get()->Init();
 	Camera::Create();
+	FadeManager::Get()->Init();
 //	this->mainObj->Init();
 
 	Time::Get()->Start();
@@ -120,11 +124,13 @@ WPARAM Window::Run(IObject* mainObj)
 	EventMgr::Delete();
 	Gui::Delete();
 	Time::Delete();
+	Sounds::Delete();
 	Mouse::Delete();
 	Keyboard::Delete();
 	Graphics::Delete();
 	Camera::Delete();
-
+	FadeManager::Delete();
+	
 
 	return msg.wParam;
 }
@@ -156,6 +162,7 @@ void Window::MainRender()
 	}
 
 	Time::Get()->Update();
+	Sounds::Get()->Update();
 	Gui::Get()->Update();
 
 	//	mainObj->Update();
@@ -165,8 +172,9 @@ void Window::MainRender()
 	Graphics::Get()->Begin();
 	{
 		//mainObj->Render();
+		FadeManager::Get()->Update();
 		SceneMgr::Get()->Render();
-
+		FadeManager::Get()->Render();
 
 		Gui::Get()->Render();
 		EventMgr::Get()->Update();

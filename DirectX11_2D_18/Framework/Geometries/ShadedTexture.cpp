@@ -31,13 +31,48 @@ FadedTexture::FadedTexture(Vector3 position, Vector3 size, float rotation, wstri
 {
     sb = new FadeBuffer();
 
+    {
+        D3D11_SAMPLER_DESC desc;
+        States::GetSamplerDesc(&desc);
+        States::CreateSampler(&desc, &point[0]);
+
+        desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+        States::CreateSampler(&desc, &point[1]);
+    }
+
+    // Blend
+    {
+        D3D11_BLEND_DESC desc;
+        States::GetBlendDesc(&desc);
+        States::CreateBlend(&desc, &bPoint[0]);
+
+        desc.RenderTarget[0].BlendEnable = true;
+        States::CreateBlend(&desc, &bPoint[1]);
+    }
+
     ps->Clear();
     ps->Create(ShaderPath + L"UI/Fade.hlsl", "PS");
 }
 void FadedTexture::Update() {
     
     float* a= sb->GetSelectionPtr();
-    (*a) += 0.001;
+
+    if ((*a) < 1.f) {
+
+         (*a) +=0.5* DELTA;
+    }
+
+    TextureRect::Update();
+}
+void FadedTexture::ReverseUpdate()
+{
+    float* a = sb->GetSelectionPtr();
+    if ((*a) > 0.f) {
+
+        (*a) -= 0.5 * DELTA;
+    }
+
+
     TextureRect::Update();
 }
 FadedTexture::~FadedTexture()
@@ -48,6 +83,9 @@ FadedTexture::~FadedTexture()
 void FadedTexture::Render()
 {
     sb->SetPSBuffer(0);
+    DC->PSSetSamplers(0, 1, &point[1]);
+    DC->OMSetBlendState(bPoint[1], nullptr, (UINT)0xFFFFFFFF);
+
     TextureRect::Render();
 }
 

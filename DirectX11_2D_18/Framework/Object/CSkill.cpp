@@ -9,7 +9,7 @@ void CSkill::AnimationInit()
 {
 	if (bAnim) {
 		Texture2D* srcTex = nullptr;
-		if (m_Skill.Name == L"BURN") {
+		if (m_Skill.Name == L"Burn") {
 			AnimRect= new AnimationRect(Vector3(0.f, 0.f, 0.f), Vector3(0.f, 0.f, 0.f));
 			 srcTex = new Texture2D(TexturePath + L"Pokemon/Effect/Burn.png");
 			float height = srcTex->GetHeight(); float Width = srcTex->GetWidth() /5;
@@ -148,18 +148,18 @@ CSkill::CSkill(const wstring& _Name, const SKILL_TYPE& _type, const UINT& _maxPP
 	m_Skill.Dmg = _dmg;
 	SAFE_DELETE(srcTex);
 	NameFont = new CFont;
-	NameFont->Init(m_Skill.Name);
+	NameFont->Init(m_Skill.Name, m_Skill.Name.size());
 
-	BattleNameFont = new CFont; BattleNameFont->Init(m_Skill.Name);
+	BattleNameFont = new CFont; BattleNameFont->Init(m_Skill.Name, m_Skill.Name.size());
 	BattleNameFont->Setsize(); BattleNameFont->SetRender(false);
 	
 	CurPPFont = new CFont;
 	wstring wstr = to_wstring(m_Skill.curPP);
-	CurPPFont->Init(wstr);
+	CurPPFont->Init(wstr,wstr.size());
 
 	MaxPPFont = new CFont;
 	wstr = to_wstring(m_Skill.maxPP);
-	MaxPPFont->Init(wstr);
+	MaxPPFont->Init(wstr,wstr.size());
 
 }
 

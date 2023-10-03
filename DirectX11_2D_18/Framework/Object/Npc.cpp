@@ -72,6 +72,7 @@ void Npc::Roar()
 			float a = m_vecPokemon[m_curPokemon]->GetAnimRect()->GetWidth();
 			if (m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->GetEnd() && !m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->GetEnd()) {
 				m_vecPokemon[m_curPokemon]->GetPokeBall()->SetRender(false);
+				Sounds::Get()->Play(String::ToString(m_vecPokemon[m_curPokemon]->GetName()), 0.3f);
 				m_vecPokemon[m_curPokemon]->SetPos(Vector3(WinMaxWidth / 2 + 130, WinMaxHeight / 2 + (215 + 60), 0.f));
 				m_vecPokemon[m_curPokemon]->SetSize(Vector3(
 					m_vecPokemon[m_curPokemon]->GetAnimRect()->GetWidth(), m_vecPokemon[m_curPokemon]->GetAnimRect()->GetHeight(), 0.f
@@ -153,6 +154,7 @@ void Npc::Move()
 		if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::N_ROAR) {
 			if (m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->GetEnd() && !m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->GetEnd()) {
 				m_vecPokemon[m_curPokemon]->GetPokeBall()->SetRender(false);
+				Sounds::Get()->Play(String::ToString(m_vecPokemon[m_curPokemon]->GetName()), 0.3f);
 				m_vecPokemon[m_curPokemon]->SetPos(Vector3(WinMaxWidth / 2 + 130, WinMaxHeight / 2 + (215 + 60), 0.f));
 				m_vecPokemon[m_curPokemon]->SetSize(Vector3(
 					m_vecPokemon[m_curPokemon]->GetAnimRect()->GetWidth(), m_vecPokemon[m_curPokemon]->GetAnimRect()->GetHeight(), 0.f

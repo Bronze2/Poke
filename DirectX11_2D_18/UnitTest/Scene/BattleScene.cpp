@@ -6,6 +6,7 @@
 #include "Geometries/AnimationRect.h"
 #include "Object/UI.h"
 #include "Object/TextureObject.h"
+#include "Manager/FadeManager.h"
 void BattleScene::Init()
 {
 	
@@ -57,6 +58,8 @@ void BattleScene::Init()
 
 	BattleManager::Get()->SetCircumStance(BATTLE_CIR::N_READY);
 	start = std::chrono::system_clock::now();
+	FadeManager::Get()->SetReverse(false);
+	FadeManager::Get()->Reset();
 }
 
 void BattleScene::Destroy()

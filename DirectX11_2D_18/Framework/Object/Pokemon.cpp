@@ -101,31 +101,31 @@ Pokemon::Pokemon(wstring Name, UINT maxhp, int hp, int att, int def, UINT level,
 	SAFE_DELETE(IconTex);
 
 	NameFont = new CFont();
-	NameFont->Init(Name);
+	NameFont->Init(Name,Name.size());
 	NameFont->Setsize();
 	NameFont->SetRender(false);
 
 
 	BattleNameFont = new CFont();
-	BattleNameFont->Init(Name);
+	BattleNameFont->Init(Name, Name.size());
 	BattleNameFont->Setsize();
 	BattleNameFont->SetRender(false);
 
 	IconNameFont = new CFont();
-	IconNameFont->Init(Name);
+	IconNameFont->Init(Name, Name.size());
 	IconNameFont->Setsize();
 	IconNameFont->SetRender(false);
 	LevelFont = new CFont;
 	wstring str = to_wstring(level);
-	LevelFont->Init(str);	LevelFont->Setsize();
+	LevelFont->Init(str,str.size());	LevelFont->Setsize();
 	LevelFont->SetRender(false);
 	HpFont = new CFont;
 	 str = to_wstring(hp);
-	 HpFont->Init(str);	HpFont->Setsize();
+	 HpFont->Init(str, str.size());	HpFont->Setsize();
 	 HpFont->SetRender(false);
 	 MaxHpFont = new CFont;
 	 str = to_wstring(maxhp);
-	 MaxHpFont->Init(str); MaxHpFont->Setsize();
+	 MaxHpFont->Init(str, str.size()); MaxHpFont->Setsize();
 	 MaxHpFont->SetRender(false);
 }
 void Pokemon::SetPos(const Vector3& pos)

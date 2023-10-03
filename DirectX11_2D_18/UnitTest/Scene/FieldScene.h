@@ -10,6 +10,7 @@ private:
 private:
 	class TMap* tm = nullptr;
 public:
+	void DeleteMap();
 	virtual void Init();
 	virtual void BattleInit();
 	virtual void Destroy();	// 소멸자 대체

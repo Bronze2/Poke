@@ -6,8 +6,9 @@ class TitleScene :
 private:
 	class CObject* m_Obj;
 //	class ShadedTexture* st;
-	class FadedTexture* ft;
+	
 public:
+	
 	virtual void Init() ;
 	virtual void Destroy();	// 소멸자 대체
 

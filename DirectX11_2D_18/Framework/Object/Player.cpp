@@ -142,8 +142,10 @@ void Player::Roar()
 		}
 	}
 	if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::P_ROAR) {
+
 		if (m_vecPokemon[m_curPokemon]->GetPokeBall()->GetAnimRect()->GetAnimator()->GetEnd() && !m_vecPokemon[m_curPokemon]->GetAnimRect()->GetAnimator()->GetEnd()) {
 			m_vecPokemon[m_curPokemon]->GetPokeBall()->SetRender(false);
+			Sounds::Get()->Play(String::ToString(m_vecPokemon[m_curPokemon]->GetName()), 0.3f);
 			m_vecPokemon[m_curPokemon]->SetPos(Vector3(WinMaxWidth / 2 - 150, WinMaxHeight / 2 + (115 + 74), 0.f));
 			m_vecPokemon[m_curPokemon]->SetSize(Vector3(
 				m_vecPokemon[m_curPokemon]->GetAnimRect()->GetWidth(), m_vecPokemon[m_curPokemon]->GetAnimRect()->GetHeight(), 0.f
@@ -214,11 +216,12 @@ void Player::BattlePhase()
 				case SELECT_PHASE::COMPREHENSIVE:
 					if(m_iSelect>4)
 					m_iSelect = 1;
+					Sounds::Get()->Play("Press", 0.3f);
 					break;
 				case SELECT_PHASE::SKILL:
 					if (m_iSelect > 5)
 					m_iSelect = 1;
-				
+					Sounds::Get()->Play("Press", 0.3f);
 					break;
 				case SELECT_PHASE::ITEM:
 				
@@ -240,7 +243,7 @@ void Player::BattlePhase()
 							BattleManager::Get()->ItemAnimationButton(m_prevselect, m_iSelect);
 
 						}
-				
+						Sounds::Get()->Play("Press", 0.3f);
 					break;
 				case SELECT_PHASE::POKEMON:
 					if (m_iSelect > 7)
@@ -249,6 +252,7 @@ void Player::BattlePhase()
 					BattleManager::Get()->BattleAnimationButton(m_prevselect, m_iSelect);
 					else
 						BattleManager::Get()->BattleAnimationChangeButton(m_prevselect, m_iSelect);
+					Sounds::Get()->Play("Press", 0.3f);
 					break;
 				case SELECT_PHASE::RUN:
 					break;
@@ -262,6 +266,7 @@ void Player::BattlePhase()
 		if (KEYUP(VK_LEFT)) {
 			int	m_prevselect = m_iSelect;
 			m_iSelect -= 1;
+			Sounds::Get()->Play("Press", 0.3f);
 			switch (m_eSelect)
 			{
 
@@ -474,9 +479,11 @@ void Player::BattlePhase()
 					BattleManager::Get()->NotRenderPokemonSelect();
 					m_iSelect = 0;
 					m_eSelect = SELECT_PHASE::COMPREHENSIVE;
+					Sounds::Get()->Play("Press", 0.3f);
 				}
 				else
 				{
+					Sounds::Get()->Play("Press", 0.3f);
 					m_iSelect = 0;
 					m_eSelect = SELECT_PHASE::CHANGEORNOT;
 					BattleManager::Get()->NotRenderPokemonSelect();
@@ -489,6 +496,7 @@ void Player::BattlePhase()
 			
 				if (m_iSelect != 0) {
 					if (KEYUP(VK_SPACE)) {
+						Sounds::Get()->Play("Press", 0.3f);
 						if (BattleManager::Get()->GetCircumStance() == BATTLE_CIR::ALL_READY) {
 							if (!bChangePokemon) {
 								m_iChangePokemon = m_iSelect;
@@ -588,6 +596,7 @@ void Player::BattlePhase()
 		break;
 	case SELECT_PHASE::CHANGEORNOT:
 		if (KEYUP(VK_SPACE)) {
+			Sounds::Get()->Play("Press", 0.3f);
 			if (m_iSelect == 1) {
 				m_eSelect = SELECT_PHASE::POKEMON;
 				BattleManager::Get()->RenderPokemonSelect();
@@ -609,11 +618,13 @@ void Player::BattlePhase()
 			}
 		}
 		if (KEYUP(VK_RIGHT)) {
+			Sounds::Get()->Play("Press", 0.3f);
 			if (m_iSelect > 2)
 				m_iSelect = 0;
 
 		}
 		if (KEYUP(VK_LEFT)) {
+			Sounds::Get()->Play("Press", 0.3f);
 			if (m_iSelect < 0)
 				m_iSelect = 2;
 
@@ -810,9 +821,7 @@ Player::Player() {
 	Pokemon* pokemon = new Pokemon(L"Infernape", 100, 100, 100, 10, 30,100);
 	pokemon->AddSkill(L"Tackle", SKILL_TYPE::NORMAL, 30, 30, 100);
 	pokemon->GetSkills()[0]->SetSkillMVRIGHType();
-	pokemon->AddSkill(L"BURN", SKILL_TYPE::FIRE, 30, 30, 30,true);
-
-
+	pokemon->AddSkill(L"Burn", SKILL_TYPE::FIRE, 30, 30, 30,true);
 
 	m_vecPokemon.push_back(pokemon);
 	pokemon = new Pokemon(L"Bibarel", 100, 100, 100, 10, 30,70);

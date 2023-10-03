@@ -153,6 +153,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Manager\FadeManager.cpp" />
+    <ClCompile Include="Object\FadeObject.cpp" />
     <ClCompile Include="Object\UI\CFont.cpp" />
     <ClCompile Include="Geometries\TileMap.cpp" />
     <ClCompile Include="Geometries\Tile\Tile.cpp" />
@@ -208,6 +210,8 @@
     <ClCompile Include="Utilities\String.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Manager\FadeManager.h" />
+    <ClInclude Include="Object\FadeObject.h" />
     <ClInclude Include="Object\UI\CFont.h" />
     <ClInclude Include="Geometries\TileMap.h" />
     <ClInclude Include="Geometries\Tile\Tile.h" />

@@ -6,35 +6,40 @@
 #include "Manager/SceneMgr.h"
 #include "Manager/EventMgr.h"
 #include "Geometries/ShadedTexture.h"
-
+#include "Manager/FadeManager.h"
+#include "Object/FadeObject.h"
 void TitleScene::Init()
 {
 
     m_Obj = new Title;
-    Vector3 pos = { WinMaxWidth / 2, WinMaxHeight / 2, 0 };
-    Vector3 size = { WinMaxWidth, WinMaxHeight, 0 };
+    
+
  //   st = new ShadedTexture(pos, size, 0.0f, TexturePath + L"Pokemon/Fade.png");
-    ft = new FadedTexture
-    (pos, size,0.f,TexturePath+L"Pokemon/Fade.png");
+
+  
+    Sounds::Get()->Play("TitleBGM",0.3f);
     m_Obj->Init();
     AddObj(m_Obj, OBJ_TYPE::DEFAULT);
 }
 
 void TitleScene::Destroy()
 {
-    SAFE_DELETE(ft);
+ 
     DeleteAllObj();
 }
 
 void TitleScene::Update()
 {
  //  st->Update();
-    ft->Update();
     Scene::Update();
   
     auto* key = Keyboard::Get();
     if (key->Up('A')) {
-      
+        FadeManager::Get()->SetReverse(true);
+        FadeManager::Get()->Reset();
+        Sounds::Get()->Play("Press", 0.3f);
+    
+        Sounds::Get()->Pause("TitleBGM");
         ChangeScene(SCENE_TYPE::FIELD);
     }
 }
@@ -44,7 +49,7 @@ void TitleScene::Render()
     
 //    st->Render();
     Scene::Render();
-    ft->Render();
+    
 }
 
 void TitleScene::PostRender()

@@ -928,6 +928,7 @@ void BattleManager::DeadEffect()
 {
 	if (5 == DeadCount) { 
 		m_Npc->FindPokemon();
+		bEffectSound = false;
 		return;}
 	switch (m_eCir)
 	{
@@ -935,13 +936,20 @@ void BattleManager::DeadEffect()
 	{
 		Vector3 vSize = DeadSize / 5;
 		vSize = m_Npc->GetCurPokemons()->GetAnimationSize() - vSize;
-	
+		if (!bEffectSound) {
+			Sounds::Get()->Play(String::ToString(m_Npc->GetCurPokemons()->GetName()),0.3f);
+			bEffectSound = true;
+		}
 		m_Npc->GetCurPokemons()->GetAnimRect()->SetSize(vSize);
 	}
 	break;
 	case BATTLE_CIR::N_PHASE: {
 		Vector3 vSize = DeadSize / 5;
 		vSize = m_Player->GetCurPokemons()->GetAnimationSize() - vSize;
+		if (!bEffectSound) {
+			Sounds::Get()->Play(String::ToString(m_Player->GetCurPokemons()->GetName()), 0.3f);
+			bEffectSound = true;
+		}
 		m_Player->GetCurPokemons()->GetAnimRect()->SetSize(vSize);
 		
 	}
@@ -1097,6 +1105,10 @@ void BattleManager::DoBattlePhase()
 							CSkill* pSkill = (CSkill*)ptr;
 							m_Player->GetCurPokemons()->GetBattleNameFont()->SetRender(true);
 							pSkill->GetBattleNameFont()->SetRender(true);
+							if (!bHitSound) {
+								Sounds::Get()->Play(String::ToString(pSkill->GetName()), 0.3f);
+								bHitSound = true;
+							}
 							if (!(pSkill->GetCasting()))
 							{
 								if (!bHitted) {
@@ -1130,6 +1142,7 @@ void BattleManager::DoBattlePhase()
 								int Value=0;
 								if (!bCodeCheck)
 								{
+									Sounds::Get()->Play("Heal", 0.3f);
 									bUpdateHpBar = 1;
 									bCodeCheck = 1;
 									HealValue = m_Player->GetCurPokemons()->GetHp();
@@ -1162,6 +1175,10 @@ void BattleManager::DoBattlePhase()
 					else if (BATTLE_CIR::N_PHASE == m_eCir) {
 						if (BATTLE_TYPE::SKILL == npcbehavior.eBattle) {
 							CSkill* pSkill = (CSkill*)ptr;
+							if (!bHitSound) {
+								Sounds::Get()->Play(String::ToString(pSkill->GetName()), 0.3f);
+								bHitSound = true;
+							}
 							m_Npc->GetCurPokemons()->GetBattleNameFont()->SetRender(true);
 							pSkill->GetBattleNameFont()->SetRender(true);
 							if (!(pSkill->GetCasting()))
@@ -1215,7 +1232,7 @@ void BattleManager::DoBattlePhase()
 								HealValue = 0;
 								HealHp = 0;
 							}
-													break;
+							break;
 							}
 							}
 							else {
@@ -1236,6 +1253,7 @@ void BattleManager::DoBattlePhase()
 									DeadCount = 0;		bCodeCheck = false;
 									HealValue = 0;
 									HealHp = 0;
+									bHitSound = false;
 
 								}
 								break;
@@ -1249,6 +1267,7 @@ void BattleManager::DoBattlePhase()
 									DeadCount = 0;		bCodeCheck = false;
 									HealValue = 0;
 									HealHp = 0;
+									bHitSound = false;
 								}
 														break;
 								}
@@ -1269,8 +1288,7 @@ void BattleManager::DoBattlePhase()
 							pSkill->GetBattleNameFont()->SetRender(false);
 							m_Player->GetCurPokemons()->GetBattleNameFont()->SetRender(false);
 
-							pSkill = ((CSkill*)npcbehavior.wParam);
-							pSkill->Cast();
+							
 						
 							if (pSkill->GetAnim()) {
 								pSkill->GetAnimRect()->SetPosition(m_Npc->GetCurPokemons()->GetAnimRect()->GetPosition());
@@ -1280,6 +1298,9 @@ void BattleManager::DoBattlePhase()
 						else if (BATTLE_TYPE::SKILL == npcbehavior.eBattle) {
 
 						}
+					CSkill* pSkill = ((CSkill*)npcbehavior.wParam);
+					pSkill->Cast();
+
 					ptr = npcbehavior.wParam;
 					m_eCir = BATTLE_CIR::N_PHASE; 
 					bHitted = false;
@@ -1312,9 +1333,32 @@ void BattleManager::DoBattlePhase()
 					m_iPhase += 1;
 				}
 				else if (2 == m_iPhase) {
+				switch (m_eCir)
+				{
+				case BATTLE_CIR::P_PHASE:
+				{
+					CSkill* pSkill = (CSkill*)ptr;
+					pSkill->GetBattleNameFont()->SetRender(true);
+					m_Player->GetCurPokemons()->GetBattleNameFont()->SetRender(true);
+
+				}
+				break;
+				case BATTLE_CIR::N_PHASE: {
+					CSkill* pSkill = (CSkill*)ptr;
+					pSkill->GetBattleNameFont()->SetRender(true);
+					m_Npc->GetCurPokemons()->GetBattleNameFont()->SetRender(true);
+				}
+				break;
+				default:
+					break;
+				}
 					CSkill* pSkill = (CSkill*)ptr;
 					if (!(pSkill->GetCasting()))
 					{
+						if (!bHitSound) {
+							Sounds::Get()->Play(String::ToString(pSkill->GetName()), 0.3f);
+							bHitSound = true;
+						}
 						if (!bHitted)
 						HitEffect();
 					}
@@ -1397,6 +1441,10 @@ void BattleManager::DoBattlePhase()
 				}
 
 				else if(3==m_iPhase){
+					m_Npc->GetCurPokemons()->GetBattleNameFont()->SetRender(false);
+					CSkill* pSkill = (CSkill*)ptr;
+					pSkill->GetBattleNameFont()->SetRender(false);
+					
 					m_iPhase = 0;
 					m_eCir = BATTLE_CIR::ALL_READY;
 					playerbehavior = {};
@@ -1479,6 +1527,7 @@ void BattleManager::HitEffect()
 		{
 			start = chrono::steady_clock::now();
 			bHitEffectCheck = true;
+			Sounds::Get()->Play("Hit", 0.3f);
 		}
 		else {
 			if (TimeCheck(0.125f, start)) {
@@ -1628,6 +1677,8 @@ void BattleManager::BattleEnd(Player* _player, Npc* _npc)
 
 	m_vecBallItem.clear();
 	m_vecHealItem.clear();
+
+	Sounds::Get()->Pause("Battle");
 
 
 }
@@ -1977,7 +2028,7 @@ void BattleManager::Init()
 		}
 	}
 	ItemUse = new CFont;
-	ItemUse->Init(L"Player Use Item",15);
+	ItemUse->Init(L"PlayerUseItem",13);
 	ItemUse->Setsize(); ItemUse->SetRender(false);
 	ItemUse->SetPosition(Vector3(50, 450, 0), true);
 
