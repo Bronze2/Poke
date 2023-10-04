@@ -55,13 +55,15 @@ FadedTexture::FadedTexture(Vector3 position, Vector3 size, float rotation, wstri
 }
 void FadedTexture::Update() {
     
-    float* a= sb->GetSelectionPtr();
+    if (bStart) {
+        float* a = sb->GetSelectionPtr();
 
-    if ((*a) < 1.f) {
+        if ((*a) < 1.f) {
 
-         (*a) +=0.5* DELTA;
+            (*a) += 0.5 * DELTA;
+        }
+
     }
-
     TextureRect::Update();
 }
 void FadedTexture::ReverseUpdate()

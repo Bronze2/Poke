@@ -67,15 +67,15 @@ class FadedTexture : public TextureRect
 public:
     FadedTexture(Vector3 position, Vector3 size, float rotation, wstring path);
     ~FadedTexture();
-
+    
     void Update();
     void ReverseUpdate();
     void Render();
     void GUI();
     FadeBuffer* GetBuffer() { return sb; }
-
+    void SetStart(const bool& _bStart) { bStart = _bStart; }
 private:
-
+    bool bStart = false;
     FadeBuffer* sb = nullptr;
 
 private:

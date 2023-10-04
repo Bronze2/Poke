@@ -42,7 +42,7 @@ TMap::TMap(uint width, uint height, uint spacing)
 
 TMap::~TMap()
 {
-	if (nullptr == Player)return;
+	if (Player == nullptr) return;
 
 	TileSet::Delete();
 	
@@ -65,24 +65,7 @@ TMap::~TMap()
 
 void TMap::Update()
 {
-	Vector3 mPos = MOUSE->GetPosition(); //마우스 위치 가져오기
-	Tile* tile = GetTile(mPos);			 //가져온 마우스 좌표 넘겨주기
 
-	if (tile != nullptr)
-		inb->SetIndex(tile->GetIndex()); //타일이 널인 경우 현재 정점의 인덱스 가져오기
-
-	if (Mouse::Get()->Press(0))
-	{
-		if (tile != nullptr)
-		{
-			tile->SetColor(Color(0,0,0,0));
-			Vector2 startUV = TileSet::Get()->selectedStartUV;
-			Vector2 endUV = startUV + TileSet::Get()->texelTileSize;
-			tile->SetStartUV(TileSet::Get()->selectedStartUV);
-			tile->SetEndUV(endUV);
-			tile->SetCol(bColTile); 
-		}
-	}
 }
 
 void TMap::Render()

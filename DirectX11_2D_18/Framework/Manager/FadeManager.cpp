@@ -7,6 +7,7 @@ void FadeManager::Start()
     if (!bStart) {
         bStart = true;
         Reset();
+        m_pObject->GetTexture()->SetStart(bStart);
     }
 
 }
@@ -26,13 +27,14 @@ void FadeManager::Reset()
 
 void FadeManager::Update()
 {
-   
+ 
     m_pObject->Update();
   
 }
 
 void FadeManager::Render()
 {
+
     m_pObject->Render();
 }
 

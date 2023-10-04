@@ -42,6 +42,9 @@ void TitleScene::Update()
         Sounds::Get()->Pause("TitleBGM");
         ChangeScene(SCENE_TYPE::FIELD);
     }
+    if (KEYUP('B')) {
+        FadeManager::Get()->Start();
+    }
 }
 
 void TitleScene::Render()

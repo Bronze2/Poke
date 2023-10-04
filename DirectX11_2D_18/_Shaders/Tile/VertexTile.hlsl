@@ -66,11 +66,6 @@ float4 PS(PixelInput input) : SV_Target
     //if (input.bWalkable == false)
     //    color = float4(min(1, color.r + 1), color.gba);
 
-    if (input.index == _index)
-    {
-        if (input.uv2.x < 0.05f || input.uv2.x > 0.95f || input.uv2.y < 0.05f || input.uv2.y > 0.95f)
-            color = float4(1, 0, 0, 1);
-
-    }
+   
     return color;
 }

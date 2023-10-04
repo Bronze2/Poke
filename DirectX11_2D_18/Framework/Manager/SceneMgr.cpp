@@ -37,13 +37,14 @@ SceneMgr::~SceneMgr()
 	for (int i = 0; i < (UINT)SCENE_TYPE::END; i++)
 	{
 		
+		if (i == (UINT)SCENE_TYPE::FIELD)
+			((FieldScene*)m_arrScene[i])->DeleteMap();
 		if (nullptr != m_arrScene[i])
 		{
 			delete m_arrScene[i];
 		}
 	
-	//	if (i == (UINT)SCENE_TYPE::FIELD)
-	//		((FieldScene*)m_arrScene[i])->DeleteMap();
+
 	}
 	BattleManager::Get()->NpcClear();
 
