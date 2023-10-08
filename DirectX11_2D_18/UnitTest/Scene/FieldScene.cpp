@@ -13,6 +13,7 @@
 #include "Manager/FadeManager.h"
 void FieldScene::Init()
 {
+	Camera::Get()->SetProjection(WinMaxWidth / 4, WinMaxHeight / 4);
 	FadeManager::Get()->SetReverse(true);
 	FadeManager::Get()->Reset();
 	uint spacing = 48;
@@ -86,6 +87,7 @@ void FieldScene::DeleteMap() {
 
 void FieldScene::BattleInit()
 {
+	Camera::Get()->SetProjection(WinMaxWidth / 4, WinMaxHeight / 4);
 	FadeManager::Get()->SetReverse(false);
 	FadeManager::Get()->Reset();
 	uint spacing = 48;

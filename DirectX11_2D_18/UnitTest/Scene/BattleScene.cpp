@@ -9,7 +9,7 @@
 #include "Manager/FadeManager.h"
 void BattleScene::Init()
 {
-	
+	Camera::Get()->SetProjection(WinMaxWidth , WinMaxHeight );
 	AddObj(BattleManager::Get()->GetNpc(), OBJ_TYPE::NPC);
 	BattleManager::Get()->GetPlayer()->SetBattlePosition(Vector3(WinMaxWidth / 2-150, WinMaxHeight / 2+(115+64), 0.f));
 	BattleManager::Get()->GetPlayer()->SetBattleSize(

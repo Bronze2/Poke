@@ -422,9 +422,11 @@ void Player::BattlePhase()
 				else if (m_iSelect == 7) {
 					bDetailItemSelect = ITEM_SELECT::NONE;
 					m_iSelect = 0;
-					BattleManager::Get()->NotRenderBattleItemBar(false);
+					BattleManager::Get()->NotRenderBattleItemBar(false,BattleManager::Get()->GetCurItemSelect());
 				}
 				else {
+					if (m_vecPokemon[m_curPokemon]->GetMaxHp() == m_vecPokemon[m_curPokemon]->GetHp())
+						return;
 					if (m_iSelect + (4 * BattleManager::Get()->GetCurItemSelect()) > BattleManager::Get()->GetvecHealItem().size()) return;
 					BATTLE_BEHAVIOR behavior;
 					behavior.eBattle = BATTLE_TYPE::ITEM;
@@ -457,7 +459,7 @@ void Player::BattlePhase()
 					}
 					bDetailItemSelect = ITEM_SELECT::NONE;
 					m_iSelect = 0;
-					BattleManager::Get()->NotRenderBattleItemBar(false);
+					BattleManager::Get()->NotRenderBattleItemBar(false,BattleManager::Get()->GetCurItemSelect());
 					m_eSelect = SELECT_PHASE::COMPREHENSIVE;
 					BattleManager::Get()->RenderBattleItemBar(false);
 					bbehavior = true;

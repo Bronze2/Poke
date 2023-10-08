@@ -17,7 +17,7 @@ void TitleScene::Init()
  //   st = new ShadedTexture(pos, size, 0.0f, TexturePath + L"Pokemon/Fade.png");
 
   
-    Sounds::Get()->Play("TitleBGM",0.3f);
+ 
     m_Obj->Init();
     AddObj(m_Obj, OBJ_TYPE::DEFAULT);
 }
@@ -38,11 +38,12 @@ void TitleScene::Update()
         FadeManager::Get()->SetReverse(true);
         FadeManager::Get()->Reset();
         Sounds::Get()->Play("Press", 0.3f);
-    
+       
         Sounds::Get()->Pause("TitleBGM");
         ChangeScene(SCENE_TYPE::FIELD);
     }
     if (KEYUP('B')) {
+        Sounds::Get()->Play("TitleBGM", 0.3f);
         FadeManager::Get()->Start();
     }
 }

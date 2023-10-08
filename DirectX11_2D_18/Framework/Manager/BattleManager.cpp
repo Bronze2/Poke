@@ -306,7 +306,7 @@ void BattleManager::NotRenderBattleItemBar()
 	PrevButton->SetRender(true);
 	NextButton->SetRender(true);
 }
-void BattleManager::NotRenderBattleItemBar(const bool& _bTrue)
+void BattleManager::NotRenderBattleItemBar(const bool& _bTrue,UINT value)
 {
 
 	BattleItemBar->SetRender(!_bTrue);
@@ -317,7 +317,7 @@ void BattleManager::NotRenderBattleItemBar(const bool& _bTrue)
 	{
 		m_vecItemSelect[i]->SetRender(_bTrue);
 	}
-	for (size_t i = 0; i < 4; ++i) {
+	for (size_t i = 4 * (value ); i < 4* (value+1); ++i) {
 		if (i >= m_vecHealItem.size())continue;
 		m_vecHealItem[i]->SetRender(_bTrue);
 		if (i == 0) {
@@ -335,7 +335,7 @@ void BattleManager::NotRenderBattleItemBar(const bool& _bTrue)
 		m_vecHealItem[i]->SetSize(Vector3(64, 64, 0));
 	}
 
-
+	m_iCuritemSelect = 0;
 	PrevButton->SetRender(_bTrue);
 	NextButton->SetRender(_bTrue);
 }
@@ -401,14 +401,16 @@ void BattleManager::NextButtonUpdate(vector<Item*> _item)
 void BattleManager::PrevButtonUpdate(vector<Item*> _item)
 {
 	if (m_iCuritemSelect == 0)return;
-	for (int i = (4 * (m_iCuritemSelect)); i < (4 * (m_iCuritemSelect + 1)); ++i) {
-		if (_item.size() < i)break;
-		_item[i]->SetRender(false);
-	}
-	m_iCuritemSelect -= 1;
-	for (int i = (4 * (m_iCuritemSelect)); i < (4 * (m_iCuritemSelect + 1)); ++i) {
-		_item[i]->SetRender(true);
-		_item[i]->SetSize(Vector3(64, 64, 0));
+	if (_item.size() < (4 * (m_iCuritemSelect + 1))) {
+		for (int i = (4 * (m_iCuritemSelect)); i < _item.size(); ++i) {
+			if (_item.size() < i)break;
+				_item[i]->SetRender(false);
+		}
+		m_iCuritemSelect -= 1;
+			for (int i = (4 * (m_iCuritemSelect)); i < (4 * (m_iCuritemSelect + 1)); ++i) {
+				_item[i]->SetRender(true);
+					_item[i]->SetSize(Vector3(64, 64, 0));
+			}
 	}
 }
 void BattleManager::NotRenderBattleItemBarBall()
@@ -1540,7 +1542,6 @@ void BattleManager::HitEffect()
 				if (m_iHitEffectCount % 2 == 0) {
 					m_Npc->GetCurPokemons()->SetSize(
 						Vector3(m_Npc->GetCurPokemons()->GetAnimRect()->GetWidth(), m_Npc->GetCurPokemons()->GetAnimRect()->GetHeight(), 0.f)
-
 					);
 					
 				}

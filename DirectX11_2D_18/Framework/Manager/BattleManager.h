@@ -181,7 +181,8 @@ public:
 	void EraseItem(Item* item);
 	vector<Item*> GetvecBallItem() { return m_vecBallItem; }
 	void NotRenderBattleItemBar();// 힐아이템 목록
-	void NotRenderBattleItemBar(const bool& _bTrue);// 힐아이템 목록
+//	void NotRenderBattleItemBar(const bool& _bTrue);// 힐아이템 목록
+	void NotRenderBattleItemBar(const bool& _bTrue,UINT value);// 힐아이템 목록
 	void NextButtonUpdate(vector<Item*> _item); //아이템 다음 목록 있을 경우 활성화 
 	void PrevButtonUpdate(vector<Item*> _item);// 아이템 이전 목록 있을 경우 활성화
 	void NotRenderBattleItemBarBall(); //포켓몬볼 아이템목록

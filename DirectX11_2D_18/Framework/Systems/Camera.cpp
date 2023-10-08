@@ -20,8 +20,8 @@ void Camera::Move()
 	if (nullptr != m_Player) {
 		if (BATTLE_STATE::NONE == m_Player->GetBattleState()) {
 			position = m_Player->GetAnimRect()->GetPosition();
-			position.x -= WinMaxWidth / 2;
-			position.y -= WinMaxHeight / 2;
+			position.x -= WinMaxWidth / 8;
+			position.y -= WinMaxHeight / 8;
 		}
 		else {
 			position=Vector3(0,0,0);
@@ -35,6 +35,12 @@ void Camera::UpdateView()
 
 	D3DXMatrixLookAtLH(&view, &position, &(position + Values::FwdVec), &Values::UpVec);
 	vpb->SetView(view);
+}
+
+void Camera::SetProjection(float _Value, float _Value2)
+{
+	D3DXMatrixOrthoOffCenterLH(&proj, 0.0f, _Value, 0.0f, _Value2, 0, 1);
+	vpb->SetProjection(proj);
 }
 
 void Camera::UnProjection(Vector3* out, Vector3 source, Matrix world)
